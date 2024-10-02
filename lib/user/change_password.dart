@@ -74,12 +74,18 @@ class _ChangePasswordPageState extends State<ChangePasswordPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        automaticallyImplyLeading: true,
-        backgroundColor: const Color(0xFF00086B),
+        automaticallyImplyLeading: false,
+        backgroundColor: const Color(0xff2d1b6b),
         iconTheme: const IconThemeData(color: Colors.white),
         title: Row(
-          mainAxisAlignment: MainAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: <Widget>[
+            IconButton(
+              icon: const Icon(Icons.arrow_back),
+              onPressed: () {
+                Navigator.pop(context);
+              },
+            ),
             Column(
               mainAxisSize: MainAxisSize.min,
               children: [
@@ -121,7 +127,9 @@ class _ChangePasswordPageState extends State<ChangePasswordPage> {
                 )
               ],
             ),
-            const SizedBox(width: 50),
+            const SizedBox(
+              width: 40,
+            )
           ],
         ),
       ),

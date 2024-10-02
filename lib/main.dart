@@ -67,7 +67,7 @@ class _MyHomePageState extends State<MyHomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: const Color(0xFF00086B),
+        backgroundColor: const Color(0xff2d1b6b),
         title: Center(
           child: Column(
             mainAxisSize: MainAxisSize.min,
