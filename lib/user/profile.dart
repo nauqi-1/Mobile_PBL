@@ -18,7 +18,7 @@ class _ProfilePageState extends State<ProfilePage> {
   String prodi = "Sistem Informasi Bisnis";
   String kelas = "3B";
   String noHp = "08xxxxxx";
-  String kompetensi = "Pembantu rumah tangga >:3";
+  String kompetensi = "Video Editing, Photography, Web Design";
 
   void _editProfile() {
     print('Edit Profile');
@@ -279,7 +279,7 @@ class _ProfilePageState extends State<ProfilePage> {
                       onPressed: _editProfile,
                       style: ElevatedButton.styleFrom(
                         padding: const EdgeInsets.symmetric(horizontal: 5),
-                        backgroundColor: Color(0xFF2c2c2c),
+                        backgroundColor: const Color(0xFF2c2c2c),
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(10),
                         ),
@@ -301,7 +301,7 @@ class _ProfilePageState extends State<ProfilePage> {
                       onPressed: _logOut,
                       style: ElevatedButton.styleFrom(
                         padding: const EdgeInsets.symmetric(horizontal: 5),
-                        backgroundColor: Color(0xFF2c2c2c),
+                        backgroundColor: const Color(0xFF2c2c2c),
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(10),
                         ),

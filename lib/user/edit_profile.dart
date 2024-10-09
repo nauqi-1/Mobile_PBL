@@ -356,7 +356,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
                         onPressed: _confirmEdit,
                         style: ElevatedButton.styleFrom(
                           padding: const EdgeInsets.symmetric(horizontal: 5),
-                          backgroundColor: Color(0xFF2c2c2c),
+                          backgroundColor: const Color(0xFF2c2c2c),
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(10),
                           ),
