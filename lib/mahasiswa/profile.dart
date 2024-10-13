@@ -1,18 +1,19 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'change_password.dart';
+import '../change_password.dart';
 import 'edit_profile.dart';
+import 'package:testproject/login.dart';
 
-class ProfilePage extends StatefulWidget {
-  const ProfilePage({super.key, required this.title});
+class MhsProfilePage extends StatefulWidget {
+  const MhsProfilePage({super.key, required this.title});
 
   final String title;
 
   @override
-  State<ProfilePage> createState() => _ProfilePageState();
+  State<MhsProfilePage> createState() => _ProfilePageState();
 }
 
-class _ProfilePageState extends State<ProfilePage> {
+class _ProfilePageState extends State<MhsProfilePage> {
   String nama = "Ellen Joe from ZZZ";
   String nim = "2241760046";
   String prodi = "Sistem Informasi Bisnis";
@@ -32,6 +33,12 @@ class _ProfilePageState extends State<ProfilePage> {
 
   void _logOut() {
     print('Log Out');
+    Navigator.push(
+        context,
+        MaterialPageRoute(
+            builder: (context) => const LoginPage(
+                  title: 'Sistem Kompensasi',
+                )));
   }
 
   void _indexMhs() {
@@ -344,7 +351,7 @@ class _ProfilePageState extends State<ProfilePage> {
         ),
       ),
       bottomNavigationBar: SizedBox(
-          height: 50,
+          height: 70,
           child: Container(
             color: const Color(0xff2d1b6b),
             child: Row(

@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'profile.dart';
 
@@ -11,7 +12,7 @@ class EditProfilePage extends StatefulWidget {
 }
 
 class _EditProfilePageState extends State<EditProfilePage> {
-  String nim = '2241760046';
+  String nip = '19208080';
 
   void _editProfile() {
     print('Edit Profile');
@@ -23,6 +24,10 @@ class _EditProfilePageState extends State<EditProfilePage> {
 
   void _notifMhs() {
     print('Notifikasi Mahasiswa');
+  }
+
+  void _indexMhs() {
+    print('Index Mahasiswa');
   }
 
   void _saveEdit() {
@@ -37,7 +42,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
                     context,
                     MaterialPageRoute(
                         builder: (context) =>
-                            const ProfilePage(title: 'Sistem Kompensasi')),
+                            const DsnProfilePage(title: 'Sistem Kompensasi')),
                     (Route<dynamic> route) => false);
               },
               child: const AlertDialog(
@@ -235,7 +240,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
               ),
               const SizedBox(height: 20),
               const Text(
-                'NIM',
+                'NIP / NIDN',
                 style: TextStyle(
                   color: Colors.black,
                   fontSize: 12,
@@ -252,7 +257,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
                         Border.all(color: const Color(0xFFE4E4E4), width: 1),
                     borderRadius: BorderRadius.circular(10)),
                 child: Text(
-                  nim,
+                  nip,
                   style: const TextStyle(
                     fontSize: 16,
                     color: Colors.black,
@@ -283,28 +288,6 @@ class _EditProfilePageState extends State<EditProfilePage> {
               ),
               const SizedBox(height: 20),
               const Text(
-                'Kelas',
-                style: TextStyle(
-                  color: Colors.black,
-                  fontSize: 12,
-                ),
-              ),
-              const SizedBox(height: 8),
-              const TextField(
-                decoration: InputDecoration(
-                  hintText: 'Kelas',
-                  hintStyle: TextStyle(color: Color(0xffd9d9d9)),
-                  enabledBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.all(Radius.circular(10)),
-                    borderSide: BorderSide(
-                      color: Color(0xFFd9d9d9),
-                      width: 1.0,
-                    ),
-                  ),
-                ),
-              ),
-              const SizedBox(height: 20),
-              const Text(
                 'No. HP',
                 style: TextStyle(
                   color: Colors.black,
@@ -315,28 +298,6 @@ class _EditProfilePageState extends State<EditProfilePage> {
               const TextField(
                 decoration: InputDecoration(
                   hintText: '08XXXXXX',
-                  hintStyle: TextStyle(color: Color(0xffd9d9d9)),
-                  enabledBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.all(Radius.circular(10)),
-                    borderSide: BorderSide(
-                      color: Color(0xFFd9d9d9),
-                      width: 1.0,
-                    ),
-                  ),
-                ),
-              ),
-              const SizedBox(height: 20),
-              const Text(
-                'Kompetensi',
-                style: TextStyle(
-                  color: Colors.black,
-                  fontSize: 12,
-                ),
-              ),
-              const SizedBox(height: 8),
-              const TextField(
-                decoration: InputDecoration(
-                  hintText: 'Kompetensi',
                   hintStyle: TextStyle(color: Color(0xffd9d9d9)),
                   enabledBorder: OutlineInputBorder(
                     borderRadius: BorderRadius.all(Radius.circular(10)),
@@ -380,6 +341,42 @@ class _EditProfilePageState extends State<EditProfilePage> {
           ),
         ),
       ),
+      bottomNavigationBar: SizedBox(
+          height: 70,
+          child: Container(
+            color: const Color(0xff2d1b6b),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                IconButton(
+                    onPressed: _indexMhs,
+                    icon: const Icon(
+                      Icons.home_outlined,
+                      color: Colors.white,
+                      size: 35,
+                    )),
+                IconButton(
+                    onPressed: _notifMhs,
+                    icon: const Icon(
+                      Icons.list_sharp,
+                      color: Colors.white,
+                      size: 30,
+                    )),
+                IconButton(
+                    onPressed: _notifMhs,
+                    icon: const Icon(
+                      CupertinoIcons.briefcase,
+                      color: Colors.white,
+                      size: 30,
+                    )),
+                IconButton(
+                    onPressed: _notifMhs,
+                    icon: const Icon(Icons.account_circle_outlined,
+                        color: Colors.white, size: 35))
+              ],
+            ),
+          )),
     );
   }
 }

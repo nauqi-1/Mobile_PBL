@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:testproject/main.dart';
+import 'package:testproject/login.dart';
 
 class ChangePasswordPage extends StatefulWidget {
   const ChangePasswordPage({super.key, required this.title});
@@ -22,7 +22,6 @@ class _ChangePasswordPageState extends State<ChangePasswordPage> {
 
   @override
   void dispose() {
-    // Dispose of the controller when the widget is disposed.
     _textUsername.dispose();
     _textPassword.dispose();
     _textConfirmPassword.dispose();
@@ -45,7 +44,7 @@ class _ChangePasswordPageState extends State<ChangePasswordPage> {
                     context,
                     MaterialPageRoute(
                         builder: (context) =>
-                            const MyHomePage(title: 'Sistem Kompensasi')),
+                            const LoginPage(title: 'Sistem Kompensasi')),
                     (Route<dynamic> route) => false);
               },
               child: const AlertDialog(
