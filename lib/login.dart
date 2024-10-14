@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'change_password.dart';
 import 'mahasiswa/profile.dart';
@@ -31,7 +30,25 @@ class _LoginPageState extends State<LoginPage> {
     print(_inputUsername);
     print(_inputPassword);
 
-    if (_inputUsername == "" || _inputPassword == "") {
+    if (_inputUsername == "mahasiswa" && _inputPassword == "123") {
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => const MhsProfilePage(
+            title: 'Sistem Kompensasi',
+          ),
+        ),
+      );
+    } else if (_inputUsername == "dosen" && _inputPassword == "123") {
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => const DsnProfilePage(
+            title: 'Sistem Kompensasi',
+          ),
+        ),
+      );
+    } else {
       showDialog(
           context: context,
           builder: (BuildContext context) {
@@ -43,36 +60,12 @@ class _LoginPageState extends State<LoginPage> {
                     TextStyle(fontWeight: FontWeight.bold, color: Colors.black),
               ),
               content: Text(
-                'Username atau Password tidak valid.',
+                'Username atau Password tidak ditemukan.',
                 textAlign: TextAlign.center,
                 style: TextStyle(),
               ),
             );
           });
-    } else if (_inputUsername == "mahasiswa" || _inputPassword == "123") {
-      Navigator.push(
-        context,
-        MaterialPageRoute(
-          builder: (context) => const MhsProfilePage(
-            title: 'Sistem Kompensasi',
-          ),
-        ),
-      );
-
-      _textUsername.clear();
-      _textPassword.clear();
-    } else if (_inputUsername == "dosen" || _inputPassword == "123") {
-      Navigator.push(
-        context,
-        MaterialPageRoute(
-          builder: (context) => const DsnProfilePage(
-            title: 'Sistem Kompensasi',
-          ),
-        ),
-      );
-
-      _textUsername.clear();
-      _textPassword.clear();
     }
   }
 
