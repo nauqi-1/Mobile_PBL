@@ -14,7 +14,7 @@ class DsnProfilePage extends StatefulWidget {
 }
 
 class _ProfilePageState extends State<DsnProfilePage> {
-  String nama = "pak dosen terlove";
+  String nama = "Pak Usman";
   String nip = "19208080";
   String prodi = "Sistem Informasi Bisnis";
   String noHp = "08xxxxxx";
