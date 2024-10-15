@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
 import 'daftar_request.dart'; // Mengimpor halaman baru
+import 'profile.dart';
 
 class MhsHomepageHutang extends StatefulWidget {
   const MhsHomepageHutang({super.key});
 
   @override
-  _MhsHomepageHutangState createState() => _MhsHomepageHutangState();
+  // ignore: library_private_types_in_public_api
+  State<MhsHomepageHutang> createState() => _MhsHomepageHutangState();
 }
 
 class _MhsHomepageHutangState extends State<MhsHomepageHutang> {
@@ -16,6 +18,7 @@ class _MhsHomepageHutangState extends State<MhsHomepageHutang> {
   final List<Widget> _pages = [
     const MhsHomepageHutang(), //Halaman Homepage
     const MhsDaftarRequest(), // Halaman Daftar Request
+    const MhsProfilePage(title: 'Sistem Kompensasi') //Halaman Profil mahasiswa
     //const Placeholder(), // Tambahkan halaman lainnya di sini
   ];
 
