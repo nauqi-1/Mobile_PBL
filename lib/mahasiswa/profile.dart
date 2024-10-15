@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:testproject/mahasiswa/daftar_request.dart';
 import '../change_password.dart';
 import 'edit_profile.dart';
 import 'package:testproject/login.dart';
@@ -33,7 +34,6 @@ class _ProfilePageState extends State<MhsProfilePage> {
   }
 
   void _logOut() {
-    print('Log Out');
     Navigator.push(
         context,
         MaterialPageRoute(
@@ -47,12 +47,16 @@ class _ProfilePageState extends State<MhsProfilePage> {
         MaterialPageRoute(builder: (context) => const MhsHomepageHutang()));
   }
 
+  void _tugasMhs() {
+    Navigator.push(context,
+        MaterialPageRoute(builder: (context) => const MhsDaftarRequest()));
+  }
+
   void _notifMhs() {
     print('Notifikasi Mahasiswa');
   }
 
   void _profileMhs() {
-    print('Profile Mahasiswa');
     Navigator.push(
         context,
         MaterialPageRoute(
@@ -377,7 +381,7 @@ class _ProfilePageState extends State<MhsProfilePage> {
                       size: 35,
                     )),
                 IconButton(
-                    onPressed: _notifMhs,
+                    onPressed: _tugasMhs,
                     icon: const Icon(
                       Icons.list_sharp,
                       color: Colors.white,

@@ -31,6 +31,11 @@ class _MhsHomepageHutangState extends State<MhsHomepageHutang> {
                 const MhsProfilePage(title: 'Sistem Kompensasi')));
   }
 
+  void _tugasMhs() {
+    Navigator.push(context,
+        MaterialPageRoute(builder: (context) => const MhsDaftarRequest()));
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
