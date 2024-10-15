@@ -13,7 +13,9 @@ class MhsHomepageHutang extends StatefulWidget {
 
 class _MhsHomepageHutangState extends State<MhsHomepageHutang> {
   void _indexMhs() {
-    print('Index Mahasiswa');
+    print('Homepage Mahasiswa');
+    Navigator.push(context,
+        MaterialPageRoute(builder: (context) => const MhsHomepageHutang()));
   }
 
   void _notifMhs() {

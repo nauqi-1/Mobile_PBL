@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import '../change_password.dart';
 import 'edit_profile.dart';
 import 'package:testproject/login.dart';
+import 'homepage.dart';
 
 class MhsProfilePage extends StatefulWidget {
   const MhsProfilePage({super.key, required this.title});
@@ -42,11 +43,21 @@ class _ProfilePageState extends State<MhsProfilePage> {
   }
 
   void _indexMhs() {
-    print('Index Mahasiswa');
+    Navigator.push(context,
+        MaterialPageRoute(builder: (context) => const MhsHomepageHutang()));
   }
 
   void _notifMhs() {
     print('Notifikasi Mahasiswa');
+  }
+
+  void _profileMhs() {
+    print('Profile Mahasiswa');
+    Navigator.push(
+        context,
+        MaterialPageRoute(
+            builder: (context) =>
+                const MhsProfilePage(title: 'Sistem Kompensasi')));
   }
 
   @override
@@ -380,7 +391,7 @@ class _ProfilePageState extends State<MhsProfilePage> {
                       size: 30,
                     )),
                 IconButton(
-                    onPressed: _notifMhs,
+                    onPressed: _profileMhs,
                     icon: const Icon(Icons.account_circle_outlined,
                         color: Colors.white, size: 35))
               ],
