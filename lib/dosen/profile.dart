@@ -344,7 +344,7 @@ class _ProfilePageState extends State<DsnProfilePage> {
                       size: 35,
                     )),
                 IconButton(
-                    onPressed: _notifDsn,
+                    onPressed: _daftarTugas,
                     icon: const Icon(
                       Icons.list_sharp,
                       color: Colors.white,

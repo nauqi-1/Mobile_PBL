@@ -36,7 +36,7 @@ class _MhsHomepageHutangState extends State<MhsHomepageHutang> {
 
   void _tugasMhs() {
     Navigator.push(context,
-        MaterialPageRoute(builder: (context) => const MhsDaftarRequest()));
+        MaterialPageRoute(builder: (context) => const MhsDaftarTersedia()));
   }
 
   @override

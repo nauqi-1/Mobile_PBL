@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'daftar_tugas.dart';
 import 'package:testproject/dosen/profile.dart';
 
 class DsnHomepage extends StatefulWidget {
@@ -26,6 +27,16 @@ class _DsnHomepageState extends State<DsnHomepage> {
         MaterialPageRoute(
             builder: (context) =>
                 const DsnProfilePage(title: 'Sistem Kompensasi')));
+  }
+
+  void _daftarTugas() {
+    print('Daftar Tugas');
+    Navigator.push(
+        context,
+        MaterialPageRoute(
+            builder: (context) => const DsnDaftarTugasPage(
+                  title: 'Sistem Kompensasi',
+                )));
   }
 
   @override
@@ -138,7 +149,7 @@ class _DsnHomepageState extends State<DsnHomepage> {
                       size: 35,
                     )),
                 IconButton(
-                    onPressed: _notifDsn,
+                    onPressed: _daftarTugas,
                     icon: const Icon(
                       Icons.list_sharp,
                       color: Colors.white,

@@ -1,6 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:testproject/mahasiswa/daftar_request.dart';
+import 'package:testproject/mahasiswa/daftar_tersedia.dart';
 import '../change_password.dart';
 import 'edit_profile.dart';
 import 'package:testproject/login.dart';
@@ -49,7 +49,7 @@ class _ProfilePageState extends State<MhsProfilePage> {
 
   void _tugasMhs() {
     Navigator.push(context,
-        MaterialPageRoute(builder: (context) => const MhsDaftarRequest()));
+        MaterialPageRoute(builder: (context) => const MhsDaftarTersedia()));
   }
 
   void _notifMhs() {

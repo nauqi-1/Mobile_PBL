@@ -17,6 +17,9 @@ class _BuatTugasPageState extends State<BuatTugasPage> {
   final TextEditingController _tenggatController = TextEditingController();
   final TextEditingController _deskripsiController = TextEditingController();
 
+  DateTime? _selectedDate;
+  TimeOfDay? _selectedTime;
+
   bool _isFormValid = false;
 
   void _checkFormValid() {
@@ -29,20 +32,58 @@ class _BuatTugasPageState extends State<BuatTugasPage> {
     });
   }
 
+  Future<void> _selectDate() async {
+    final DateTime? pickedDate = await showDatePicker(
+      context: context,
+      initialDate: _selectedDate ?? DateTime.now(),
+      firstDate: DateTime(2020),
+      lastDate: DateTime(2100),
+    );
+    if (pickedDate != null) {
+      setState(() {
+        _selectedDate = pickedDate;
+        _updateTenggat();
+      });
+    }
+  }
+
+  Future<void> _selectTime() async {
+    final TimeOfDay? pickedTime = await showTimePicker(
+      context: context,
+      initialTime: _selectedTime ?? TimeOfDay.now(),
+    );
+    if (pickedTime != null) {
+      setState(() {
+        _selectedTime = pickedTime;
+        _updateTenggat();
+      });
+    }
+  }
+
+  void _updateTenggat() {
+    if (_selectedDate != null && _selectedTime != null) {
+      final String formattedDate =
+          "${_selectedDate!.day}/${_selectedDate!.month}/${_selectedDate!.year}";
+      final String formattedTime =
+          "${_selectedTime!.hour}:${_selectedTime!.minute.toString().padLeft(2, '0')}";
+      _tenggatController.text = "$formattedDate $formattedTime";
+    }
+  }
+
   Future<void> _showSuccessPopup() async {
     return showDialog<void>(
       context: context,
       barrierDismissible: false,
       builder: (BuildContext context) {
         return AlertDialog(
-          content: const SizedBox(
+          content: Container(
             width: 300,
             height: 100,
             child: Column(
               children: [
-                Icon(Icons.check_circle, color: Colors.green, size: 40),
-                SizedBox(height: 10),
-                Text("Tugas berhasil dibuat"),
+                const Icon(Icons.check_circle, color: Colors.green, size: 40),
+                const SizedBox(height: 10),
+                const Text("Tugas berhasil dibuat"),
               ],
             ),
           ),
@@ -116,46 +157,42 @@ class _BuatTugasPageState extends State<BuatTugasPage> {
             const SizedBox(height: 10),
             TextField(
               controller: _judulTugasController,
-              decoration: const InputDecoration(
-                hintText: 'Judul Tugas',
-                hintStyle: TextStyle(color: Color(0xffd9d9d9)),
+              decoration: InputDecoration(
                 border: OutlineInputBorder(),
-                contentPadding: EdgeInsets.symmetric(horizontal: 10),
+                contentPadding: const EdgeInsets.symmetric(horizontal: 10),
               ),
             ),
             const SizedBox(height: 20),
-            const Row(
+            Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Text("Bobot Jam"),
-                Text("Kuota Mahasiswa"),
+                const Text("Bobot Jam"),
+                const Text("Kuota Mahasiswa"),
               ],
             ),
             const SizedBox(height: 10),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                SizedBox(
+                Container(
                   width: 130,
                   child: TextField(
                     controller: _bobotJamController,
-                    decoration: const InputDecoration(
-                      hintText: 'Bobot Jam',
-                      hintStyle: TextStyle(color: Color(0xffd9d9d9)),
+                    decoration: InputDecoration(
                       border: OutlineInputBorder(),
-                      contentPadding: EdgeInsets.symmetric(horizontal: 10),
+                      contentPadding:
+                          const EdgeInsets.symmetric(horizontal: 10),
                     ),
                   ),
                 ),
-                SizedBox(
+                Container(
                   width: 130,
                   child: TextField(
                     controller: _kuotaMhsController,
-                    decoration: const InputDecoration(
-                      hintText: 'Kuota Mahasiswa',
-                      hintStyle: TextStyle(color: Color(0xffd9d9d9)),
+                    decoration: InputDecoration(
                       border: OutlineInputBorder(),
-                      contentPadding: EdgeInsets.symmetric(horizontal: 10),
+                      contentPadding:
+                          const EdgeInsets.symmetric(horizontal: 10),
                     ),
                   ),
                 ),
@@ -166,22 +203,19 @@ class _BuatTugasPageState extends State<BuatTugasPage> {
             const SizedBox(height: 10),
             TextField(
               controller: _tenggatController,
+              readOnly: true,
               decoration: InputDecoration(
-                border: const OutlineInputBorder(),
+                border: OutlineInputBorder(),
                 suffixIcon: Row(
                   mainAxisSize: MainAxisSize.min,
                   children: [
                     IconButton(
                       icon: const Icon(Icons.calendar_today),
-                      onPressed: () {
-                        // Code to select date
-                      },
+                      onPressed: _selectDate,
                     ),
                     IconButton(
                       icon: const Icon(Icons.access_time),
-                      onPressed: () {
-                        // Code to select time
-                      },
+                      onPressed: _selectTime,
                     ),
                   ],
                 ),
@@ -193,11 +227,9 @@ class _BuatTugasPageState extends State<BuatTugasPage> {
             TextField(
               controller: _deskripsiController,
               maxLines: 8,
-              decoration: const InputDecoration(
-                hintText: 'Deskripsi',
-                hintStyle: TextStyle(color: Color(0xffd9d9d9)),
+              decoration: InputDecoration(
                 border: OutlineInputBorder(),
-                contentPadding: EdgeInsets.symmetric(horizontal: 10),
+                contentPadding: const EdgeInsets.symmetric(horizontal: 10),
               ),
             ),
             const SizedBox(height: 40),
