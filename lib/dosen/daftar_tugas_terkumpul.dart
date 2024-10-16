@@ -1,41 +1,17 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'profile.dart';
-import 'detail_request.dart';
-import 'daftar_tugas_terkumpul.dart';
 
-class DsnNotifikasiPage extends StatefulWidget {
-  const DsnNotifikasiPage({super.key, required this.title});
+class DaftarTugasTerkumpulPage extends StatefulWidget {
+  const DaftarTugasTerkumpulPage({super.key, required this.title});
 
   final String title;
 
   @override
-  State<DsnNotifikasiPage> createState() => _NotifikasiPageState();
+  State<DaftarTugasTerkumpulPage> createState() => _DaftarTugasTerkumpulState();
 }
 
-class _NotifikasiPageState extends State<DsnNotifikasiPage> {
-  void _daftarTugasTerkumpul() {
-    Navigator.push(
-      context,
-      MaterialPageRoute(
-        builder: (context) => const DaftarTugasTerkumpulPage(
-          title: 'Sistem Kompensasi',
-        ),
-      ),
-    );
-  }
-
-  void _detailRequest() {
-    Navigator.push(
-      context,
-      MaterialPageRoute(
-        builder: (context) => const DetailRequestPage(
-          title: 'Sistem Kompensasi',
-        ),
-      ),
-    );
-  }
-
+class _DaftarTugasTerkumpulState extends State<DaftarTugasTerkumpulPage> {
   void _profileDsn() {
     print('Profile Dosen');
     Navigator.push(
@@ -121,7 +97,7 @@ class _NotifikasiPageState extends State<DsnNotifikasiPage> {
               const SizedBox(height: 20),
               const Center(
                 child: Text(
-                  'NOTIFIKASI',
+                  'Daftar Tugas Kompensasi Terkumpul',
                   style: TextStyle(
                       fontSize: 24,
                       fontWeight: FontWeight.bold,
@@ -129,61 +105,34 @@ class _NotifikasiPageState extends State<DsnNotifikasiPage> {
                 ),
               ),
               const SizedBox(height: 20),
-              GestureDetector(
-                onTap: _daftarTugasTerkumpul,
-                child: Container(
-                  width: 330,
-                  height: 32,
-                  decoration: BoxDecoration(
-                    color: const Color(0xFFD9D9D9),
-                    borderRadius: BorderRadius.circular(5),
-                  ),
-                  child: const Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 10),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text(
-                          'Mahasiswa Kumpul Tugas',
-                          style: TextStyle(fontSize: 14),
-                        ),
-                        Text(
-                          'Detail >',
-                          style: TextStyle(fontSize: 14),
-                        ),
-                      ],
+              for (int i = 0; i < 8; i++)
+                Padding(
+                  padding: const EdgeInsets.only(bottom: 20),
+                  child: Container(
+                    width: 330,
+                    height: 32,
+                    decoration: BoxDecoration(
+                      color: const Color(0xFFD9D9D9),
+                      borderRadius: BorderRadius.circular(5),
+                    ),
+                    child: const Padding(
+                      padding: EdgeInsets.symmetric(horizontal: 10),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text(
+                            'Judul Tugas',
+                            style: TextStyle(fontSize: 14),
+                          ),
+                          Text(
+                            'Detail >',
+                            style: TextStyle(fontSize: 14),
+                          ),
+                        ],
+                      ),
                     ),
                   ),
                 ),
-              ),
-              const SizedBox(height: 20),
-              GestureDetector(
-                onTap: _detailRequest,
-                child: Container(
-                  width: 330,
-                  height: 32,
-                  decoration: BoxDecoration(
-                    color: const Color(0xFFD9D9D9),
-                    borderRadius: BorderRadius.circular(5),
-                  ),
-                  child: const Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 10),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text(
-                          'Mahasiswa request',
-                          style: TextStyle(fontSize: 14),
-                        ),
-                        Text(
-                          'Detail >',
-                          style: TextStyle(fontSize: 14),
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-              ),
             ],
           ),
         ),

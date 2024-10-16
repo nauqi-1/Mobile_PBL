@@ -79,11 +79,11 @@ class _BuatTugasPageState extends State<BuatTugasPage> {
           content: Container(
             width: 300,
             height: 100,
-            child: Column(
+            child: const Column(
               children: [
-                const Icon(Icons.check_circle, color: Colors.green, size: 40),
-                const SizedBox(height: 10),
-                const Text("Tugas berhasil dibuat"),
+                SizedBox(height: 10),
+                Text("Tugas berhasil dibuat"),
+                Icon(Icons.check_circle, color: Colors.green, size: 40),
               ],
             ),
           ),
