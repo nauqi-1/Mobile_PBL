@@ -1,211 +1,211 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'daftar_request.dart'; // Mengimpor halaman baru
+import 'profile.dart';
 
 class MhsHomepageHutang extends StatefulWidget {
   const MhsHomepageHutang({super.key});
 
   @override
-  _MhsHomepageHutangState createState() => _MhsHomepageHutangState();
+  // ignore: library_private_types_in_public_api
+  State<MhsHomepageHutang> createState() => _MhsHomepageHutangState();
 }
 
 class _MhsHomepageHutangState extends State<MhsHomepageHutang> {
-  int _selectedIndex =
-      0; // Variabel untuk menyimpan index dari item yang dipilih
+  void _indexMhs() {
+    print('Homepage Mahasiswa');
+    Navigator.push(context,
+        MaterialPageRoute(builder: (context) => const MhsHomepageHutang()));
+  }
 
-  // Daftar halaman yang bisa dinavigasi
-  final List<Widget> _pages = [
-    const MhsHomepageHutang(), //Halaman Homepage
-    const MhsDaftarRequest(), // Halaman Daftar Request
-    //const Placeholder(), // Tambahkan halaman lainnya di sini
-  ];
+  void _notifMhs() {
+    print('Notifikasi Mahasiswa');
+  }
 
-  // Fungsi untuk mengupdate state saat item di bottom navigation dipilih
-  void _onItemTapped(int index) {
-    setState(() {
-      _selectedIndex = index; // Mengubah indeks yang dipilih
-    });
+  void _profileMhs() {
+    print('Profile Mahasiswa');
+    Navigator.push(
+        context,
+        MaterialPageRoute(
+            builder: (context) =>
+                const MhsProfilePage(title: 'Sistem Kompensasi')));
+  }
+
+  void _tugasMhs() {
+    Navigator.push(context,
+        MaterialPageRoute(builder: (context) => const MhsDaftarRequest()));
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor:
-            const Color.fromARGB(255, 45, 27, 107), // Warna AppBar biru tua
-        leading: _selectedIndex == 1
-            ? IconButton(
-                icon: const Icon(Icons.arrow_back),
-                onPressed: () {
-                  setState(() {
-                    _selectedIndex = 0; // Kembali ke halaman beranda
-                  });
-                },
-              )
-            : null, // Tampilkan tombol back hanya di halaman Daftar Request
-        title: Stack(
-          children: [
-            Align(
-              alignment: Alignment.center, // Pusatkan teks di tengah
-              child: RichText(
-                textAlign: TextAlign.center, // Center alignment untuk teks
-                text: const TextSpan(
-                  style: TextStyle(
-                    fontFamily: 'InstrumentSans',
-                    fontSize: 24,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.white, // Warna teks default
-                  ),
-                  children: <TextSpan>[
-                    TextSpan(text: 'Sistem Kompensasi\n'), // Teks biasa
-                    TextSpan(
-                        text: 'J',
-                        style:
-                            TextStyle(color: Color.fromARGB(255, 153, 58, 54))),
-                    TextSpan(
-                        text: 'T',
-                        style:
-                            TextStyle(color: Color.fromARGB(255, 240, 85, 41))),
-                    TextSpan(
-                        text: 'I',
-                        style: TextStyle(
-                            color: Color.fromARGB(255, 254, 192, 26))),
-                    TextSpan(text: ' Polinema'), // Teks biasa
-                  ],
-                ),
-              ),
-            ),
-            Align(
-              alignment: Alignment.centerRight, // Tempatkan ikon di kanan
-              child: IconButton(
-                icon: const Icon(
-                  Icons.notifications_outlined, // Ikon lonceng
-                  color: Colors.white,
-                ),
-                onPressed: () {
-                  // Aksi jika ikon notifikasi diklik
-                },
-              ),
-            ),
-          ],
-        ),
-        centerTitle: true, // Membuat judul berada di tengah
-      ),
-      body: _pages[_selectedIndex], // Panggil halaman sesuai index
-      bottomNavigationBar: Container(
-        height: 50, // Tinggi BottomAppBar
-        color: const Color.fromARGB(255, 45, 27, 107),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceAround,
+        automaticallyImplyLeading: false,
+        backgroundColor: const Color(0xff2d1b6b),
+        iconTheme: const IconThemeData(color: Colors.white),
+        title: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: <Widget>[
             IconButton(
-              icon: const Icon(Icons.home, size: 24),
-              color: Colors.white,
+              icon: const Icon(Icons.arrow_back),
               onPressed: () {
-                setState(() {
-                  _selectedIndex = 0; // Pindah ke Beranda
-                });
+                Navigator.pop(context);
               },
             ),
-            IconButton(
-              icon: const Icon(Icons.menu, size: 24),
-              color: Colors.white,
-              onPressed: () {
-                setState(() {
-                  _selectedIndex = 1; // Pindah ke Daftar Request
-                });
-              },
+            Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                const Text(
+                  'Sistem Kompensasi',
+                  style: TextStyle(color: Colors.white, fontSize: 20),
+                ),
+                const SizedBox(height: 4),
+                RichText(
+                  text: const TextSpan(children: [
+                    TextSpan(
+                        text: 'J',
+                        style: TextStyle(
+                            color: Colors.brown,
+                            fontSize: 19,
+                            fontWeight: FontWeight.bold)),
+                    TextSpan(
+                      text: 'T',
+                      style: TextStyle(
+                          color: Colors.orange,
+                          fontSize: 19,
+                          fontWeight: FontWeight.bold),
+                    ),
+                    TextSpan(
+                      text: 'I',
+                      style: TextStyle(
+                          color: Colors.yellow,
+                          fontSize: 19,
+                          fontWeight: FontWeight.bold),
+                    ),
+                    TextSpan(
+                      text: ' Polinema',
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 19,
+                      ),
+                    ),
+                  ]),
+                )
+              ],
             ),
             IconButton(
-              icon: const Icon(Icons.cases_outlined, size: 24),
-              color: Colors.white,
-              onPressed: () {
-                setState(() {
-                  _selectedIndex = 2; // Pindah ke Daftar Tugas
-                });
-              },
+                onPressed: _notifMhs,
+                icon: const Icon(
+                  Icons.notifications_outlined,
+                  color: Colors.white,
+                ))
+          ],
+        ),
+      ),
+      body: SingleChildScrollView(
+        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            const SizedBox(height: 5),
+            const Text(
+              'Selamat datang,',
+              style: TextStyle(
+                fontFamily: 'InstrumentSans',
+                fontSize: 21,
+                fontWeight: FontWeight.bold,
+              ),
             ),
-            IconButton(
-              icon: const Icon(Icons.person, size: 24),
-              color: Colors.white,
-              onPressed: () {
-                setState(() {
-                  _selectedIndex = 3; // Pindah ke Profil
-                });
-              },
+            const Text(
+              'NAMA MAHASISWA',
+              style: TextStyle(
+                fontFamily: 'InstrumentSans',
+                fontSize: 24,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+            const SizedBox(height: 20),
+            Image.asset(
+              'assets/images/logo-polinema.png',
+              height: 150,
+            ),
+            const SizedBox(height: 20),
+            _buildTextField('Total Absensi Alfa', 'Total jam'),
+            const SizedBox(height: 5),
+            _buildTextField('Jumlah Absensi Alfa Lunas', 'Jumlah jam'),
+            const SizedBox(height: 5),
+            _buildTextField('Jumlah Absensi Alfa Belum Lunas', 'Jumlah jam'),
+            const SizedBox(height: 5),
+            const Align(
+              alignment: Alignment.centerLeft,
+              child: Text(
+                'Status Ujian Akhir Semester (UAS)',
+                style: TextStyle(fontSize: 16),
+              ),
+            ),
+            const SizedBox(height: 5),
+            Container(
+              width: double.infinity,
+              padding: const EdgeInsets.all(15),
+              decoration: BoxDecoration(
+                color: Colors.red,
+                border:
+                    Border.all(color: const Color.fromARGB(255, 144, 11, 9)),
+                borderRadius: BorderRadius.circular(8),
+              ),
+              child: const Text(
+                'Belum bisa mengikuti!',
+                style: TextStyle(
+                  color: Color.fromARGB(255, 144, 11, 9),
+                  fontSize: 16,
+                  fontWeight: FontWeight.normal,
+                ),
+                textAlign: TextAlign.left,
+              ),
             ),
           ],
         ),
       ),
+      bottomNavigationBar: SizedBox(
+          height: 70,
+          child: Container(
+            color: const Color(0xff2d1b6b),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                IconButton(
+                    onPressed: _indexMhs,
+                    icon: const Icon(
+                      Icons.home_outlined,
+                      color: Colors.white,
+                      size: 35,
+                    )),
+                IconButton(
+                    onPressed: _notifMhs,
+                    icon: const Icon(
+                      Icons.list_sharp,
+                      color: Colors.white,
+                      size: 30,
+                    )),
+                IconButton(
+                    onPressed: _notifMhs,
+                    icon: const Icon(
+                      CupertinoIcons.briefcase,
+                      color: Colors.white,
+                      size: 30,
+                    )),
+                IconButton(
+                    onPressed: _profileMhs,
+                    icon: const Icon(Icons.account_circle_outlined,
+                        color: Colors.white, size: 35))
+              ],
+            ),
+          )),
     );
   }
 
   // Fungsi untuk membangun tampilan homepage
-  Widget _buildHomepage() {
-    return SingleChildScrollView(
-      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          const SizedBox(height: 5),
-          const Text(
-            'Selamat datang,',
-            style: TextStyle(
-              fontFamily: 'InstrumentSans',
-              fontSize: 21,
-              fontWeight: FontWeight.bold,
-            ),
-          ),
-          const Text(
-            'NAMA MAHASISWA',
-            style: TextStyle(
-              fontFamily: 'InstrumentSans',
-              fontSize: 24,
-              fontWeight: FontWeight.bold,
-            ),
-          ),
-          const SizedBox(height: 20),
-          const Image(
-            image: AssetImage('assets/images/logo_polinema.png'),
-            height: 150,
-            width: 149,
-          ),
-          const SizedBox(height: 20),
-          _buildTextField('Total Absensi Alfa', 'Total jam'),
-          const SizedBox(height: 5),
-          _buildTextField('Jumlah Absensi Alfa Lunas', 'Jumlah jam'),
-          const SizedBox(height: 5),
-          _buildTextField('Jumlah Absensi Alfa Belum Lunas', 'Jumlah jam'),
-          const SizedBox(height: 5),
-          const Align(
-            alignment: Alignment.centerLeft,
-            child: Text(
-              'Status Ujian Akhir Semester (UAS)',
-              style: TextStyle(fontSize: 16),
-            ),
-          ),
-          const SizedBox(height: 5),
-          Container(
-            width: double.infinity,
-            padding: const EdgeInsets.all(15),
-            decoration: BoxDecoration(
-              color: Colors.red,
-              border: Border.all(color: const Color.fromARGB(255, 144, 11, 9)),
-              borderRadius: BorderRadius.circular(8),
-            ),
-            child: const Text(
-              'Belum bisa mengikuti!',
-              style: TextStyle(
-                color: Color.fromARGB(255, 144, 11, 9),
-                fontSize: 16,
-                fontWeight: FontWeight.normal,
-              ),
-              textAlign: TextAlign.left,
-            ),
-          ),
-        ],
-      ),
-    );
-  }
 
   // Fungsi untuk membuat TextField dengan label dan hint
   Widget _buildTextField(String label, String hint) {

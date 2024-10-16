@@ -1,6 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'profile.dart';
+import 'homepage.dart';
+import 'daftar_request.dart';
 
 class EditProfilePage extends StatefulWidget {
   const EditProfilePage({super.key, required this.title});
@@ -12,7 +14,22 @@ class EditProfilePage extends StatefulWidget {
 }
 
 class _EditProfilePageState extends State<EditProfilePage> {
+  final TextEditingController _textNama = TextEditingController();
+  String textNama = "";
+
   String nim = '2241760046';
+
+  final TextEditingController _textProdi = TextEditingController();
+  String textProdi = "";
+
+  final TextEditingController _textKelas = TextEditingController();
+  String textKelas = "";
+
+  final TextEditingController _noHp = TextEditingController();
+  String noHp = "";
+
+  final TextEditingController _textKompetensi = TextEditingController();
+  String textKompetensi = "";
 
   void _editProfile() {
     print('Edit Profile');
@@ -22,12 +39,27 @@ class _EditProfilePageState extends State<EditProfilePage> {
     print('Log Out');
   }
 
+  void _indexMhs() {
+    Navigator.push(context,
+        MaterialPageRoute(builder: (context) => const MhsHomepageHutang()));
+  }
+
+  void _tugasMhs() {
+    Navigator.push(context,
+        MaterialPageRoute(builder: (context) => const MhsDaftarRequest()));
+  }
+
   void _notifMhs() {
     print('Notifikasi Mahasiswa');
   }
 
-  void _indexMhs() {
-    print('Index Mahasiswa');
+  void _profileMhs() {
+    print('Profile Mahasiswa');
+    Navigator.push(
+        context,
+        MaterialPageRoute(
+            builder: (context) =>
+                const MhsProfilePage(title: 'Sistem Kompensasi')));
   }
 
   void _saveEdit() {
