@@ -185,7 +185,7 @@ class _MhsHomepageHutangState extends State<MhsHomepageHutang> {
                       size: 35,
                     )),
                 IconButton(
-                    onPressed: _notifMhs,
+                    onPressed: _tugasMhs,
                     icon: const Icon(
                       Icons.list_sharp,
                       color: Colors.white,
