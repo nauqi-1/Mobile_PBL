@@ -1,24 +1,32 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:testproject/dosen/profile.dart';
 
-void main() {
-  runApp(MyApp());
-}
-
-class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+class DsnHomepage extends StatefulWidget {
+  const DsnHomepage({super.key});
 
   @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      home: DSNHomePage(),
-    );
-  }
+  State<DsnHomepage> createState() => _DsnHomepageState();
 }
 
-class DSNHomePage extends StatelessWidget {
-  const DSNHomePage({super.key});
+class _DsnHomepageState extends State<DsnHomepage> {
+  void _indexDsn() {
+    Navigator.push(
+        context, MaterialPageRoute(builder: (context) => const DsnHomepage()));
+  }
+
+  void _notifDsn() {
+    print('Notifikasi Dosen');
+  }
+
+  void _profileDsn() {
+    print('Profile Dosen');
+    Navigator.push(
+        context,
+        MaterialPageRoute(
+            builder: (context) =>
+                const DsnProfilePage(title: 'Sistem Kompensasi')));
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -77,6 +85,12 @@ class DSNHomePage extends StatelessWidget {
                 )
               ],
             ),
+            IconButton(
+                onPressed: _notifDsn,
+                icon: const Icon(
+                  Icons.notifications_outlined,
+                  color: Colors.white,
+                ))
           ],
         ),
       ),
@@ -96,8 +110,7 @@ class DSNHomePage extends StatelessWidget {
             ),
             SizedBox(height: 20),
             Image(
-              image: AssetImage(
-                  'assets/images/LOGOPOLINEMA.jpg'), // Path disesuaikan
+              image: AssetImage('assets/images/logo-polinema.png'),
               height: 150,
             ),
             SizedBox(height: 30),
@@ -109,30 +122,42 @@ class DSNHomePage extends StatelessWidget {
           ],
         ),
       ),
-      bottomNavigationBar: BottomNavigationBar(
-        backgroundColor: const Color(0xFF00086B), // Set the footer color
-        selectedItemColor: Colors.white,
-        unselectedItemColor: Colors.white70,
-        iconSize: 30,
-        items: const <BottomNavigationBarItem>[
-          BottomNavigationBarItem(
-            icon: Icon(Icons.home),
-            label: 'Home',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.list),
-            label: 'Tasks',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(CupertinoIcons.briefcase),
-            label: 'Briefcase',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.account_circle),
-            label: 'Profile',
-          ),
-        ],
-      ),
+      bottomNavigationBar: SizedBox(
+          height: 70,
+          child: Container(
+            color: const Color(0xff2d1b6b),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                IconButton(
+                    onPressed: _indexDsn,
+                    icon: const Icon(
+                      Icons.home_outlined,
+                      color: Colors.white,
+                      size: 35,
+                    )),
+                IconButton(
+                    onPressed: _notifDsn,
+                    icon: const Icon(
+                      Icons.list_sharp,
+                      color: Colors.white,
+                      size: 30,
+                    )),
+                IconButton(
+                    onPressed: _notifDsn,
+                    icon: const Icon(
+                      CupertinoIcons.briefcase,
+                      color: Colors.white,
+                      size: 30,
+                    )),
+                IconButton(
+                    onPressed: _profileDsn,
+                    icon: const Icon(Icons.account_circle_outlined,
+                        color: Colors.white, size: 35))
+              ],
+            ),
+          )),
     );
   }
 }

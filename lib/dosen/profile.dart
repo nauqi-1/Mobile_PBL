@@ -4,6 +4,7 @@ import '../change_password.dart';
 import 'edit_profile.dart';
 import 'daftar_tugas.dart';
 import 'package:testproject/login.dart';
+import 'homepage.dart';
 
 class DsnProfilePage extends StatefulWidget {
   const DsnProfilePage({super.key, required this.title});
@@ -19,6 +20,24 @@ class _ProfilePageState extends State<DsnProfilePage> {
   String nip = "19208080";
   String prodi = "Sistem Informasi Bisnis";
   String noHp = "08xxxxxx";
+
+  void _indexDsn() {
+    Navigator.push(
+        context, MaterialPageRoute(builder: (context) => const DsnHomepage()));
+  }
+
+  void _notifDsn() {
+    print('Notifikasi Dosen');
+  }
+
+  void _profileDsn() {
+    print('Profile Dosen');
+    Navigator.push(
+        context,
+        MaterialPageRoute(
+            builder: (context) =>
+                const DsnProfilePage(title: 'Sistem Kompensasi')));
+  }
 
   void _editProfile() {
     print('Edit Profile');
@@ -318,28 +337,28 @@ class _ProfilePageState extends State<DsnProfilePage> {
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 IconButton(
-                    onPressed: _indexMhs,
+                    onPressed: _indexDsn,
                     icon: const Icon(
                       Icons.home_outlined,
                       color: Colors.white,
                       size: 35,
                     )),
                 IconButton(
-                    onPressed: _daftarTugas,
+                    onPressed: _notifDsn,
                     icon: const Icon(
                       Icons.list_sharp,
                       color: Colors.white,
                       size: 30,
                     )),
                 IconButton(
-                    onPressed: _notifMhs,
+                    onPressed: _notifDsn,
                     icon: const Icon(
                       CupertinoIcons.briefcase,
                       color: Colors.white,
                       size: 30,
                     )),
                 IconButton(
-                    onPressed: _notifMhs,
+                    onPressed: _profileDsn,
                     icon: const Icon(Icons.account_circle_outlined,
                         color: Colors.white, size: 35))
               ],
