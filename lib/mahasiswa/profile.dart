@@ -5,6 +5,7 @@ import '../change_password.dart';
 import 'edit_profile.dart';
 import 'package:testproject/login.dart';
 import 'homepage.dart';
+import 'notifikasi.dart';
 
 class MhsProfilePage extends StatefulWidget {
   const MhsProfilePage({super.key, required this.title});
@@ -54,6 +55,8 @@ class _ProfilePageState extends State<MhsProfilePage> {
 
   void _notifMhs() {
     print('Notifikasi Mahasiswa');
+    Navigator.push(
+        context, MaterialPageRoute(builder: (context) => MhsNotification()));
   }
 
   void _profileMhs() {
