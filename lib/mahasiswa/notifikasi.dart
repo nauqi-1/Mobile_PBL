@@ -1,10 +1,16 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'daftar_request.dart'; // Mengimpor halaman baru
+import 'daftar_tersedia.dart'; // Mengimpor halaman baru
 import 'profile.dart';
 import 'homepage.dart';
 
-class MhsNotification extends StatelessWidget {
+class MhsNotification extends StatefulWidget {
+  const MhsNotification({super.key});
+  @override
+  State<MhsNotification> createState() => _MhsNotificationState();
+}
+
+class _MhsNotificationState extends State<MhsNotification> {
   final List<String> notifications = [
     "Hasil tugas diterima!",
     "Hasil tugas ditolak!",
@@ -40,8 +46,12 @@ class MhsNotification extends StatelessWidget {
   }
 
   void _tugasMhs() {
-    Navigator.push(context,
-        MaterialPageRoute(builder: (context) => const MhsDaftarRequest()));
+    Navigator.push(
+        context,
+        MaterialPageRoute(
+            builder: (context) => const MhsDaftarTersedia(
+                  title: '',
+                )));
   }
 
   @override
@@ -140,7 +150,7 @@ class MhsNotification extends StatelessWidget {
                       size: 35,
                     )),
                 IconButton(
-                    onPressed: _notifMhs,
+                    onPressed: _tugasMhs,
                     icon: const Icon(
                       Icons.list_sharp,
                       color: Colors.white,

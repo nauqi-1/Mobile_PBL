@@ -1,7 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:testproject/mahasiswa/notifikasi.dart';
-import 'daftar_request.dart'; // Mengimpor halaman baru
+import 'daftar_tersedia.dart'; // Mengimpor halaman baru
 import 'profile.dart';
 
 class MhsHomepageHutang extends StatefulWidget {
@@ -21,8 +21,8 @@ class _MhsHomepageHutangState extends State<MhsHomepageHutang> {
 
   void _notifMhs() {
     print('Notifikasi Mahasiswa');
-    Navigator.push(context,
-        MaterialPageRoute(builder: (context) => MhsNotification()));
+    Navigator.push(
+        context, MaterialPageRoute(builder: (context) => MhsNotification()));
   }
 
   void _profileMhs() {
@@ -35,8 +35,12 @@ class _MhsHomepageHutangState extends State<MhsHomepageHutang> {
   }
 
   void _tugasMhs() {
-    Navigator.push(context,
-        MaterialPageRoute(builder: (context) => const MhsDaftarTersedia()));
+    Navigator.push(
+        context,
+        MaterialPageRoute(
+            builder: (context) => const MhsDaftarTersedia(
+                  title: 'Sistem Kompensasi',
+                )));
   }
 
   @override
@@ -68,20 +72,20 @@ class _MhsHomepageHutangState extends State<MhsHomepageHutang> {
                     TextSpan(
                         text: 'J',
                         style: TextStyle(
-                            color: Colors.brown,
+                            color: Color.fromARGB(255, 153, 58, 54),
                             fontSize: 19,
                             fontWeight: FontWeight.bold)),
                     TextSpan(
                       text: 'T',
                       style: TextStyle(
-                          color: Colors.orange,
+                          color: Color.fromARGB(255, 240, 85, 41),
                           fontSize: 19,
                           fontWeight: FontWeight.bold),
                     ),
                     TextSpan(
                       text: 'I',
                       style: TextStyle(
-                          color: Colors.yellow,
+                          color: Color.fromARGB(255, 254, 192, 26),
                           fontSize: 19,
                           fontWeight: FontWeight.bold),
                     ),
@@ -185,7 +189,7 @@ class _MhsHomepageHutangState extends State<MhsHomepageHutang> {
                       size: 35,
                     )),
                 IconButton(
-                    onPressed: _notifMhs,
+                    onPressed: _tugasMhs,
                     icon: const Icon(
                       Icons.list_sharp,
                       color: Colors.white,

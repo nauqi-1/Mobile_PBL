@@ -45,8 +45,12 @@ class _EditProfilePageState extends State<EditProfilePage> {
   }
 
   void _tugasMhs() {
-    Navigator.push(context,
-        MaterialPageRoute(builder: (context) => const MhsDaftarTersedia()));
+    Navigator.push(
+        context,
+        MaterialPageRoute(
+            builder: (context) => const MhsDaftarTersedia(
+                  title: '',
+                )));
   }
 
   void _notifMhs() {
@@ -198,20 +202,20 @@ class _EditProfilePageState extends State<EditProfilePage> {
                     TextSpan(
                         text: 'J',
                         style: TextStyle(
-                            color: Colors.brown,
+                            color: Color.fromARGB(255, 153, 58, 54),
                             fontSize: 19,
                             fontWeight: FontWeight.bold)),
                     TextSpan(
                       text: 'T',
                       style: TextStyle(
-                          color: Colors.orange,
+                          color: Color.fromARGB(255, 240, 85, 41),
                           fontSize: 19,
                           fontWeight: FontWeight.bold),
                     ),
                     TextSpan(
                       text: 'I',
                       style: TextStyle(
-                          color: Colors.yellow,
+                          color: Color.fromARGB(255, 254, 192, 26),
                           fontSize: 19,
                           fontWeight: FontWeight.bold),
                     ),
@@ -433,7 +437,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
                       size: 35,
                     )),
                 IconButton(
-                    onPressed: _notifMhs,
+                    onPressed: _tugasMhs,
                     icon: const Icon(
                       Icons.list_sharp,
                       color: Colors.white,

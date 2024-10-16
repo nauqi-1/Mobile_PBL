@@ -48,8 +48,12 @@ class _ProfilePageState extends State<MhsProfilePage> {
   }
 
   void _tugasMhs() {
-    Navigator.push(context,
-        MaterialPageRoute(builder: (context) => const MhsDaftarTersedia()));
+    Navigator.push(
+        context,
+        MaterialPageRoute(
+            builder: (context) => const MhsDaftarTersedia(
+                  title: '',
+                )));
   }
 
   void _notifMhs() {

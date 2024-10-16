@@ -85,20 +85,20 @@ class _LoginPageState extends State<LoginPage> {
                   TextSpan(
                       text: 'J',
                       style: TextStyle(
-                          color: Colors.brown,
+                          color: Color.fromARGB(255, 153, 58, 54),
                           fontSize: 19,
                           fontWeight: FontWeight.bold)),
                   TextSpan(
                     text: 'T',
                     style: TextStyle(
-                        color: Colors.orange,
+                        color: Color.fromARGB(255, 240, 85, 41),
                         fontSize: 19,
                         fontWeight: FontWeight.bold),
                   ),
                   TextSpan(
                     text: 'I',
                     style: TextStyle(
-                        color: Colors.yellow,
+                        color: Color.fromARGB(255, 254, 192, 26),
                         fontSize: 19,
                         fontWeight: FontWeight.bold),
                   ),
