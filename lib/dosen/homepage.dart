@@ -94,7 +94,7 @@ class _DsnHomepageState extends State<DsnHomepage> {
           ],
         ),
       ),
-      body: const Padding(
+      body: const SingleChildScrollView(
         padding: EdgeInsets.all(16.0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
