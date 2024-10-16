@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:testproject/mahasiswa/homepage.dart';
 import 'change_password.dart';
-import 'mahasiswa/profile.dart';
-import 'dosen/profile.dart';
+import 'mahasiswa/homepage.dart';
+import 'dosen/homepage.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key, required this.title});
@@ -34,18 +35,14 @@ class _LoginPageState extends State<LoginPage> {
       Navigator.push(
         context,
         MaterialPageRoute(
-          builder: (context) => const MhsProfilePage(
-            title: 'Sistem Kompensasi',
-          ),
+          builder: (context) => const MhsHomepageHutang(),
         ),
       );
     } else if (_inputUsername == "dosen" && _inputPassword == "123") {
       Navigator.push(
         context,
         MaterialPageRoute(
-          builder: (context) => const DsnProfilePage(
-            title: 'Sistem Kompensasi',
-          ),
+          builder: (context) => HomePage(),
         ),
       );
     } else {
