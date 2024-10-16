@@ -160,7 +160,7 @@ class _DaftarTugasState extends State<DsnDaftarTugasPage> {
                   onTap: _detailTugas,
                   child: Container(
                     margin: const EdgeInsets.only(bottom: 12),
-                    width: 330,
+                    width: 400,
                     height: 32,
                     decoration: BoxDecoration(
                       color: const Color(0xFFD9D9D9),
