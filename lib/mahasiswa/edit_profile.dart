@@ -2,7 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'profile.dart';
 import 'homepage.dart';
-import 'daftar_request.dart';
+import 'daftar_tersedia.dart';
 
 class EditProfilePage extends StatefulWidget {
   const EditProfilePage({super.key, required this.title});
@@ -46,7 +46,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
 
   void _tugasMhs() {
     Navigator.push(context,
-        MaterialPageRoute(builder: (context) => const MhsDaftarRequest()));
+        MaterialPageRoute(builder: (context) => const MhsDaftarTersedia()));
   }
 
   void _notifMhs() {

@@ -1,6 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'daftar_request.dart'; // Mengimpor halaman baru
+import 'daftar_tersedia.dart'; // Mengimpor halaman baru
 import 'profile.dart';
 
 class MhsHomepageHutang extends StatefulWidget {
@@ -33,7 +33,7 @@ class _MhsHomepageHutangState extends State<MhsHomepageHutang> {
 
   void _tugasMhs() {
     Navigator.push(context,
-        MaterialPageRoute(builder: (context) => const MhsDaftarRequest()));
+        MaterialPageRoute(builder: (context) => const MhsDaftarTersedia()));
   }
 
   @override

@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
+import 'detil_tugas.dart';
 
-class MhsDaftarRequest extends StatelessWidget {
-  const MhsDaftarRequest({super.key});
+class MhsDaftarTersedia extends StatelessWidget {
+  const MhsDaftarTersedia({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -12,7 +13,7 @@ class MhsDaftarRequest extends StatelessWidget {
         children: [
           const SizedBox(height: 10),
           const Text(
-            'DAFTAR REQUEST\nTUGAS KOMPENSASI',
+            'DAFTAR TUGAS\nKOMPENSASI TERSEDIA',
             style: TextStyle(
               fontFamily: 'InstrumentSans',
               fontSize: 21,
@@ -43,6 +44,13 @@ class MhsDaftarRequest extends StatelessWidget {
                       ),
                       onTap: () {
                         // Aksi ketika ditekan (bisa navigasi ke detail)
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) =>
+                                const MhsDetilTugas(), // Arahkan ke halaman detail tugas
+                          ),
+                        );
                       },
                     ),
                   ),
