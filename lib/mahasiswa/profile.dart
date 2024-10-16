@@ -16,7 +16,7 @@ class MhsProfilePage extends StatefulWidget {
 }
 
 class _ProfilePageState extends State<MhsProfilePage> {
-  String nama = "Ellen Joe from ZZZ";
+  String nama = "Ahmad Husain";
   String nim = "2241760046";
   String prodi = "Sistem Informasi Bisnis";
   String kelas = "3B";

@@ -14,7 +14,22 @@ class EditProfilePage extends StatefulWidget {
 }
 
 class _EditProfilePageState extends State<EditProfilePage> {
+  final TextEditingController _textNama = TextEditingController();
+  String textNama = "";
+
   String nim = '2241760046';
+
+  final TextEditingController _textProdi = TextEditingController();
+  String textProdi = "";
+
+  final TextEditingController _textKelas = TextEditingController();
+  String textKelas = "";
+
+  final TextEditingController _noHp = TextEditingController();
+  String noHp = "";
+
+  final TextEditingController _textKompetensi = TextEditingController();
+  String textKompetensi = "";
 
   void _editProfile() {
     print('Edit Profile');
