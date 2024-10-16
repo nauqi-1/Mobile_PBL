@@ -1,18 +1,29 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:testproject/mahasiswa/notifikasi.dart';
 import 'daftar_tersedia.dart'; // Mengimpor halaman baru
 import 'profile.dart';
+import 'homepage.dart';
 
-class MhsHomepageHutang extends StatefulWidget {
-  const MhsHomepageHutang({super.key});
-
+class MhsNotification extends StatefulWidget {
+  const MhsNotification({super.key});
   @override
-  // ignore: library_private_types_in_public_api
-  State<MhsHomepageHutang> createState() => _MhsHomepageHutangState();
+  State<MhsNotification> createState() => _MhsNotificationState();
 }
 
-class _MhsHomepageHutangState extends State<MhsHomepageHutang> {
+class _MhsNotificationState extends State<MhsNotification> {
+  final List<String> notifications = [
+    "Hasil tugas diterima!",
+    "Hasil tugas ditolak!",
+    "Selesaikan tugas!",
+    "Request diterima!",
+    "Request ditolak!",
+    "Notifikasi",
+    "Notifikasi",
+    "Notifikasi",
+    "Notifikasi",
+    "Notifikasi",
+    "Notifikasi",
+  ];
   void _indexMhs() {
     print('Homepage Mahasiswa');
     Navigator.push(context,
@@ -105,69 +116,19 @@ class _MhsHomepageHutangState extends State<MhsHomepageHutang> {
           ],
         ),
       ),
-      body: SingleChildScrollView(
-        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            const SizedBox(height: 5),
-            const Text(
-              'Selamat datang,',
-              style: TextStyle(
-                fontFamily: 'InstrumentSans',
-                fontSize: 21,
-                fontWeight: FontWeight.bold,
-              ),
+      body: ListView.builder(
+        itemCount: notifications.length,
+        itemBuilder: (context, index) {
+          return ListTile(
+            title: Text(notifications[index]),
+            trailing: ElevatedButton(
+              child: Text("Detail"),
+              onPressed: () {
+                // Implement detail functionality here
+              },
             ),
-            const Text(
-              'NAMA MAHASISWA',
-              style: TextStyle(
-                fontFamily: 'InstrumentSans',
-                fontSize: 24,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-            const SizedBox(height: 20),
-            Image.asset(
-              'assets/images/logo-polinema.png',
-              height: 150,
-            ),
-            const SizedBox(height: 20),
-            _buildTextField('Total Absensi Alfa', 'Total jam'),
-            const SizedBox(height: 5),
-            _buildTextField('Jumlah Absensi Alfa Lunas', 'Jumlah jam'),
-            const SizedBox(height: 5),
-            _buildTextField('Jumlah Absensi Alfa Belum Lunas', 'Jumlah jam'),
-            const SizedBox(height: 5),
-            const Align(
-              alignment: Alignment.centerLeft,
-              child: Text(
-                'Status Ujian Akhir Semester (UAS)',
-                style: TextStyle(fontSize: 16),
-              ),
-            ),
-            const SizedBox(height: 5),
-            Container(
-              width: double.infinity,
-              padding: const EdgeInsets.all(15),
-              decoration: BoxDecoration(
-                color: Colors.red,
-                border:
-                    Border.all(color: const Color.fromARGB(255, 144, 11, 9)),
-                borderRadius: BorderRadius.circular(8),
-              ),
-              child: const Text(
-                'Belum bisa mengikuti!',
-                style: TextStyle(
-                  color: Color.fromARGB(255, 144, 11, 9),
-                  fontSize: 16,
-                  fontWeight: FontWeight.normal,
-                ),
-                textAlign: TextAlign.left,
-              ),
-            ),
-          ],
-        ),
+          );
+        },
       ),
       bottomNavigationBar: SizedBox(
           height: 70,
@@ -185,7 +146,7 @@ class _MhsHomepageHutangState extends State<MhsHomepageHutang> {
                       size: 35,
                     )),
                 IconButton(
-                    onPressed: _tugasMhs,
+                    onPressed: _notifMhs,
                     icon: const Icon(
                       Icons.list_sharp,
                       color: Colors.white,
@@ -205,42 +166,6 @@ class _MhsHomepageHutangState extends State<MhsHomepageHutang> {
               ],
             ),
           )),
-    );
-  }
-
-  // Fungsi untuk membangun tampilan homepage
-
-  // Fungsi untuk membuat TextField dengan label dan hint
-  Widget _buildTextField(String label, String hint) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(
-          label, // Label yang muncul di atas kotak input
-          style: const TextStyle(fontSize: 16),
-        ),
-        const SizedBox(height: 5),
-        TextField(
-          decoration: InputDecoration(
-            hintText: hint, // Teks yang muncul di dalam kotak
-            hintStyle: const TextStyle(
-              color: Colors
-                  .grey, // Warna teks abu-abu pada "Total jam" dan "Jumlah jam"
-            ),
-            border: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(8), // Sudut kotak melengkung
-              borderSide: BorderSide(
-                color: Colors.grey
-                    .withOpacity(0.1), // Warna border dengan opacity 50%
-                width: 1, // Lebar garis border
-              ),
-            ),
-            contentPadding:
-                const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
-          ),
-          readOnly: true, // Membuat input hanya untuk dibaca, tidak bisa diubah
-        ),
-      ],
     );
   }
 }
