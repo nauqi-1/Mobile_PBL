@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:testproject/mahasiswa/homepage.dart';
 import 'change_password.dart';
-import 'mahasiswa/homepage.dart';
 import 'dosen/homepage.dart';
 
 class LoginPage extends StatefulWidget {

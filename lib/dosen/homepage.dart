@@ -6,6 +6,8 @@ void main() {
 }
 
 class MyApp extends StatelessWidget {
+  const MyApp({super.key});
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -16,6 +18,8 @@ class MyApp extends StatelessWidget {
 }
 
 class DSNHomePage extends StatelessWidget {
+  const DSNHomePage({super.key});
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -35,9 +39,9 @@ class DSNHomePage extends StatelessWidget {
             Column(
               mainAxisSize: MainAxisSize.min,
               children: [
-                Text(
+                const Text(
                   'Sistem Kompensasi',
-                  style: const TextStyle(color: Colors.white, fontSize: 20),
+                  style: TextStyle(color: Colors.white, fontSize: 20),
                 ),
                 const SizedBox(height: 4),
                 RichText(
@@ -76,8 +80,8 @@ class DSNHomePage extends StatelessWidget {
           ],
         ),
       ),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
+      body: const Padding(
+        padding: EdgeInsets.all(16.0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
@@ -106,7 +110,7 @@ class DSNHomePage extends StatelessWidget {
         ),
       ),
       bottomNavigationBar: BottomNavigationBar(
-        backgroundColor: Color(0xFF00086B), // Set the footer color
+        backgroundColor: const Color(0xFF00086B), // Set the footer color
         selectedItemColor: Colors.white,
         unselectedItemColor: Colors.white70,
         iconSize: 30,
@@ -135,13 +139,13 @@ class DSNHomePage extends StatelessWidget {
 
 class InputField extends StatelessWidget {
   final String labelText;
-  InputField({required this.labelText});
+  const InputField({super.key, required this.labelText});
 
   @override
   Widget build(BuildContext context) {
     return TextField(
       decoration: InputDecoration(
-        border: OutlineInputBorder(),
+        border: const OutlineInputBorder(),
         labelText: labelText,
       ),
     );
