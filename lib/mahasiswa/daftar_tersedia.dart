@@ -1,10 +1,14 @@
 import 'package:flutter/material.dart';
 import 'detil_tugas.dart';
 
-class MhsDaftarTersedia extends StatelessWidget {
+class MhsDaftarTersedia extends StatefulWidget {
   const MhsDaftarTersedia({super.key});
 
   @override
+  State<MhsDaftarTersedia> createState() => _MhsDaftarTersediaState();
+}
+
+class _MhsDaftarTersediaState extends State<MhsDaftarTersedia> {
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 10.0),
