@@ -1,7 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:testproject/mahasiswa/notifikasi.dart';
-import 'daftar_request.dart'; // Mengimpor halaman baru
+import 'daftar_tersedia.dart'; // Mengimpor halaman baru
 import 'profile.dart';
 
 class MhsHomepageHutang extends StatefulWidget {
@@ -21,8 +21,8 @@ class _MhsHomepageHutangState extends State<MhsHomepageHutang> {
 
   void _notifMhs() {
     print('Notifikasi Mahasiswa');
-    Navigator.push(context,
-        MaterialPageRoute(builder: (context) => MhsNotification()));
+    Navigator.push(
+        context, MaterialPageRoute(builder: (context) => MhsNotification()));
   }
 
   void _profileMhs() {
