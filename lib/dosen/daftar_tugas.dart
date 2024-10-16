@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'buat_tugas.dart';
+import 'profile.dart';
 
 class DsnDaftarTugasPage extends StatefulWidget {
   const DsnDaftarTugasPage({super.key, required this.title});
@@ -21,6 +22,15 @@ class _DaftarTugasState extends State<DsnDaftarTugasPage> {
         ),
       ),
     );
+  }
+
+  void _profileDsn() {
+    print('Profile Dosen');
+    Navigator.push(
+        context,
+        MaterialPageRoute(
+            builder: (context) =>
+                const DsnProfilePage(title: 'Sistem Kompensasi')));
   }
 
   void _detailTugas() {
@@ -200,7 +210,7 @@ class _DaftarTugasState extends State<DsnDaftarTugasPage> {
                 ),
               ),
               IconButton(
-                onPressed: () {}, // Replace with actual action
+                onPressed: _profileDsn, // Replace with actual action
                 icon: const Icon(
                   Icons.account_circle_outlined,
                   color: Colors.white,
