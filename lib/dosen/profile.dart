@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import '../change_password.dart';
 import 'edit_profile.dart';
+import 'daftar_tugas.dart';
 import 'package:testproject/login.dart';
 
 class DsnProfilePage extends StatefulWidget {
@@ -25,6 +26,16 @@ class _ProfilePageState extends State<DsnProfilePage> {
         context,
         MaterialPageRoute(
             builder: (context) => const EditProfilePage(
+                  title: 'Sistem Kompensasi',
+                )));
+  }
+
+  void _daftarTugas() {
+    print('Daftar Tugas');
+    Navigator.push(
+        context,
+        MaterialPageRoute(
+            builder: (context) => const DsnDaftarTugasPage(
                   title: 'Sistem Kompensasi',
                 )));
   }
@@ -314,7 +325,7 @@ class _ProfilePageState extends State<DsnProfilePage> {
                       size: 35,
                     )),
                 IconButton(
-                    onPressed: _notifMhs,
+                    onPressed: _daftarTugas,
                     icon: const Icon(
                       Icons.list_sharp,
                       color: Colors.white,
