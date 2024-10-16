@@ -1,24 +1,35 @@
-import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
-import 'buat_tugas.dart';
+import 'package:flutter/material.dart';
 import 'profile.dart';
-import 'notifikasi.dart';
+import 'detail_request.dart';
+import 'daftar_tugas_terkumpul.dart';
 
-class DsnDaftarTugasPage extends StatefulWidget {
-  const DsnDaftarTugasPage({super.key, required this.title});
+class DsnNotifikasiPage extends StatefulWidget {
+  const DsnNotifikasiPage({super.key, required this.title});
 
   final String title;
 
   @override
-  State<DsnDaftarTugasPage> createState() => _DaftarTugasState();
+  State<DsnNotifikasiPage> createState() => _NotifikasiPageState();
 }
 
-class _DaftarTugasState extends State<DsnDaftarTugasPage> {
-  void _buatTugas() {
+class _NotifikasiPageState extends State<DsnNotifikasiPage> {
+  void _daftarTugasTerkumpul() {
     Navigator.push(
       context,
       MaterialPageRoute(
-        builder: (context) => const BuatTugasPage(
+        builder: (context) => const DaftarTugasTerkumpulPage(
+          title: 'Sistem Kompensasi',
+        ),
+      ),
+    );
+  }
+
+  void _detailRequest() {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => const DetailRequestPage(
           title: 'Sistem Kompensasi',
         ),
       ),
@@ -32,28 +43,6 @@ class _DaftarTugasState extends State<DsnDaftarTugasPage> {
         MaterialPageRoute(
             builder: (context) =>
                 const DsnProfilePage(title: 'Sistem Kompensasi')));
-  }
-
-  void _detailTugas() {
-    Navigator.push(
-      context,
-      MaterialPageRoute(
-        builder: (context) => const BuatTugasPage(
-          title: 'Sistem Kompensasi',
-        ),
-      ),
-    );
-  }
-
-  void _notifDsn() {
-    Navigator.push(
-      context,
-      MaterialPageRoute(
-        builder: (context) => const DsnNotifikasiPage(
-          title: 'Sistem Kompensasi',
-        ),
-      ),
-    );
   }
 
   @override
@@ -114,7 +103,7 @@ class _DaftarTugasState extends State<DsnDaftarTugasPage> {
               ],
             ),
             IconButton(
-                onPressed: _notifDsn, // Action for notifications
+                onPressed: () {},
                 icon: const Icon(
                   Icons.notifications_outlined,
                   color: Colors.white,
@@ -123,69 +112,78 @@ class _DaftarTugasState extends State<DsnDaftarTugasPage> {
         ),
       ),
       body: SingleChildScrollView(
-        child: Padding(
+        child: Container(
           padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
+          margin: const EdgeInsets.symmetric(horizontal: 30),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
+              const SizedBox(height: 20),
               const Center(
                 child: Text(
-                  'DAFTAR TUGAS KOMPENSASI',
+                  'NOTIFIKASI',
                   style: TextStyle(
-                    fontSize: 22,
-                    fontWeight: FontWeight.bold,
-                  ),
+                      fontSize: 24,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.black),
                 ),
               ),
               const SizedBox(height: 20),
-              Center(
-                child: ElevatedButton(
-                  onPressed: _buatTugas,
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.green,
-                    fixedSize: const Size(272, 40),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(8),
-                    ),
+              GestureDetector(
+                onTap: _daftarTugasTerkumpul,
+                child: Container(
+                  width: 330,
+                  height: 32,
+                  decoration: BoxDecoration(
+                    color: const Color(0xFFD9D9D9),
+                    borderRadius: BorderRadius.circular(5),
                   ),
-                  child: const Text(
-                    'Buat Tugas Baru +',
-                    style: TextStyle(color: Colors.white),
-                  ),
-                ),
-              ),
-              const SizedBox(height: 20),
-              for (int i = 0; i < 8; i++)
-                GestureDetector(
-                  onTap: _detailTugas,
-                  child: Container(
-                    margin: const EdgeInsets.only(bottom: 12),
-                    width: 400,
-                    height: 32,
-                    decoration: BoxDecoration(
-                      color: const Color(0xFFD9D9D9),
-                      borderRadius: BorderRadius.circular(4),
-                    ),
-                    padding:
-                        const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
-                    child: const Row(
+                  child: const Padding(
+                    padding: EdgeInsets.symmetric(horizontal: 10),
+                    child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Text(
-                          'Judul Tugas',
-                          style: TextStyle(fontSize: 16, color: Colors.black),
+                          'Mahasiswa Kumpul Tugas',
+                          style: TextStyle(fontSize: 14),
                         ),
                         Text(
                           'Detail >',
-                          style: TextStyle(
-                              fontSize: 14,
-                              color: Colors.blueAccent,
-                              fontWeight: FontWeight.bold),
-                        )
+                          style: TextStyle(fontSize: 14),
+                        ),
                       ],
                     ),
                   ),
-                )
+                ),
+              ),
+              const SizedBox(height: 20),
+              GestureDetector(
+                onTap: _detailRequest,
+                child: Container(
+                  width: 330,
+                  height: 32,
+                  decoration: BoxDecoration(
+                    color: const Color(0xFFD9D9D9),
+                    borderRadius: BorderRadius.circular(5),
+                  ),
+                  child: const Padding(
+                    padding: EdgeInsets.symmetric(horizontal: 10),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(
+                          'Mahasiswa request',
+                          style: TextStyle(fontSize: 14),
+                        ),
+                        Text(
+                          'Detail >',
+                          style: TextStyle(fontSize: 14),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              ),
             ],
           ),
         ),
@@ -196,9 +194,10 @@ class _DaftarTugasState extends State<DsnDaftarTugasPage> {
           color: const Color(0xff2d1b6b),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceAround,
+            crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               IconButton(
-                onPressed: () {}, // Replace with actual action
+                onPressed: () {},
                 icon: const Icon(
                   Icons.home_outlined,
                   color: Colors.white,
@@ -206,7 +205,7 @@ class _DaftarTugasState extends State<DsnDaftarTugasPage> {
                 ),
               ),
               IconButton(
-                onPressed: () {}, // Replace with actual action
+                onPressed: () {},
                 icon: const Icon(
                   Icons.list_sharp,
                   color: Colors.white,
@@ -214,7 +213,7 @@ class _DaftarTugasState extends State<DsnDaftarTugasPage> {
                 ),
               ),
               IconButton(
-                onPressed: () {}, // Replace with actual action
+                onPressed: () {},
                 icon: const Icon(
                   CupertinoIcons.briefcase,
                   color: Colors.white,
@@ -222,7 +221,7 @@ class _DaftarTugasState extends State<DsnDaftarTugasPage> {
                 ),
               ),
               IconButton(
-                onPressed: _profileDsn, // Replace with actual action
+                onPressed: _profileDsn,
                 icon: const Icon(
                   Icons.account_circle_outlined,
                   color: Colors.white,

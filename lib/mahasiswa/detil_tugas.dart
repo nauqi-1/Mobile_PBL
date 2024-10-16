@@ -7,13 +7,13 @@ import 'notifikasi.dart';
 import 'profile.dart';
 
 class MhsDetilTugas extends StatefulWidget {
-  const MhsDetilTugas({super.key, required String title});
+  const MhsDetilTugas({super.key});
 
   @override
-  State<MhsDetilTugas> createState() => _MhsDetilTugas();
+  State<MhsDetilTugas> createState() => _MhsDetilTugasState();
 }
 
-class _MhsDetilTugas extends State<MhsDetilTugas> {
+class _MhsDetilTugasState extends State<MhsDetilTugas> {
   void _indexMhs() {
     print('Homepage Mahasiswa');
     Navigator.push(context,
@@ -22,8 +22,8 @@ class _MhsDetilTugas extends State<MhsDetilTugas> {
 
   void _notifMhs() {
     print('Notifikasi Mahasiswa');
-    Navigator.push(context,
-        MaterialPageRoute(builder: (context) => const MhsNotification()));
+    Navigator.push(
+        context, MaterialPageRoute(builder: (context) => MhsNotification()));
   }
 
   void _profileMhs() {
@@ -45,42 +45,39 @@ class _MhsDetilTugas extends State<MhsDetilTugas> {
   }
 
   void _request() {
-    // Setelah request berhasil, tampilkan pop-up
     showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return GestureDetector(
-            onTap: () {
-              Navigator.of(context).pop();
-              Navigator.pushAndRemoveUntil(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) =>
-                          const MhsDaftarTersedia(title: 'Sistem Kompensasi')),
-                  (Route<dynamic> route) => false);
-            },
-            child: const AlertDialog(
-                title: Text(
-                  'Permintaan sedang diproses!',
-                  textAlign: TextAlign.center,
-                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
-                ),
-                content: Row(
-                  mainAxisSize: MainAxisSize.min,
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Icon(
-                      Icons.check_circle_outline_outlined,
-                      size: 50,
-                      color: Colors.green,
-                    )
-                  ],
-                )));
-      },
-    );
+        context: context,
+        builder: (BuildContext context) {
+          return GestureDetector(
+              onTap: () {
+                Navigator.of(context).pop();
+                Navigator.pushAndRemoveUntil(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => const MhsDaftarTersedia(
+                            title: 'Sistem Kompensasi')),
+                    (Route<dynamic> route) => false);
+              },
+              child: const AlertDialog(
+                  title: Text(
+                    'Permintaan sedang diproses!',
+                    textAlign: TextAlign.center,
+                    style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
+                  ),
+                  content: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Icon(
+                        Icons.check_circle_outline_outlined,
+                        size: 50,
+                        color: Colors.green,
+                      )
+                    ],
+                  )));
+        });
   }
 
-  @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(

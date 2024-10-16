@@ -53,12 +53,13 @@ class _MhsHomepageHutangState extends State<MhsHomepageHutang> {
         title: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: <Widget>[
-            IconButton(
+            const SizedBox(width: 48),
+            /*IconButton(
               icon: const Icon(Icons.arrow_back),
               onPressed: () {
                 Navigator.pop(context);
               },
-            ),
+            ),*/
             Column(
               mainAxisSize: MainAxisSize.min,
               children: [

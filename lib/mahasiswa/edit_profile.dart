@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'profile.dart';
 import 'homepage.dart';
 import 'daftar_tersedia.dart';
+import 'notifikasi.dart';
 
 class EditProfilePage extends StatefulWidget {
   const EditProfilePage({super.key, required this.title});
@@ -55,6 +56,8 @@ class _EditProfilePageState extends State<EditProfilePage> {
 
   void _notifMhs() {
     print('Notifikasi Mahasiswa');
+    Navigator.push(
+        context, MaterialPageRoute(builder: (context) => MhsNotification()));
   }
 
   void _profileMhs() {

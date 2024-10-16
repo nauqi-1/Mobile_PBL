@@ -150,9 +150,7 @@ class _MhsDaftarTersediaState extends State<MhsDaftarTersedia> {
                           Navigator.push(
                             context,
                             MaterialPageRoute(
-                              builder: (context) => const MhsDetilTugas(
-                                title: '',
-                              ),
+                              builder: (context) => const MhsDetilTugas(),
                             ),
                           );
                         },
