@@ -56,8 +56,8 @@ class _EditProfilePageState extends State<EditProfilePage> {
 
   void _notifMhs() {
     print('Notifikasi Mahasiswa');
-    Navigator.push(
-        context, MaterialPageRoute(builder: (context) => MhsNotification()));
+    Navigator.push(context,
+        MaterialPageRoute(builder: (context) => const MhsNotification()));
   }
 
   void _profileMhs() {

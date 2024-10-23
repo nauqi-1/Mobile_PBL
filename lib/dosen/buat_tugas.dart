@@ -76,7 +76,7 @@ class _BuatTugasPageState extends State<BuatTugasPage> {
       barrierDismissible: false,
       builder: (BuildContext context) {
         return AlertDialog(
-          content: Container(
+          content: SizedBox(
             width: 300,
             height: 100,
             child: const Column(
@@ -157,42 +157,40 @@ class _BuatTugasPageState extends State<BuatTugasPage> {
             const SizedBox(height: 10),
             TextField(
               controller: _judulTugasController,
-              decoration: InputDecoration(
+              decoration: const InputDecoration(
                 border: OutlineInputBorder(),
-                contentPadding: const EdgeInsets.symmetric(horizontal: 10),
+                contentPadding: EdgeInsets.symmetric(horizontal: 10),
               ),
             ),
             const SizedBox(height: 20),
-            Row(
+            const Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                const Text("Bobot Jam"),
-                const Text("Kuota Mahasiswa"),
+                Text("Bobot Jam"),
+                Text("Kuota Mahasiswa"),
               ],
             ),
             const SizedBox(height: 10),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Container(
+                SizedBox(
                   width: 130,
                   child: TextField(
                     controller: _bobotJamController,
-                    decoration: InputDecoration(
+                    decoration: const InputDecoration(
                       border: OutlineInputBorder(),
-                      contentPadding:
-                          const EdgeInsets.symmetric(horizontal: 10),
+                      contentPadding: EdgeInsets.symmetric(horizontal: 10),
                     ),
                   ),
                 ),
-                Container(
+                SizedBox(
                   width: 130,
                   child: TextField(
                     controller: _kuotaMhsController,
-                    decoration: InputDecoration(
+                    decoration: const InputDecoration(
                       border: OutlineInputBorder(),
-                      contentPadding:
-                          const EdgeInsets.symmetric(horizontal: 10),
+                      contentPadding: EdgeInsets.symmetric(horizontal: 10),
                     ),
                   ),
                 ),
@@ -205,7 +203,7 @@ class _BuatTugasPageState extends State<BuatTugasPage> {
               controller: _tenggatController,
               readOnly: true,
               decoration: InputDecoration(
-                border: OutlineInputBorder(),
+                border: const OutlineInputBorder(),
                 suffixIcon: Row(
                   mainAxisSize: MainAxisSize.min,
                   children: [
@@ -227,9 +225,9 @@ class _BuatTugasPageState extends State<BuatTugasPage> {
             TextField(
               controller: _deskripsiController,
               maxLines: 8,
-              decoration: InputDecoration(
+              decoration: const InputDecoration(
                 border: OutlineInputBorder(),
-                contentPadding: const EdgeInsets.symmetric(horizontal: 10),
+                contentPadding: EdgeInsets.symmetric(horizontal: 10),
               ),
             ),
             const SizedBox(height: 40),

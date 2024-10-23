@@ -21,8 +21,8 @@ class _MhsHomepageHutangState extends State<MhsHomepageHutang> {
 
   void _notifMhs() {
     print('Notifikasi Mahasiswa');
-    Navigator.push(
-        context, MaterialPageRoute(builder: (context) => MhsNotification()));
+    Navigator.push(context,
+        MaterialPageRoute(builder: (context) => const MhsNotification()));
   }
 
   void _profileMhs() {

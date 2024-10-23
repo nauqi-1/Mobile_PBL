@@ -22,8 +22,8 @@ class _MhsDetilTugasState extends State<MhsDetilTugas> {
 
   void _notifMhs() {
     print('Notifikasi Mahasiswa');
-    Navigator.push(
-        context, MaterialPageRoute(builder: (context) => MhsNotification()));
+    Navigator.push(context,
+        MaterialPageRoute(builder: (context) => const MhsNotification()));
   }
 
   void _profileMhs() {
@@ -78,6 +78,7 @@ class _MhsDetilTugasState extends State<MhsDetilTugas> {
         });
   }
 
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(

@@ -32,8 +32,8 @@ class _MhsNotificationState extends State<MhsNotification> {
 
   void _notifMhs() {
     print('Notifikasi Mahasiswa');
-    Navigator.push(
-        context, MaterialPageRoute(builder: (context) => MhsNotification()));
+    Navigator.push(context,
+        MaterialPageRoute(builder: (context) => const MhsNotification()));
   }
 
   void _profileMhs() {
@@ -126,7 +126,7 @@ class _MhsNotificationState extends State<MhsNotification> {
           return ListTile(
             title: Text(notifications[index]),
             trailing: ElevatedButton(
-              child: Text("Detail"),
+              child: const Text("Detail"),
               onPressed: () {
                 // Implement detail functionality here
               },
