@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:testproject/mahasiswa/homepage.dart';
 import 'change_password.dart';
 import 'dosen/homepage.dart';
+import 'package:http/http.dart' as http;
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key, required this.title});
@@ -18,7 +19,26 @@ class _LoginPageState extends State<LoginPage> {
 
   final TextEditingController _textPassword = TextEditingController();
   String _inputPassword = "";
+  bool _isLoading = false;
 
+  Future<void> _login() async {
+    setState(() {
+      _isLoading = true;
+    });
+
+    final String apiUrl = 'https://192.168.1.8/login';
+    final response = await http.post(
+      Uri.parse(apiUrl),
+      headers: {"Content-Type": "application/json"},
+      body: jsonEncode({
+        "username": _usernameController.text,
+        "password": _passwordController.text,
+      }),
+    );
+
+    setState(() {
+      _isLoading = false;
+    });
   @override
   void dispose() {
     _textUsername.dispose();
@@ -77,10 +97,7 @@ class _LoginPageState extends State<LoginPage> {
             children: [
               Text(
                 widget.title,
-                style: const TextStyle(
-                    color: Colors.white,
-                    fontSize: 20,
-                    fontFamily: 'InstrumentSans'),
+                style: const TextStyle(color: Colors.white, fontSize: 20),
               ),
               const SizedBox(height: 4),
               RichText(
@@ -89,14 +106,12 @@ class _LoginPageState extends State<LoginPage> {
                       text: 'J',
                       style: TextStyle(
                           color: Color.fromARGB(255, 153, 58, 54),
-                          fontFamily: 'InstrumentSans',
                           fontSize: 19,
                           fontWeight: FontWeight.bold)),
                   TextSpan(
                     text: 'T',
                     style: TextStyle(
                         color: Color.fromARGB(255, 240, 85, 41),
-                        fontFamily: 'InstrumentSans',
                         fontSize: 19,
                         fontWeight: FontWeight.bold),
                   ),
@@ -104,7 +119,6 @@ class _LoginPageState extends State<LoginPage> {
                     text: 'I',
                     style: TextStyle(
                         color: Color.fromARGB(255, 254, 192, 26),
-                        fontFamily: 'InstrumentSans',
                         fontSize: 19,
                         fontWeight: FontWeight.bold),
                   ),
@@ -112,7 +126,6 @@ class _LoginPageState extends State<LoginPage> {
                     text: ' Polinema',
                     style: TextStyle(
                       color: Colors.white,
-                      fontFamily: 'InstrumentSans',
                       fontSize: 19,
                     ),
                   ),
