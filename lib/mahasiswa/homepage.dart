@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:testproject/mahasiswa/notifikasi.dart';
 import 'daftar_tersedia.dart'; // Mengimpor halaman baru
 import 'profile.dart';
+import 'daftar_terambil.dart';
 
 class MhsHomepageHutang extends StatefulWidget {
   const MhsHomepageHutang({super.key});
@@ -34,11 +35,20 @@ class _MhsHomepageHutangState extends State<MhsHomepageHutang> {
                 const MhsProfilePage(title: 'Sistem Kompensasi')));
   }
 
-  void _tugasMhs() {
+  void _tugasTersedia() {
     Navigator.push(
         context,
         MaterialPageRoute(
             builder: (context) => const MhsDaftarTersedia(
+                  title: 'Sistem Kompensasi',
+                )));
+  }
+
+  void _tugasTerambil() {
+    Navigator.push(
+        context,
+        MaterialPageRoute(
+            builder: (context) => const MhsDaftarTerambil(
                   title: 'Sistem Kompensasi',
                 )));
   }
@@ -65,7 +75,10 @@ class _MhsHomepageHutangState extends State<MhsHomepageHutang> {
               children: [
                 const Text(
                   'Sistem Kompensasi',
-                  style: TextStyle(color: Colors.white, fontSize: 20),
+                  style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 20,
+                      fontFamily: 'InstrumentSans'),
                 ),
                 const SizedBox(height: 4),
                 RichText(
@@ -74,12 +87,14 @@ class _MhsHomepageHutangState extends State<MhsHomepageHutang> {
                         text: 'J',
                         style: TextStyle(
                             color: Color.fromARGB(255, 153, 58, 54),
+                            fontFamily: 'InstrumentSans',
                             fontSize: 19,
                             fontWeight: FontWeight.bold)),
                     TextSpan(
                       text: 'T',
                       style: TextStyle(
                           color: Color.fromARGB(255, 240, 85, 41),
+                          fontFamily: 'InstrumentSans',
                           fontSize: 19,
                           fontWeight: FontWeight.bold),
                     ),
@@ -87,6 +102,7 @@ class _MhsHomepageHutangState extends State<MhsHomepageHutang> {
                       text: 'I',
                       style: TextStyle(
                           color: Color.fromARGB(255, 254, 192, 26),
+                          fontFamily: 'InstrumentSans',
                           fontSize: 19,
                           fontWeight: FontWeight.bold),
                     ),
@@ -94,6 +110,7 @@ class _MhsHomepageHutangState extends State<MhsHomepageHutang> {
                       text: ' Polinema',
                       style: TextStyle(
                         color: Colors.white,
+                        fontFamily: 'InstrumentSans',
                         fontSize: 19,
                       ),
                     ),
@@ -190,14 +207,14 @@ class _MhsHomepageHutangState extends State<MhsHomepageHutang> {
                       size: 35,
                     )),
                 IconButton(
-                    onPressed: _tugasMhs,
+                    onPressed: _tugasTersedia,
                     icon: const Icon(
                       Icons.list_sharp,
                       color: Colors.white,
                       size: 30,
                     )),
                 IconButton(
-                    onPressed: _notifMhs,
+                    onPressed: _tugasTerambil,
                     icon: const Icon(
                       CupertinoIcons.briefcase,
                       color: Colors.white,

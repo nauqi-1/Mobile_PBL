@@ -4,6 +4,7 @@ import 'profile.dart';
 import 'homepage.dart';
 import 'daftar_tersedia.dart';
 import 'notifikasi.dart';
+import 'daftar_terambil.dart';
 
 class EditProfilePage extends StatefulWidget {
   const EditProfilePage({super.key, required this.title});
@@ -45,12 +46,21 @@ class _EditProfilePageState extends State<EditProfilePage> {
         MaterialPageRoute(builder: (context) => const MhsHomepageHutang()));
   }
 
-  void _tugasMhs() {
+  void _tugasTersedia() {
     Navigator.push(
         context,
         MaterialPageRoute(
             builder: (context) => const MhsDaftarTersedia(
                   title: '',
+                )));
+  }
+
+  void _tugasTerambil() {
+    Navigator.push(
+        context,
+        MaterialPageRoute(
+            builder: (context) => const MhsDaftarTerambil(
+                  title: 'Sistem Kompensasi',
                 )));
   }
 
@@ -197,7 +207,10 @@ class _EditProfilePageState extends State<EditProfilePage> {
               children: [
                 Text(
                   widget.title,
-                  style: const TextStyle(color: Colors.white, fontSize: 20),
+                  style: const TextStyle(
+                      color: Colors.white,
+                      fontSize: 20,
+                      fontFamily: 'InstrumentSans'),
                 ),
                 const SizedBox(height: 4),
                 RichText(
@@ -206,12 +219,14 @@ class _EditProfilePageState extends State<EditProfilePage> {
                         text: 'J',
                         style: TextStyle(
                             color: Color.fromARGB(255, 153, 58, 54),
+                            fontFamily: 'InstrumentSans',
                             fontSize: 19,
                             fontWeight: FontWeight.bold)),
                     TextSpan(
                       text: 'T',
                       style: TextStyle(
                           color: Color.fromARGB(255, 240, 85, 41),
+                          fontFamily: 'InstrumentSans',
                           fontSize: 19,
                           fontWeight: FontWeight.bold),
                     ),
@@ -219,6 +234,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
                       text: 'I',
                       style: TextStyle(
                           color: Color.fromARGB(255, 254, 192, 26),
+                          fontFamily: 'InstrumentSans',
                           fontSize: 19,
                           fontWeight: FontWeight.bold),
                     ),
@@ -226,6 +242,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
                       text: ' Polinema',
                       style: TextStyle(
                         color: Colors.white,
+                        fontFamily: 'InstrumentSans',
                         fontSize: 19,
                       ),
                     ),
@@ -440,21 +457,21 @@ class _EditProfilePageState extends State<EditProfilePage> {
                       size: 35,
                     )),
                 IconButton(
-                    onPressed: _tugasMhs,
+                    onPressed: _tugasTersedia,
                     icon: const Icon(
                       Icons.list_sharp,
                       color: Colors.white,
                       size: 30,
                     )),
                 IconButton(
-                    onPressed: _notifMhs,
+                    onPressed: _tugasTerambil,
                     icon: const Icon(
                       CupertinoIcons.briefcase,
                       color: Colors.white,
                       size: 30,
                     )),
                 IconButton(
-                    onPressed: _notifMhs,
+                    onPressed: _profileMhs,
                     icon: const Icon(Icons.account_circle_outlined,
                         color: Colors.white, size: 35))
               ],
