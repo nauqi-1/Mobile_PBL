@@ -138,7 +138,10 @@ class _BuatTugasPageState extends State<BuatTugasPage> {
             ),
             Text(
               widget.title,
-              style: const TextStyle(color: Colors.white, fontSize: 20),
+              style: const TextStyle(
+                  color: Colors.white,
+                  fontSize: 20,
+                  fontFamily: 'InstrumentSans'),
             ),
             IconButton(
               onPressed: () {},

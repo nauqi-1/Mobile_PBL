@@ -77,7 +77,10 @@ class _DaftarTugasState extends State<DsnDaftarTugasPage> {
               children: [
                 Text(
                   widget.title,
-                  style: const TextStyle(color: Colors.white, fontSize: 20),
+                  style: const TextStyle(
+                      color: Colors.white,
+                      fontSize: 20,
+                      fontFamily: 'InstrumentSans'),
                 ),
                 const SizedBox(height: 4),
                 RichText(
@@ -85,20 +88,23 @@ class _DaftarTugasState extends State<DsnDaftarTugasPage> {
                     TextSpan(
                         text: 'J',
                         style: TextStyle(
-                            color: Colors.brown,
+                            color: Color.fromARGB(255, 153, 58, 54),
+                            fontFamily: 'InstrumentSans',
                             fontSize: 19,
                             fontWeight: FontWeight.bold)),
                     TextSpan(
                       text: 'T',
                       style: TextStyle(
-                          color: Colors.orange,
+                          color: Color.fromARGB(255, 240, 85, 41),
+                          fontFamily: 'InstrumentSans',
                           fontSize: 19,
                           fontWeight: FontWeight.bold),
                     ),
                     TextSpan(
                       text: 'I',
                       style: TextStyle(
-                          color: Colors.yellow,
+                          color: Color.fromARGB(255, 254, 192, 26),
+                          fontFamily: 'InstrumentSans',
                           fontSize: 19,
                           fontWeight: FontWeight.bold),
                     ),
@@ -106,6 +112,7 @@ class _DaftarTugasState extends State<DsnDaftarTugasPage> {
                       text: ' Polinema',
                       style: TextStyle(
                         color: Colors.white,
+                        fontFamily: 'InstrumentSans',
                         fontSize: 19,
                       ),
                     ),
@@ -133,6 +140,7 @@ class _DaftarTugasState extends State<DsnDaftarTugasPage> {
                   'DAFTAR TUGAS KOMPENSASI',
                   style: TextStyle(
                     fontSize: 22,
+                    fontFamily: 'InstrumentSans',
                     fontWeight: FontWeight.bold,
                   ),
                 ),
