@@ -47,7 +47,8 @@ class _LoginPageState extends State<LoginPage> {
 
     if (response.statusCode == 200) {
       final responseData = jsonDecode(response.body);
-      final int levelId = responseData['level_id'];
+      print(responseData);
+      final int levelId = responseData['user']['level_id'];
       if (levelId == 4) {
         Navigator.push(
           context,
