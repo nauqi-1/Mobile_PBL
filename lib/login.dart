@@ -26,7 +26,7 @@ class _LoginPageState extends State<LoginPage> {
     super.dispose();
   }
 
-  Future<void> _login() async {
+  Future<void> submitForm() async {
     setState(() {
       _isLoading = true;
     });
@@ -46,30 +46,25 @@ class _LoginPageState extends State<LoginPage> {
     });
 
     if (response.statusCode == 200) {
-      submitForm();
-    } else {
-      _showErrorDialog();
-    }
-  }
-
-  void submitForm() {
-    String username = _textUsername.text;
-    String password = _textPassword.text;
-
-    if (username == "mahasiswa" && password == "123") {
-      Navigator.push(
-        context,
-        MaterialPageRoute(
-          builder: (context) => const MhsHomepageHutang(),
-        ),
-      );
-    } else if (username == "dosen" && password == "123") {
-      Navigator.push(
-        context,
-        MaterialPageRoute(
-          builder: (context) => const DsnHomepage(),
-        ),
-      );
+      final responseData = jsonDecode(response.body);
+      final int levelId = responseData['level_id'];
+      if (levelId == 4) {
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => const MhsHomepageHutang(),
+          ),
+        );
+      } else if (levelId == 2 || levelId == 3) {
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => const DsnHomepage(),
+          ),
+        );
+      } else {
+        _showErrorDialog();
+      }
     } else {
       _showErrorDialog();
     }
@@ -203,7 +198,7 @@ class _LoginPageState extends State<LoginPage> {
                   ),
                   const SizedBox(height: 30),
                   ElevatedButton(
-                      onPressed: _isLoading ? null : _login,
+                      onPressed: _isLoading ? null : submitForm,
                       style: ElevatedButton.styleFrom(
                         backgroundColor: const Color(0xFF2c2c2c),
                         shape: const RoundedRectangleBorder(
