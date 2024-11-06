@@ -17,7 +17,7 @@ class MhsDetilPengumpulan extends StatefulWidget {
 
 class _MhsDetilPengumpulanState extends State<MhsDetilPengumpulan> {
   String? _selectedFileName; // Menyimpan nama file yang dipilih
-  TextEditingController _progressController =
+  final TextEditingController _progressController =
       TextEditingController(); // Controller untuk progress
   bool isSubmitEnabled = false; // Status tombol submit
 

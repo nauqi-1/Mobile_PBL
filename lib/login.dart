@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:testproject/mahasiswa/homepage.dart';
 import 'change_password.dart';
@@ -15,30 +16,9 @@ class LoginPage extends StatefulWidget {
 
 class _LoginPageState extends State<LoginPage> {
   final TextEditingController _textUsername = TextEditingController();
-  String _inputUsername = "";
-
   final TextEditingController _textPassword = TextEditingController();
-  String _inputPassword = "";
   bool _isLoading = false;
 
-  Future<void> _login() async {
-    setState(() {
-      _isLoading = true;
-    });
-
-    final String apiUrl = 'https://192.168.1.8/login';
-    final response = await http.post(
-      Uri.parse(apiUrl),
-      headers: {"Content-Type": "application/json"},
-      body: jsonEncode({
-        "username": _usernameController.text,
-        "password": _passwordController.text,
-      }),
-    );
-
-    setState(() {
-      _isLoading = false;
-    });
   @override
   void dispose() {
     _textUsername.dispose();
@@ -46,18 +26,44 @@ class _LoginPageState extends State<LoginPage> {
     super.dispose();
   }
 
-  void _submitForm() {
-    print(_inputUsername);
-    print(_inputPassword);
+  Future<void> _login() async {
+    setState(() {
+      _isLoading = true;
+    });
 
-    if (_inputUsername == "mahasiswa" && _inputPassword == "123") {
+    const String apiUrl = 'https://192.168.1.8/login';
+    final response = await http.post(
+      Uri.parse(apiUrl),
+      headers: {"Content-Type": "application/json"},
+      body: jsonEncode({
+        "username": _textUsername.text,
+        "password": _textPassword.text,
+      }),
+    );
+
+    setState(() {
+      _isLoading = false;
+    });
+
+    if (response.statusCode == 200) {
+      submitForm();
+    } else {
+      _showErrorDialog();
+    }
+  }
+
+  void submitForm() {
+    String username = _textUsername.text;
+    String password = _textPassword.text;
+
+    if (username == "mahasiswa" && password == "123") {
       Navigator.push(
         context,
         MaterialPageRoute(
           builder: (context) => const MhsHomepageHutang(),
         ),
       );
-    } else if (_inputUsername == "dosen" && _inputPassword == "123") {
+    } else if (username == "dosen" && password == "123") {
       Navigator.push(
         context,
         MaterialPageRoute(
@@ -65,24 +71,27 @@ class _LoginPageState extends State<LoginPage> {
         ),
       );
     } else {
-      showDialog(
-          context: context,
-          builder: (BuildContext context) {
-            return const AlertDialog(
-              title: Text(
-                'Error',
-                textAlign: TextAlign.center,
-                style:
-                    TextStyle(fontWeight: FontWeight.bold, color: Colors.black),
-              ),
-              content: Text(
-                'Username atau Password tidak ditemukan.',
-                textAlign: TextAlign.center,
-                style: TextStyle(),
-              ),
-            );
-          });
+      _showErrorDialog();
     }
+  }
+
+  void _showErrorDialog() {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return const AlertDialog(
+          title: Text(
+            'Error',
+            textAlign: TextAlign.center,
+            style: TextStyle(fontWeight: FontWeight.bold, color: Colors.black),
+          ),
+          content: Text(
+            'Username atau Password tidak ditemukan.',
+            textAlign: TextAlign.center,
+          ),
+        );
+      },
+    );
   }
 
   @override
@@ -140,9 +149,7 @@ class _LoginPageState extends State<LoginPage> {
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: <Widget>[
-            const SizedBox(
-              height: 70,
-            ),
+            const SizedBox(height: 70),
             Image.asset(
               'assets/images/logo-polinema.png',
               height: 150,
@@ -156,10 +163,7 @@ class _LoginPageState extends State<LoginPage> {
                 children: [
                   const Text(
                     'Username',
-                    style: TextStyle(
-                      color: Colors.black,
-                      fontSize: 15,
-                    ),
+                    style: TextStyle(color: Colors.black, fontSize: 15),
                   ),
                   const SizedBox(height: 8),
                   TextField(
@@ -175,19 +179,11 @@ class _LoginPageState extends State<LoginPage> {
                         ),
                       ),
                     ),
-                    onChanged: (username) {
-                      setState(() {
-                        _inputUsername = username;
-                      });
-                    },
                   ),
                   const SizedBox(height: 20),
                   const Text(
                     'Password',
-                    style: TextStyle(
-                      color: Colors.black,
-                      fontSize: 15,
-                    ),
+                    style: TextStyle(color: Colors.black, fontSize: 15),
                   ),
                   const SizedBox(height: 8),
                   TextField(
@@ -204,15 +200,10 @@ class _LoginPageState extends State<LoginPage> {
                       ),
                     ),
                     obscureText: true,
-                    onChanged: (password) {
-                      setState(() {
-                        _inputPassword = password;
-                      });
-                    },
                   ),
                   const SizedBox(height: 30),
                   ElevatedButton(
-                      onPressed: _submitForm,
+                      onPressed: _isLoading ? null : _login,
                       style: ElevatedButton.styleFrom(
                         backgroundColor: const Color(0xFF2c2c2c),
                         shape: const RoundedRectangleBorder(
@@ -220,23 +211,24 @@ class _LoginPageState extends State<LoginPage> {
                         ),
                         minimumSize: const Size(double.infinity, 50),
                       ),
-                      child: const Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: <Widget>[
-                          Text(
-                            'Login',
-                            style: TextStyle(color: Colors.white, fontSize: 15),
-                          ),
-                          SizedBox(
-                            width: 5,
-                          ),
-                          Icon(
-                            Icons.login,
-                            color: Colors.white,
-                            size: 15,
-                          ),
-                        ],
-                      )),
+                      child: _isLoading
+                          ? const CircularProgressIndicator(color: Colors.white)
+                          : const Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: <Widget>[
+                                Text(
+                                  'Login',
+                                  style: TextStyle(
+                                      color: Colors.white, fontSize: 15),
+                                ),
+                                SizedBox(width: 5),
+                                Icon(
+                                  Icons.login,
+                                  color: Colors.white,
+                                  size: 15,
+                                ),
+                              ],
+                            )),
                   const SizedBox(height: 20),
                   Align(
                     alignment: Alignment.centerLeft,
@@ -252,9 +244,7 @@ class _LoginPageState extends State<LoginPage> {
                       },
                       child: const Text(
                         'Lupa Password?',
-                        style: TextStyle(
-                          color: Colors.black,
-                        ),
+                        style: TextStyle(color: Colors.black),
                       ),
                     ),
                   ),

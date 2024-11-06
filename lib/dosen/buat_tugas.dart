@@ -76,10 +76,10 @@ class _BuatTugasPageState extends State<BuatTugasPage> {
       barrierDismissible: false,
       builder: (BuildContext context) {
         return AlertDialog(
-          content: SizedBox(
+          content: const SizedBox(
             width: 300,
             height: 100,
-            child: const Column(
+            child: Column(
               children: [
                 SizedBox(height: 10),
                 Text("Tugas berhasil dibuat"),
