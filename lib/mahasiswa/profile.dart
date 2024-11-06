@@ -6,6 +6,7 @@ import 'edit_profile.dart';
 import 'package:testproject/login.dart';
 import 'homepage.dart';
 import 'notifikasi.dart';
+import 'daftar_terambil.dart';
 
 class MhsProfilePage extends StatefulWidget {
   const MhsProfilePage({super.key, required this.title});
@@ -48,12 +49,21 @@ class _ProfilePageState extends State<MhsProfilePage> {
         MaterialPageRoute(builder: (context) => const MhsHomepageHutang()));
   }
 
-  void _tugasMhs() {
+  void _tugasTersedia() {
     Navigator.push(
         context,
         MaterialPageRoute(
             builder: (context) => const MhsDaftarTersedia(
                   title: '',
+                )));
+  }
+
+  void _tugasTerambil() {
+    Navigator.push(
+        context,
+        MaterialPageRoute(
+            builder: (context) => const MhsDaftarTerambil(
+                  title: 'Sistem Kompensasi',
                 )));
   }
 
@@ -92,7 +102,10 @@ class _ProfilePageState extends State<MhsProfilePage> {
               children: [
                 Text(
                   widget.title,
-                  style: const TextStyle(color: Colors.white, fontSize: 20),
+                  style: const TextStyle(
+                      color: Colors.white,
+                      fontSize: 20,
+                      fontFamily: 'InstrumentSans'),
                 ),
                 const SizedBox(height: 4),
                 RichText(
@@ -101,12 +114,14 @@ class _ProfilePageState extends State<MhsProfilePage> {
                         text: 'J',
                         style: TextStyle(
                             color: Color.fromARGB(255, 153, 58, 54),
+                            fontFamily: 'InstrumentSans',
                             fontSize: 19,
                             fontWeight: FontWeight.bold)),
                     TextSpan(
                       text: 'T',
                       style: TextStyle(
                           color: Color.fromARGB(255, 240, 85, 41),
+                          fontFamily: 'InstrumentSans',
                           fontSize: 19,
                           fontWeight: FontWeight.bold),
                     ),
@@ -114,6 +129,7 @@ class _ProfilePageState extends State<MhsProfilePage> {
                       text: 'I',
                       style: TextStyle(
                           color: Color.fromARGB(255, 254, 192, 26),
+                          fontFamily: 'InstrumentSans',
                           fontSize: 19,
                           fontWeight: FontWeight.bold),
                     ),
@@ -121,6 +137,7 @@ class _ProfilePageState extends State<MhsProfilePage> {
                       text: ' Polinema',
                       style: TextStyle(
                         color: Colors.white,
+                        fontFamily: 'InstrumentSans',
                         fontSize: 19,
                       ),
                     ),
@@ -388,14 +405,14 @@ class _ProfilePageState extends State<MhsProfilePage> {
                       size: 35,
                     )),
                 IconButton(
-                    onPressed: _tugasMhs,
+                    onPressed: _tugasTersedia,
                     icon: const Icon(
                       Icons.list_sharp,
                       color: Colors.white,
                       size: 30,
                     )),
                 IconButton(
-                    onPressed: _notifMhs,
+                    onPressed: _tugasTerambil,
                     icon: const Icon(
                       CupertinoIcons.briefcase,
                       color: Colors.white,

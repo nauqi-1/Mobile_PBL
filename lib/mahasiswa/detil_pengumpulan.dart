@@ -1,3 +1,5 @@
+import 'package:file_picker/file_picker.dart';
+import 'dart:math';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'daftar_tersedia.dart';
@@ -6,28 +8,49 @@ import 'notifikasi.dart';
 import 'profile.dart';
 import 'daftar_terambil.dart';
 
-class MhsDetilTugas extends StatefulWidget {
-  const MhsDetilTugas({super.key});
+class MhsDetilPengumpulan extends StatefulWidget {
+  const MhsDetilPengumpulan({super.key});
 
   @override
-  State<MhsDetilTugas> createState() => _MhsDetilTugasState();
+  State<MhsDetilPengumpulan> createState() => _MhsDetilPengumpulanState();
 }
 
-class _MhsDetilTugasState extends State<MhsDetilTugas> {
+class _MhsDetilPengumpulanState extends State<MhsDetilPengumpulan> {
+  String? _selectedFileName; // Menyimpan nama file yang dipilih
+  final TextEditingController _progressController =
+      TextEditingController(); // Controller untuk progress
+  bool isSubmitEnabled = false; // Status tombol submit
+
+  // Fungsi untuk memilih file
+  Future<void> _pickFile() async {
+    FilePickerResult? result = await FilePicker.platform.pickFiles();
+    if (result != null) {
+      setState(() {
+        _selectedFileName =
+            result.files.single.name; // Menyimpan nama file yang dipilih
+        isSubmitEnabled =
+            true; // Mengaktifkan tombol submit setelah file dipilih
+      });
+    }
+  }
+
+  // Fungsi untuk menyimpan progress secara otomatis
+  void _saveProgress(String value) {
+    // Di sini Anda bisa menyimpan nilai progress ke server atau database lokal
+    print("Progress disimpan: $value"); // Simulasi penyimpanan progress
+  }
+
   void _indexMhs() {
-    print('Homepage Mahasiswa');
     Navigator.push(context,
         MaterialPageRoute(builder: (context) => const MhsHomepageHutang()));
   }
 
   void _notifMhs() {
-    print('Notifikasi Mahasiswa');
     Navigator.push(context,
         MaterialPageRoute(builder: (context) => const MhsNotification()));
   }
 
   void _profileMhs() {
-    print('Profile Mahasiswa');
     Navigator.push(
         context,
         MaterialPageRoute(
@@ -53,7 +76,7 @@ class _MhsDetilTugasState extends State<MhsDetilTugas> {
                 )));
   }
 
-  void _request() {
+  void _submit() {
     showDialog(
         context: context,
         builder: (BuildContext context) {
@@ -63,13 +86,13 @@ class _MhsDetilTugasState extends State<MhsDetilTugas> {
                 Navigator.pushAndRemoveUntil(
                     context,
                     MaterialPageRoute(
-                        builder: (context) => const MhsDaftarTersedia(
+                        builder: (context) => const MhsDaftarTerambil(
                             title: 'Sistem Kompensasi')),
                     (Route<dynamic> route) => false);
               },
               child: const AlertDialog(
                   title: Text(
-                    'Permintaan sedang diproses!',
+                    'Tugas berhasil dikumpulkan!',
                     textAlign: TextAlign.center,
                     style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
                   ),
@@ -187,10 +210,27 @@ class _MhsDetilTugasState extends State<MhsDetilTugas> {
               ),
               const SizedBox(height: 10),
               Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Expanded(child: _buildTextField('Bobot Jam', 'Bobot jam')),
                   const SizedBox(width: 10),
                   Expanded(child: _buildTextField('Kuota Mahasiswa', 'Kuota')),
+                  const SizedBox(width: 10),
+                  Column(
+                    children: [
+                      const Text(
+                        'Unduh File',
+                        style: TextStyle(fontSize: 16),
+                      ),
+                      IconButton(
+                        icon: const Icon(Icons.file_download_outlined,
+                            color: Colors.black),
+                        onPressed: () {
+                          // Aksi untuk mengunduh file
+                        },
+                      ),
+                    ],
+                  ),
                 ],
               ),
               const SizedBox(height: 10),
@@ -221,18 +261,92 @@ class _MhsDetilTugasState extends State<MhsDetilTugas> {
               const SizedBox(height: 10),
               _buildTextField('Deskripsi', 'Deskripsi tugas kompen',
                   maxLines: 5),
+              const SizedBox(height: 10),
+              // Field Progress yang dapat diisi pengguna
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const Text('Progress', style: TextStyle(fontSize: 16)),
+                  const SizedBox(height: 5),
+                  TextField(
+                    controller: _progressController,
+                    maxLines: 2,
+                    onChanged: _saveProgress, // Menyimpan progress otomatis
+                    decoration: InputDecoration(
+                      hintText:
+                          'Penjelasan singkat progress yang telah dikerjakan',
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(8),
+                      ),
+                      contentPadding: const EdgeInsets.symmetric(
+                          horizontal: 10, vertical: 10),
+                    ),
+                  ),
+                ],
+              ),
+              const SizedBox(height: 10),
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const Text('Pengumpulan', style: TextStyle(fontSize: 16)),
+                  const SizedBox(height: 5),
+                  Container(
+                    width: double.infinity,
+                    decoration: BoxDecoration(
+                      border: Border.all(color: Colors.grey),
+                      borderRadius: BorderRadius.circular(8),
+                    ),
+                    padding: const EdgeInsets.symmetric(vertical: 10),
+                    child: Column(
+                      children: [
+                        IconButton(
+                          onPressed:
+                              _pickFile, // Memanggil fungsi untuk memilih file
+                          icon: const Icon(Icons.upload_file,
+                              color: Colors.black),
+                        ),
+                        const Text(
+                          'Upload file',
+                          style: TextStyle(fontSize: 16, color: Colors.grey),
+                        ),
+                        if (_selectedFileName !=
+                            null) // Menampilkan nama file jika ada
+                          Padding(
+                            padding: const EdgeInsets.only(top: 8.0),
+                            child: Text(
+                              _selectedFileName!,
+                              style: const TextStyle(
+                                  fontSize: 14, color: Colors.black87),
+                              textAlign: TextAlign.center,
+                            ),
+                          ),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
               const SizedBox(height: 20),
               SizedBox(
                 width: double.infinity,
                 child: ElevatedButton(
-                  onPressed: _request,
+                  onPressed: isSubmitEnabled
+                      ? _submit
+                      : null, // Mengaktifkan tombol submit hanya jika ada file
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.green,
+                    backgroundColor:
+                        isSubmitEnabled ? Colors.blue : Colors.grey,
                     padding: const EdgeInsets.symmetric(vertical: 15),
                   ),
-                  child: const Text(
-                    'Request',
-                    style: TextStyle(fontSize: 16, color: Colors.white),
+                  child: const Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text(
+                        'Submit',
+                        style: TextStyle(fontSize: 16, color: Colors.white),
+                      ),
+                      SizedBox(width: 8), // Spasi antara teks dan ikon
+                      Icon(Icons.send, color: Colors.white), // Ikon kirim
+                    ],
                   ),
                 ),
               ),
