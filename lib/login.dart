@@ -31,7 +31,7 @@ class _LoginPageState extends State<LoginPage> {
       _isLoading = true;
     });
 
-    const String apiUrl = 'http://192.168.67.76:8000/api/login';
+    const String apiUrl = 'http://192.168.1.4:8000/api/login';
     final response = await http.post(
       Uri.parse(apiUrl),
       headers: {"Content-Type": "application/json"},
