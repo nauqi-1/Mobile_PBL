@@ -19,8 +19,6 @@ class MhsProfilePage extends StatefulWidget {
 }
 
 class _ProfilePageState extends State<MhsProfilePage> {
-  SharedPreferences prefs = await.SharedPreferences.getInstance();
-
   String nama = "Ahmad Husain";
   String nim = "2241760046";
   String prodi = "Sistem Informasi Bisnis";
@@ -48,8 +46,9 @@ class _ProfilePageState extends State<MhsProfilePage> {
   }
 
   void _indexMhs() {
-    Navigator.push(context,
-        MaterialPageRoute(builder: (context) => const MhsHomepageHutang()));
+    print("homepage");
+    //Navigator.push(context,
+    //    MaterialPageRoute(builder: (context) => const MhsHomepageHutang()));
   }
 
   void _tugasTersedia() {
@@ -82,6 +81,10 @@ class _ProfilePageState extends State<MhsProfilePage> {
         MaterialPageRoute(
             builder: (context) =>
                 const MhsProfilePage(title: 'Sistem Kompensasi')));
+  }
+
+  Future<void> _getDataMhs() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
   }
 
   @override
