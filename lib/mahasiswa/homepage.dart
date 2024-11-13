@@ -1,12 +1,18 @@
+import 'dart:convert';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:testproject/mahasiswa/notifikasi.dart';
 import 'daftar_tersedia.dart'; // Mengimpor halaman baru
 import 'profile.dart';
 import 'daftar_terambil.dart';
+import 'package:http/http.dart' as http;
+import 'package:shared_preferences/shared_preferences.dart';
 
 class MhsHomepageHutang extends StatefulWidget {
-  const MhsHomepageHutang({super.key});
+  final int userId;
+  final String tokenLogin;
+  const MhsHomepageHutang(
+      {super.key, required this.userId, required this.tokenLogin});
 
   @override
   // ignore: library_private_types_in_public_api
@@ -14,10 +20,45 @@ class MhsHomepageHutang extends StatefulWidget {
 }
 
 class _MhsHomepageHutangState extends State<MhsHomepageHutang> {
+  final String baseUrl = "http://192.168.67.126:8000/api/";
+  String? mahasiswaNama;
+
+  @protected
+  @mustCallSuper
+  void initState() {
+    super.initState();
+    _showNamaMhs();
+  }
+
+  Future<void> _showNamaMhs() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String? tokenLogin = prefs.getString('token');
+
+    final response = await http.get(
+      Uri.parse('${baseUrl}mahasiswa/${widget.userId}'),
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": "Bearer $tokenLogin"
+      },
+    );
+    final responseData = jsonDecode(response.body);
+    print(responseData);
+    try {
+      setState(() {
+        mahasiswaNama = responseData['mahasiswa']['mahasiswa_nama'];
+      });
+    } catch (e) {
+      print("Error fetching mahasiswaNama: $e");
+    }
+  }
+
   void _indexMhs() {
     print('Homepage Mahasiswa');
-    Navigator.push(context,
-        MaterialPageRoute(builder: (context) => const MhsHomepageHutang()));
+    Navigator.push(
+        context,
+        MaterialPageRoute(
+            builder: (context) => MhsHomepageHutang(
+                userId: widget.userId, tokenLogin: widget.tokenLogin)));
   }
 
   void _notifMhs() {
@@ -141,9 +182,9 @@ class _MhsHomepageHutangState extends State<MhsHomepageHutang> {
                 fontWeight: FontWeight.bold,
               ),
             ),
-            const Text(
-              'NAMA MAHASISWA',
-              style: TextStyle(
+            Text(
+              mahasiswaNama ?? 'Loading...',
+              style: const TextStyle(
                 fontFamily: 'InstrumentSans',
                 fontSize: 24,
                 fontWeight: FontWeight.bold,
