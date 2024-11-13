@@ -16,8 +16,13 @@ class MhsDetilTugas extends StatefulWidget {
 class _MhsDetilTugasState extends State<MhsDetilTugas> {
   void _indexMhs() {
     print('Homepage Mahasiswa');
-    Navigator.push(context,
-        MaterialPageRoute(builder: (context) => const MhsHomepageHutang()));
+    Navigator.push(
+        context,
+        MaterialPageRoute(
+            builder: (context) => const MhsHomepageHutang(
+                  userId: widget.userId,
+                  tokenLogin: widget.tokenLogin,
+                )));
   }
 
   void _notifMhs() {

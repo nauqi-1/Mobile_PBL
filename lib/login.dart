@@ -4,6 +4,7 @@ import 'package:testproject/mahasiswa/homepage.dart';
 import 'change_password.dart';
 import 'dosen/homepage.dart';
 import 'package:http/http.dart' as http;
+import 'package:shared_preferences/shared_preferences.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key, required this.title});
@@ -55,7 +56,10 @@ class _LoginPageState extends State<LoginPage> {
         Navigator.push(
           context,
           MaterialPageRoute(
-            builder: (context) => const MhsHomepageHutang(),
+            builder: (context) => MhsHomepageHutang(
+              userId: userId,
+              tokenLogin: tokenLogin,
+            ),
           ),
         );
       } else if (levelId == 2 || levelId == 3) {
@@ -71,6 +75,11 @@ class _LoginPageState extends State<LoginPage> {
     } else {
       _showErrorDialog();
     }
+  }
+
+  Future<void> _saveToken(String tokenLogin) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    await prefs.setString('token', tokenLogin);
   }
 
   void _showErrorDialog() {
@@ -102,9 +111,9 @@ class _LoginPageState extends State<LoginPage> {
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              Text(
-                widget.title,
-                style: const TextStyle(color: Colors.white, fontSize: 20),
+              const Text(
+                "Sistem Kompensasi",
+                style: TextStyle(color: Colors.white, fontSize: 20),
               ),
               const SizedBox(height: 4),
               RichText(
