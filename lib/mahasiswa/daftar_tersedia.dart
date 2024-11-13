@@ -43,8 +43,8 @@ class _MhsDaftarTersediaState extends State<MhsDaftarTersedia> {
 
   void _indexMhs() {
     print('Homepage Mahasiswa');
-    Navigator.push(context,
-        MaterialPageRoute(builder: (context) => const MhsHomepageHutang()));
+    //Navigator.push(context,
+    //    MaterialPageRoute(builder: (context) => const MhsHomepageHutang()));
   }
 
   void _notifMhs() {
