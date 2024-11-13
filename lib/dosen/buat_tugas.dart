@@ -1,5 +1,7 @@
+import 'dart:convert';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
 
 class BuatTugasPage extends StatefulWidget {
   const BuatTugasPage({super.key, required this.title});
@@ -16,6 +18,8 @@ class _BuatTugasPageState extends State<BuatTugasPage> {
   final TextEditingController _kuotaMhsController = TextEditingController();
   final TextEditingController _tenggatController = TextEditingController();
   final TextEditingController _deskripsiController = TextEditingController();
+
+  String url_create_data = "http://192.168.56.1:8000/api/tugas/";
 
   DateTime? _selectedDate;
   TimeOfDay? _selectedTime;
@@ -92,12 +96,44 @@ class _BuatTugasPageState extends State<BuatTugasPage> {
               child: const Text('OK'),
               onPressed: () {
                 Navigator.of(context).pop();
+                Navigator.of(context).pop(); // Kembali ke halaman sebelumnya
               },
             ),
           ],
         );
       },
     );
+  }
+
+  Future<void> _submitData() async {
+    // Mengumpulkan data dari controller
+    final data = {
+      "judul": _judulTugasController.text,
+      "bobot_jam": _bobotJamController.text,
+      "kuota_mahasiswa": _kuotaMhsController.text,
+      "tenggat_waktu": _tenggatController.text,
+      "deskripsi": _deskripsiController.text,
+    };
+
+    try {
+      final response = await http.post(
+        Uri.parse(url_create_data),
+        headers: {"Content-Type": "application/json"},
+        body: jsonEncode(data),
+      );
+
+      if (response.statusCode == 200 || response.statusCode == 201) {
+        await _showSuccessPopup();
+      } else {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text("Gagal membuat tugas, coba lagi!")),
+        );
+      }
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text("Error: $e")),
+      );
+    }
   }
 
   @override
@@ -236,11 +272,7 @@ class _BuatTugasPageState extends State<BuatTugasPage> {
             const SizedBox(height: 40),
             Center(
               child: ElevatedButton(
-                onPressed: _isFormValid
-                    ? () async {
-                        await _showSuccessPopup();
-                      }
-                    : null,
+                onPressed: _isFormValid ? _submitData : null,
                 style: ElevatedButton.styleFrom(
                   padding: const EdgeInsets.symmetric(vertical: 12),
                   minimumSize: const Size(272, 40),
@@ -257,29 +289,20 @@ class _BuatTugasPageState extends State<BuatTugasPage> {
         child: Container(
           color: const Color(0xff2d1b6b),
           child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: <Widget>[
               IconButton(
-                onPressed: () {},
-                icon: const Icon(Icons.home_outlined,
-                    color: Colors.white, size: 35),
-              ),
+                  onPressed: () {},
+                  icon: const Icon(Icons.home, color: Colors.white)),
               IconButton(
-                onPressed: () {},
-                icon:
-                    const Icon(Icons.list_sharp, color: Colors.white, size: 30),
-              ),
+                  onPressed: () {},
+                  icon: const Icon(Icons.list, color: Colors.white)),
               IconButton(
-                onPressed: () {},
-                icon: const Icon(CupertinoIcons.briefcase,
-                    color: Colors.white, size: 30),
-              ),
+                  onPressed: () {},
+                  icon: const Icon(Icons.work, color: Colors.white)),
               IconButton(
-                onPressed: () {},
-                icon: const Icon(Icons.account_circle_outlined,
-                    color: Colors.white, size: 35),
-              ),
+                  onPressed: () {},
+                  icon: const Icon(Icons.person, color: Colors.white)),
             ],
           ),
         ),
