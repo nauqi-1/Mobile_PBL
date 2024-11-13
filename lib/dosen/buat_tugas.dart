@@ -107,46 +107,16 @@ class _BuatTugasPageState extends State<BuatTugasPage> {
     );
   }
 
-  // Future<void> _submitData() async {
-  //   // Mengumpulkan data dari controller
-  //   final data = {
-  //     "judul": _judulTugasController.text,
-  //     "bobot_jam": _bobotJamController.text,
-  //     "kuota_mahasiswa": _kuotaMhsController.text,
-  //     "tenggat_waktu": _tenggatController.text,
-  //     "deskripsi": _deskripsiController.text,
-  //   };
-
-  //   try {
-  //     final response = await http.post(
-  //       Uri.parse(url_create_data),
-  //       headers: {"Content-Type": "application/json"},
-  //       body: jsonEncode(data),
-  //     );
-
-  //     if (response.statusCode == 200 || response.statusCode == 201) {
-  //       await _showSuccessPopup();
-  //     } else {
-  //       ScaffoldMessenger.of(context).showSnackBar(
-  //         const SnackBar(content: Text("Gagal membuat tugas, coba lagi!")),
-  //       );
-  //     }
-  //   } catch (e) {
-  //     ScaffoldMessenger.of(context).showSnackBar(
-  //       SnackBar(content: Text("Error: $e")),
-  //     );
-  //   }
-  // }
   void createData(String tugasNama, String bobotJam, String kuotaMahasiswa,
       String tenggatWaktu, String deskripsi) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String? token =
         prefs.getString('token'); // Ambil token dari SharedPreferences
-    
+
     // Ambil tanggal saat ini
     final DateTime now = DateTime.now();
-    final String formattedDate = DateFormat('yyyy-MM-dd').format(now); // format ke "YYYY-MM-DD"
-
+    final String formattedDate =
+        DateFormat('yyyy-MM-dd').format(now); // format ke "YYYY-MM-DD"
 
     try {
       final response = await http.post(
@@ -159,7 +129,7 @@ class _BuatTugasPageState extends State<BuatTugasPage> {
           'tugas_nama': tugasNama,
           'tugas_bobot': bobotJam,
           // 'kuota_mahasiswa': kuotaMahasiswa,
-          'tugas_tgl_dibuat' : formattedDate
+          'tugas_tgl_dibuat': formattedDate,
           'tugas_tgl_deadline': tenggatWaktu,
           'tugas_desc': deskripsi,
         }),
