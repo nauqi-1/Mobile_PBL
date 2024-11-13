@@ -142,11 +142,11 @@ class _BuatTugasPageState extends State<BuatTugasPage> {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String? token =
         prefs.getString('token'); // Ambil token dari SharedPreferences
-    
+
     // Ambil tanggal saat ini
     final DateTime now = DateTime.now();
-    final String formattedDate = DateFormat('yyyy-MM-dd').format(now); // format ke "YYYY-MM-DD"
-
+    final String formattedDate =
+        DateFormat('yyyy-MM-dd').format(now); // format ke "YYYY-MM-DD"
 
     try {
       final response = await http.post(
@@ -159,7 +159,7 @@ class _BuatTugasPageState extends State<BuatTugasPage> {
           'tugas_nama': tugasNama,
           'tugas_bobot': bobotJam,
           // 'kuota_mahasiswa': kuotaMahasiswa,
-          'tugas_tgl_dibuat' : formattedDate
+          'tugas_tgl_dibuat': formattedDate,
           'tugas_tgl_deadline': tenggatWaktu,
           'tugas_desc': deskripsi,
         }),
