@@ -1,7 +1,9 @@
 import 'dart:convert';
+import 'package:intl/intl.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:shared_preferences/shared_preferences.dart';
 
 class BuatTugasPage extends StatefulWidget {
   const BuatTugasPage({super.key, required this.title});
@@ -105,26 +107,74 @@ class _BuatTugasPageState extends State<BuatTugasPage> {
     );
   }
 
-  Future<void> _submitData() async {
-    // Mengumpulkan data dari controller
-    final data = {
-      "judul": _judulTugasController.text,
-      "bobot_jam": _bobotJamController.text,
-      "kuota_mahasiswa": _kuotaMhsController.text,
-      "tenggat_waktu": _tenggatController.text,
-      "deskripsi": _deskripsiController.text,
-    };
+  // Future<void> _submitData() async {
+  //   // Mengumpulkan data dari controller
+  //   final data = {
+  //     "judul": _judulTugasController.text,
+  //     "bobot_jam": _bobotJamController.text,
+  //     "kuota_mahasiswa": _kuotaMhsController.text,
+  //     "tenggat_waktu": _tenggatController.text,
+  //     "deskripsi": _deskripsiController.text,
+  //   };
+
+  //   try {
+  //     final response = await http.post(
+  //       Uri.parse(url_create_data),
+  //       headers: {"Content-Type": "application/json"},
+  //       body: jsonEncode(data),
+  //     );
+
+  //     if (response.statusCode == 200 || response.statusCode == 201) {
+  //       await _showSuccessPopup();
+  //     } else {
+  //       ScaffoldMessenger.of(context).showSnackBar(
+  //         const SnackBar(content: Text("Gagal membuat tugas, coba lagi!")),
+  //       );
+  //     }
+  //   } catch (e) {
+  //     ScaffoldMessenger.of(context).showSnackBar(
+  //       SnackBar(content: Text("Error: $e")),
+  //     );
+  //   }
+  // }
+  void createData(String tugasNama, String bobotJam, String kuotaMahasiswa,
+      String tenggatWaktu, String deskripsi) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String? token =
+        prefs.getString('token'); // Ambil token dari SharedPreferences
+    
+    // Ambil tanggal saat ini
+    final DateTime now = DateTime.now();
+    final String formattedDate = DateFormat('yyyy-MM-dd').format(now); // format ke "YYYY-MM-DD"
+
 
     try {
       final response = await http.post(
         Uri.parse(url_create_data),
-        headers: {"Content-Type": "application/json"},
-        body: jsonEncode(data),
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": "Bearer $token", // Tambahkan token ke header
+        },
+        body: jsonEncode({
+          'tugas_nama': tugasNama,
+          'tugas_bobot': bobotJam,
+          // 'kuota_mahasiswa': kuotaMahasiswa,
+          'tugas_tgl_dibuat' : formattedDate
+          'tugas_tgl_deadline': tenggatWaktu,
+          'tugas_desc': deskripsi,
+        }),
       );
 
       if (response.statusCode == 200 || response.statusCode == 201) {
-        await _showSuccessPopup();
+        // Tampilkan popup sukses dan kosongkan field
+        _judulTugasController.clear();
+        _bobotJamController.clear();
+        _kuotaMhsController.clear();
+        _tenggatController.clear();
+        _deskripsiController.clear();
+        _showSuccessPopup();
       } else {
+        // Jika gagal
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(content: Text("Gagal membuat tugas, coba lagi!")),
         );
@@ -134,6 +184,17 @@ class _BuatTugasPageState extends State<BuatTugasPage> {
         SnackBar(content: Text("Error: $e")),
       );
     }
+  }
+
+  // Fungsi untuk memanggil createData dengan data dari controller
+  void _submitData() {
+    createData(
+      _judulTugasController.text,
+      _bobotJamController.text,
+      _kuotaMhsController.text,
+      _tenggatController.text,
+      _deskripsiController.text,
+    );
   }
 
   @override
