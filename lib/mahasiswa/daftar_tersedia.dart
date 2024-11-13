@@ -1,5 +1,7 @@
+import 'dart:convert';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
 import 'detil_tugas.dart';
 import 'homepage.dart';
 import 'notifikasi.dart';
@@ -14,6 +16,31 @@ class MhsDaftarTersedia extends StatefulWidget {
 }
 
 class _MhsDaftarTersediaState extends State<MhsDaftarTersedia> {
+  List tugasList = []; // Menyimpan daftar tugas dari API
+  bool isLoading = true; // Menyimpan status loading
+
+  // Fungsi untuk mengambil data tugas dari API
+  Future<void> fetchTugas() async {
+    try {
+      final response = await http.get(Uri.parse(
+          'http://192.168.1.4:8000/api/tugas')); // Ganti dengan IP lokal yang sesuai
+
+      if (response.statusCode == 200) {
+        setState(() {
+          tugasList = json.decode(response.body);
+          isLoading = false;
+        });
+      } else {
+        throw Exception('Failed to load tugas');
+      }
+    } catch (e) {
+      setState(() {
+        isLoading = false;
+      });
+      print("Error fetching data: $e"); // Cetak error di console
+    }
+  }
+
   void _indexMhs() {
     print('Homepage Mahasiswa');
     Navigator.push(context,
@@ -145,7 +172,8 @@ class _MhsDaftarTersediaState extends State<MhsDaftarTersedia> {
             const SizedBox(height: 20),
             Expanded(
               child: ListView.builder(
-                itemCount: 10, // Jumlah data dummy
+                //itemCount: 10, // Jumlah data dummy
+                itemCount: tugasList.length, //Jumlah data dari API
                 itemBuilder: (context, index) {
                   return Padding(
                     padding: const EdgeInsets.symmetric(vertical: 5.0),
@@ -155,7 +183,9 @@ class _MhsDaftarTersediaState extends State<MhsDaftarTersedia> {
                         borderRadius: BorderRadius.circular(8),
                       ),
                       child: ListTile(
-                        title: const Text('Judul Tugas'),
+                        //title: const Text('Judul Tugas'),
+                        title: Text(tugasList[index]
+                            ['tugas_nama']), //menampilkan judul tugas dari API
                         trailing: const Text(
                           'Detail >',
                           style: TextStyle(
