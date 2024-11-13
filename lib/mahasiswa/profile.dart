@@ -7,6 +7,7 @@ import 'package:testproject/login.dart';
 import 'homepage.dart';
 import 'notifikasi.dart';
 import 'daftar_terambil.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class MhsProfilePage extends StatefulWidget {
   const MhsProfilePage({super.key, required this.title});
@@ -18,6 +19,8 @@ class MhsProfilePage extends StatefulWidget {
 }
 
 class _ProfilePageState extends State<MhsProfilePage> {
+  SharedPreferences prefs = await.SharedPreferences.getInstance();
+
   String nama = "Ahmad Husain";
   String nim = "2241760046";
   String prodi = "Sistem Informasi Bisnis";

@@ -24,10 +24,10 @@ class _MhsHomepageHutangState extends State<MhsHomepageHutang> {
   String? mahasiswaNama;
 
   @protected
-  @mustCallSuper
+  @override
   void initState() {
-    super.initState();
     _showNamaMhs();
+    super.initState();
   }
 
   Future<void> _showNamaMhs() async {

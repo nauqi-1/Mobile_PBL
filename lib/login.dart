@@ -53,6 +53,7 @@ class _LoginPageState extends State<LoginPage> {
       final String tokenLogin = responseData['token'];
       final int userId = responseData['user']['user_id'];
       if (levelId == 4) {
+        _saveToken(tokenLogin, userId);
         Navigator.push(
           context,
           MaterialPageRoute(
@@ -77,9 +78,10 @@ class _LoginPageState extends State<LoginPage> {
     }
   }
 
-  Future<void> _saveToken(String tokenLogin) async {
+  Future<void> _saveToken(String tokenLogin, int userId) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     await prefs.setString('token', tokenLogin);
+    await prefs.setInt('user_id', userId);
   }
 
   void _showErrorDialog() {
