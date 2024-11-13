@@ -7,6 +7,7 @@ void main() {
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
+  final String apiUrl = 'http://192.168.1.4:8000/api/';
 
   @override
   Widget build(BuildContext context) {

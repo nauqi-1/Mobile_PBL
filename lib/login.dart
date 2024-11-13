@@ -31,9 +31,9 @@ class _LoginPageState extends State<LoginPage> {
       _isLoading = true;
     });
 
-    const String apiUrl = 'http://192.168.1.4:8000/api/login';
+    const String apiUrl = 'http://192.168.67.216:8000/api/';
     final response = await http.post(
-      Uri.parse(apiUrl),
+      Uri.parse('${apiUrl}login'),
       headers: {"Content-Type": "application/json"},
       body: jsonEncode({
         "username": _textUsername.text,
@@ -50,6 +50,7 @@ class _LoginPageState extends State<LoginPage> {
       print(responseData);
       final int levelId = responseData['user']['level_id'];
       final String tokenLogin = responseData['token'];
+      final int userId = responseData['user']['user_id'];
       if (levelId == 4) {
         Navigator.push(
           context,
