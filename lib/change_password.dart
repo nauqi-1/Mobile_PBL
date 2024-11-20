@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:testproject/login.dart';
+import 'models/login_response.dart';
 
 class ChangePasswordPage extends StatefulWidget {
-  const ChangePasswordPage({super.key, required this.title});
-
-  final String title;
+  const ChangePasswordPage({super.key});
 
   @override
   State<ChangePasswordPage> createState() => _ChangePasswordPageState();
@@ -88,9 +87,9 @@ class _ChangePasswordPageState extends State<ChangePasswordPage> {
             Column(
               mainAxisSize: MainAxisSize.min,
               children: [
-                Text(
-                  widget.title,
-                  style: const TextStyle(
+                const Text(
+                  'Sistem Kompensasi',
+                  style: TextStyle(
                       color: Colors.white,
                       fontSize: 20,
                       fontFamily: 'InstrumentSans'),

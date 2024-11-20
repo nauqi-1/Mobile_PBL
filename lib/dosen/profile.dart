@@ -5,11 +5,13 @@ import 'edit_profile.dart';
 import 'daftar_tugas.dart';
 import 'package:testproject/login.dart';
 import 'homepage.dart';
+import '../models/login_response.dart';
 
 class DsnProfilePage extends StatefulWidget {
-  const DsnProfilePage({super.key, required this.title});
-
-  final String title;
+  final Dosen dosen;
+  final LoginResponse loginResponse;
+  const DsnProfilePage(
+      {super.key, required this.dosen, required this.loginResponse});
 
   @override
   State<DsnProfilePage> createState() => _ProfilePageState();
@@ -23,7 +25,12 @@ class _ProfilePageState extends State<DsnProfilePage> {
 
   void _indexDsn() {
     Navigator.push(
-        context, MaterialPageRoute(builder: (context) => const DsnHomepage()));
+        context,
+        MaterialPageRoute(
+            builder: (context) => DsnHomepage(
+                  dosen: widget.dosen,
+                  loginResponse: widget.loginResponse,
+                )));
   }
 
   void _notifDsn() {
@@ -35,8 +42,10 @@ class _ProfilePageState extends State<DsnProfilePage> {
     Navigator.push(
         context,
         MaterialPageRoute(
-            builder: (context) =>
-                const DsnProfilePage(title: 'Sistem Kompensasi')));
+            builder: (context) => DsnProfilePage(
+                  dosen: widget.dosen,
+                  loginResponse: widget.loginResponse,
+                )));
   }
 
   void _editProfile() {
@@ -44,8 +53,9 @@ class _ProfilePageState extends State<DsnProfilePage> {
     Navigator.push(
         context,
         MaterialPageRoute(
-            builder: (context) => const EditProfilePage(
-                  title: 'Sistem Kompensasi',
+            builder: (context) => EditProfilePage(
+                  dosen: widget.dosen,
+                  loginResponse: widget.loginResponse,
                 )));
   }
 
@@ -96,9 +106,9 @@ class _ProfilePageState extends State<DsnProfilePage> {
             Column(
               mainAxisSize: MainAxisSize.min,
               children: [
-                Text(
-                  widget.title,
-                  style: const TextStyle(
+                const Text(
+                  'Sistem Kompensasi',
+                  style: TextStyle(
                       color: Colors.white,
                       fontSize: 20,
                       fontFamily: 'InstrumentSans'),
@@ -181,7 +191,7 @@ class _ProfilePageState extends State<DsnProfilePage> {
                         Border.all(color: const Color(0xFFd9d9d9), width: 1),
                     borderRadius: BorderRadius.circular(10)),
                 child: Text(
-                  nama,
+                  widget.dosen.dosenNama,
                   style: const TextStyle(
                     fontSize: 16,
                     color: Colors.black,
@@ -206,7 +216,7 @@ class _ProfilePageState extends State<DsnProfilePage> {
                         Border.all(color: const Color(0xFFd9d9d9), width: 1),
                     borderRadius: BorderRadius.circular(10)),
                 child: Text(
-                  nip,
+                  widget.dosen.dosenNip,
                   style: const TextStyle(
                     fontSize: 16,
                     color: Colors.black,
@@ -231,7 +241,7 @@ class _ProfilePageState extends State<DsnProfilePage> {
                         Border.all(color: const Color(0xFFd9d9d9), width: 1),
                     borderRadius: BorderRadius.circular(10)),
                 child: Text(
-                  prodi,
+                  widget.dosen.dosenProdi,
                   style: const TextStyle(
                     fontSize: 16,
                     color: Colors.black,
@@ -256,7 +266,7 @@ class _ProfilePageState extends State<DsnProfilePage> {
                         Border.all(color: const Color(0xFFd9d9d9), width: 1),
                     borderRadius: BorderRadius.circular(10)),
                 child: Text(
-                  noHp,
+                  widget.dosen.dosenNoHp,
                   style: const TextStyle(
                     fontSize: 16,
                     color: Colors.black,
@@ -317,9 +327,7 @@ class _ProfilePageState extends State<DsnProfilePage> {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                          builder: (context) => const ChangePasswordPage(
-                                title: 'Sistem Kompensasi',
-                              )),
+                          builder: (context) => const ChangePasswordPage()),
                     );
                   },
                   child: const Text(

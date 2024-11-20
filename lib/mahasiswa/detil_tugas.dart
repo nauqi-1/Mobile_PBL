@@ -33,11 +33,11 @@ class _MhsDetilTugasState extends State<MhsDetilTugas> {
 
   void _profileMhs() {
     print('Profile Mahasiswa');
-    Navigator.push(
-        context,
-        MaterialPageRoute(
-            builder: (context) =>
-                const MhsProfilePage(title: 'Sistem Kompensasi')));
+    //Navigator.push(
+    //    context,
+    //    MaterialPageRoute(
+    //        builder: (context) =>
+    //            const MhsProfilePage(title: 'Sistem Kompensasi')));
   }
 
   void _tugasTersedia() {

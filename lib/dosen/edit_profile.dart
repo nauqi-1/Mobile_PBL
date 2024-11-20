@@ -1,11 +1,13 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'profile.dart';
+import '../models/login_response.dart';
 
 class EditProfilePage extends StatefulWidget {
-  const EditProfilePage({super.key, required this.title});
-
-  final String title;
+  final Dosen dosen;
+  final LoginResponse loginResponse;
+  const EditProfilePage(
+      {super.key, required this.dosen, required this.loginResponse});
 
   @override
   State<EditProfilePage> createState() => _EditProfilePageState();
@@ -41,8 +43,10 @@ class _EditProfilePageState extends State<EditProfilePage> {
                 Navigator.pushAndRemoveUntil(
                     context,
                     MaterialPageRoute(
-                        builder: (context) =>
-                            const DsnProfilePage(title: 'Sistem Kompensasi')),
+                        builder: (context) => DsnProfilePage(
+                              dosen: widget.dosen,
+                              loginResponse: widget.loginResponse,
+                            )),
                     (Route<dynamic> route) => false);
               },
               child: const AlertDialog(
@@ -156,9 +160,9 @@ class _EditProfilePageState extends State<EditProfilePage> {
             Column(
               mainAxisSize: MainAxisSize.min,
               children: [
-                Text(
-                  widget.title,
-                  style: const TextStyle(
+                const Text(
+                  'Sistem Kompensasi',
+                  style: TextStyle(
                       color: Colors.white,
                       fontSize: 20,
                       fontFamily: 'InstrumentSans'),

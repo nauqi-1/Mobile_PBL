@@ -14,11 +14,11 @@ class DaftarTugasTerkumpulPage extends StatefulWidget {
 class _DaftarTugasTerkumpulState extends State<DaftarTugasTerkumpulPage> {
   void _profileDsn() {
     print('Profile Dosen');
-    Navigator.push(
-        context,
-        MaterialPageRoute(
-            builder: (context) =>
-                const DsnProfilePage(title: 'Sistem Kompensasi')));
+    //Navigator.push(
+    //    context,
+    //    MaterialPageRoute(
+    //        builder: (context) =>
+    //            const DsnProfilePage(title: 'Sistem Kompensasi')));
   }
 
   @override

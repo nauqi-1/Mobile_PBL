@@ -8,32 +8,28 @@ import 'homepage.dart';
 import 'notifikasi.dart';
 import 'daftar_terambil.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import '../models/login_response.dart';
 
 class MhsProfilePage extends StatefulWidget {
-  const MhsProfilePage({super.key, required this.title});
+  final Mahasiswa mahasiswa;
+  final LoginResponse loginResponse;
 
-  final String title;
+  const MhsProfilePage(
+      {super.key, required this.mahasiswa, required this.loginResponse});
 
   @override
   State<MhsProfilePage> createState() => _ProfilePageState();
 }
 
 class _ProfilePageState extends State<MhsProfilePage> {
-  String nama = "Ahmad Husain";
-  String nim = "2241760046";
-  String prodi = "Sistem Informasi Bisnis";
-  String kelas = "3B";
-  String noHp = "08xxxxxx";
-  String kompetensi = "Video Editing, Photography, Web Design";
-
   void _editProfile() {
     print('Edit Profile');
-    Navigator.push(
-        context,
-        MaterialPageRoute(
-            builder: (context) => const EditProfilePage(
-                  title: 'Sistem Kompensasi',
-                )));
+    //Navigator.push(
+    //    context,
+    //    MaterialPageRoute(
+    //        builder: (context) => const EditProfilePage(
+    //              title: 'Sistem Kompensasi',
+    //            )));
   }
 
   void _logOut() {
@@ -79,12 +75,9 @@ class _ProfilePageState extends State<MhsProfilePage> {
     Navigator.push(
         context,
         MaterialPageRoute(
-            builder: (context) =>
-                const MhsProfilePage(title: 'Sistem Kompensasi')));
-  }
-
-  Future<void> _getDataMhs() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
+            builder: (context) => MhsProfilePage(
+                mahasiswa: widget.mahasiswa,
+                loginResponse: widget.loginResponse)));
   }
 
   @override
@@ -106,9 +99,9 @@ class _ProfilePageState extends State<MhsProfilePage> {
             Column(
               mainAxisSize: MainAxisSize.min,
               children: [
-                Text(
-                  widget.title,
-                  style: const TextStyle(
+                const Text(
+                  'Sistem Kompensasi',
+                  style: TextStyle(
                       color: Colors.white,
                       fontSize: 20,
                       fontFamily: 'InstrumentSans'),
@@ -191,7 +184,7 @@ class _ProfilePageState extends State<MhsProfilePage> {
                         Border.all(color: const Color(0xFFd9d9d9), width: 1),
                     borderRadius: BorderRadius.circular(10)),
                 child: Text(
-                  nama,
+                  widget.mahasiswa.mahasiswaNama,
                   style: const TextStyle(
                     fontSize: 16,
                     color: Colors.black,
@@ -216,7 +209,7 @@ class _ProfilePageState extends State<MhsProfilePage> {
                         Border.all(color: const Color(0xFFd9d9d9), width: 1),
                     borderRadius: BorderRadius.circular(10)),
                 child: Text(
-                  nim,
+                  widget.mahasiswa.mahasiswaNim,
                   style: const TextStyle(
                     fontSize: 16,
                     color: Colors.black,
@@ -241,7 +234,7 @@ class _ProfilePageState extends State<MhsProfilePage> {
                         Border.all(color: const Color(0xFFd9d9d9), width: 1),
                     borderRadius: BorderRadius.circular(10)),
                 child: Text(
-                  prodi,
+                  widget.mahasiswa.mahasiswaProdi,
                   style: const TextStyle(
                     fontSize: 16,
                     color: Colors.black,
@@ -266,7 +259,7 @@ class _ProfilePageState extends State<MhsProfilePage> {
                         Border.all(color: const Color(0xFFd9d9d9), width: 1),
                     borderRadius: BorderRadius.circular(10)),
                 child: Text(
-                  kelas,
+                  widget.mahasiswa.mahasiswaKelas,
                   style: const TextStyle(
                     fontSize: 16,
                     color: Colors.black,
@@ -291,32 +284,7 @@ class _ProfilePageState extends State<MhsProfilePage> {
                         Border.all(color: const Color(0xFFd9d9d9), width: 1),
                     borderRadius: BorderRadius.circular(10)),
                 child: Text(
-                  noHp,
-                  style: const TextStyle(
-                    fontSize: 16,
-                    color: Colors.black,
-                  ),
-                ),
-              ),
-              const SizedBox(height: 20),
-              const Text(
-                'Kompetensi',
-                style: TextStyle(
-                  color: Colors.black,
-                  fontSize: 12,
-                ),
-              ),
-              const SizedBox(height: 8),
-              Container(
-                width: 500,
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 12, vertical: 12),
-                decoration: BoxDecoration(
-                    border:
-                        Border.all(color: const Color(0xFFd9d9d9), width: 1),
-                    borderRadius: BorderRadius.circular(10)),
-                child: Text(
-                  kompetensi,
+                  widget.mahasiswa.mahasiswaNoHp,
                   style: const TextStyle(
                     fontSize: 16,
                     color: Colors.black,
@@ -377,9 +345,7 @@ class _ProfilePageState extends State<MhsProfilePage> {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                          builder: (context) => const ChangePasswordPage(
-                                title: 'Sistem Kompensasi',
-                              )),
+                          builder: (context) => const ChangePasswordPage()),
                     );
                   },
                   child: const Text(

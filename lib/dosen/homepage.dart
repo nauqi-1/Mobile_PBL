@@ -3,9 +3,13 @@ import 'package:flutter/material.dart';
 import 'daftar_tugas.dart';
 import 'notifikasi.dart';
 import 'package:testproject/dosen/profile.dart';
+import '../models/login_response.dart';
 
 class DsnHomepage extends StatefulWidget {
-  const DsnHomepage({super.key});
+  final Dosen dosen;
+  final LoginResponse loginResponse;
+  const DsnHomepage(
+      {super.key, required this.dosen, required this.loginResponse});
 
   @override
   State<DsnHomepage> createState() => _DsnHomepageState();
@@ -14,7 +18,10 @@ class DsnHomepage extends StatefulWidget {
 class _DsnHomepageState extends State<DsnHomepage> {
   void _indexDsn() {
     Navigator.push(
-        context, MaterialPageRoute(builder: (context) => const DsnHomepage()));
+        context,
+        MaterialPageRoute(
+            builder: (context) => DsnHomepage(
+                dosen: widget.dosen, loginResponse: widget.loginResponse)));
   }
 
   void _profileDsn() {
@@ -22,8 +29,8 @@ class _DsnHomepageState extends State<DsnHomepage> {
     Navigator.push(
         context,
         MaterialPageRoute(
-            builder: (context) =>
-                const DsnProfilePage(title: 'Sistem Kompensasi')));
+            builder: (context) => DsnProfilePage(
+                dosen: widget.dosen, loginResponse: widget.loginResponse)));
   }
 
   void _daftarTugas() {
@@ -120,32 +127,39 @@ class _DsnHomepageState extends State<DsnHomepage> {
           ],
         ),
       ),
-      body: const SingleChildScrollView(
-        padding: EdgeInsets.all(16.0),
+      body: SingleChildScrollView(
+        padding: const EdgeInsets.all(16.0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            SizedBox(height: 20),
-            Text(
-              'Selamat datang,\nUsman Nurhasan, S.Kom., M.T.',
-              textAlign: TextAlign.center,
+            const SizedBox(height: 20),
+            const Text(
+              'Selamat datang,',
               style: TextStyle(
-                fontSize: 24,
                 fontFamily: 'InstrumentSans',
+                fontSize: 21,
                 fontWeight: FontWeight.bold,
               ),
             ),
-            SizedBox(height: 20),
-            Image(
+            Text(
+              widget.dosen.dosenNama,
+              style: const TextStyle(
+                fontFamily: 'InstrumentSans',
+                fontSize: 24,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+            const SizedBox(height: 20),
+            const Image(
               image: AssetImage('assets/images/logo-polinema.png'),
               height: 150,
             ),
-            SizedBox(height: 30),
-            InputField(labelText: 'Total Tugas Kompensasi'),
-            SizedBox(height: 10),
-            InputField(labelText: 'Jumlah Tugas Kompensasi Dikerjakan'),
-            SizedBox(height: 10),
-            InputField(labelText: 'Jumlah Permintaan Tugas Kompensasi'),
+            const SizedBox(height: 30),
+            const InputField(labelText: 'Total Tugas Kompensasi'),
+            const SizedBox(height: 10),
+            const InputField(labelText: 'Jumlah Tugas Kompensasi Dikerjakan'),
+            const SizedBox(height: 10),
+            const InputField(labelText: 'Jumlah Permintaan Tugas Kompensasi'),
           ],
         ),
       ),

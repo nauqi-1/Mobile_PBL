@@ -5,11 +5,14 @@ import 'homepage.dart';
 import 'daftar_tersedia.dart';
 import 'notifikasi.dart';
 import 'daftar_terambil.dart';
+import '../models/login_response.dart';
 
 class EditProfilePage extends StatefulWidget {
-  const EditProfilePage({super.key, required this.title});
+  final Mahasiswa mahasiswa;
+  final LoginResponse loginResponse;
 
-  final String title;
+  const EditProfilePage(
+      {super.key, required this.mahasiswa, required this.loginResponse});
 
   @override
   State<EditProfilePage> createState() => _EditProfilePageState();
@@ -76,8 +79,10 @@ class _EditProfilePageState extends State<EditProfilePage> {
     Navigator.push(
         context,
         MaterialPageRoute(
-            builder: (context) =>
-                const MhsProfilePage(title: 'Sistem Kompensasi')));
+            builder: (context) => MhsProfilePage(
+                  mahasiswa: widget.mahasiswa,
+                  loginResponse: widget.loginResponse,
+                )));
   }
 
   void _saveEdit() {
@@ -91,8 +96,10 @@ class _EditProfilePageState extends State<EditProfilePage> {
                 Navigator.pushAndRemoveUntil(
                     context,
                     MaterialPageRoute(
-                        builder: (context) =>
-                            const MhsProfilePage(title: 'Sistem Kompensasi')),
+                        builder: (context) => MhsProfilePage(
+                              mahasiswa: widget.mahasiswa,
+                              loginResponse: widget.loginResponse,
+                            )),
                     (Route<dynamic> route) => false);
               },
               child: const AlertDialog(
@@ -206,9 +213,9 @@ class _EditProfilePageState extends State<EditProfilePage> {
             Column(
               mainAxisSize: MainAxisSize.min,
               children: [
-                Text(
-                  widget.title,
-                  style: const TextStyle(
+                const Text(
+                  'Sistem Kompensasi',
+                  style: TextStyle(
                       color: Colors.white,
                       fontSize: 20,
                       fontFamily: 'InstrumentSans'),

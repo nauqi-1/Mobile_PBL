@@ -38,11 +38,11 @@ class _NotifikasiPageState extends State<DsnNotifikasiPage> {
 
   void _profileDsn() {
     print('Profile Dosen');
-    Navigator.push(
-        context,
-        MaterialPageRoute(
-            builder: (context) =>
-                const DsnProfilePage(title: 'Sistem Kompensasi')));
+    //Navigator.push(
+    //    context,
+    //    MaterialPageRoute(
+    //        builder: (context) =>
+    //            const DsnProfilePage(title: 'Sistem Kompensasi')));
   }
 
   @override

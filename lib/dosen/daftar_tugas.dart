@@ -27,11 +27,11 @@ class _DaftarTugasState extends State<DsnDaftarTugasPage> {
 
   void _profileDsn() {
     print('Profile Dosen');
-    Navigator.push(
-        context,
-        MaterialPageRoute(
-            builder: (context) =>
-                const DsnProfilePage(title: 'Sistem Kompensasi')));
+    //Navigator.push(
+    //    context,
+    //    MaterialPageRoute(
+    //        builder: (context) =>
+    //            const DsnProfilePage(title: 'Sistem Kompensasi')));
   }
 
   void _detailTugas() {

@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:testproject/mahasiswa/notifikasi.dart';
+import 'package:testproject/models/login_response.dart';
 import 'daftar_tersedia.dart'; // Mengimpor halaman baru
 import 'profile.dart';
 import 'daftar_terambil.dart';
@@ -9,10 +10,10 @@ import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 
 class MhsHomepageHutang extends StatefulWidget {
-  final int userId;
-  final String tokenLogin;
+  final LoginResponse loginResponse;
+  final Mahasiswa mahasiswa;
   const MhsHomepageHutang(
-      {super.key, required this.userId, required this.tokenLogin});
+      {super.key, required this.loginResponse, required this.mahasiswa});
 
   @override
   // ignore: library_private_types_in_public_api
@@ -20,45 +21,15 @@ class MhsHomepageHutang extends StatefulWidget {
 }
 
 class _MhsHomepageHutangState extends State<MhsHomepageHutang> {
-  final String baseUrl = "http://192.168.67.126:8000/api/";
-  String? mahasiswaNama;
-
-  @protected
-  @override
-  void initState() {
-    _showNamaMhs();
-    super.initState();
-  }
-
-  Future<void> _showNamaMhs() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    String? tokenLogin = prefs.getString('token');
-
-    final response = await http.get(
-      Uri.parse('${baseUrl}mahasiswa/${widget.userId}'),
-      headers: {
-        "Content-Type": "application/json",
-        "Authorization": "Bearer $tokenLogin"
-      },
-    );
-    final responseData = jsonDecode(response.body);
-    print(responseData);
-    try {
-      setState(() {
-        mahasiswaNama = responseData['mahasiswa']['mahasiswa_nama'];
-      });
-    } catch (e) {
-      print("Error fetching mahasiswaNama: $e");
-    }
-  }
-
   void _indexMhs() {
     print('Homepage Mahasiswa');
     Navigator.push(
         context,
         MaterialPageRoute(
             builder: (context) => MhsHomepageHutang(
-                userId: widget.userId, tokenLogin: widget.tokenLogin)));
+                  mahasiswa: widget.mahasiswa,
+                  loginResponse: widget.loginResponse,
+                )));
   }
 
   void _notifMhs() {
@@ -72,8 +43,9 @@ class _MhsHomepageHutangState extends State<MhsHomepageHutang> {
     Navigator.push(
         context,
         MaterialPageRoute(
-            builder: (context) =>
-                const MhsProfilePage(title: 'Sistem Kompensasi')));
+            builder: (context) => MhsProfilePage(
+                mahasiswa: widget.mahasiswa,
+                loginResponse: widget.loginResponse)));
   }
 
   void _tugasTersedia() {
@@ -183,7 +155,7 @@ class _MhsHomepageHutangState extends State<MhsHomepageHutang> {
               ),
             ),
             Text(
-              mahasiswaNama ?? 'Loading...',
+              widget.mahasiswa.mahasiswaNama ?? 'Loading...',
               style: const TextStyle(
                 fontFamily: 'InstrumentSans',
                 fontSize: 24,
@@ -196,11 +168,16 @@ class _MhsHomepageHutangState extends State<MhsHomepageHutang> {
               height: 150,
             ),
             const SizedBox(height: 20),
-            _buildTextField('Total Absensi Alfa', 'Total jam'),
+            _buildTextField(
+                'Total Absensi Alfa', widget.mahasiswa.mahasiswaAlfaTotal),
             const SizedBox(height: 5),
-            _buildTextField('Jumlah Absensi Alfa Lunas', 'Jumlah jam'),
+            _buildTextField('Jumlah Absensi Alfa Lunas',
+                widget.mahasiswa.mahasiswaAlfaSisa),
             const SizedBox(height: 5),
-            _buildTextField('Jumlah Absensi Alfa Belum Lunas', 'Jumlah jam'),
+            _buildTextField(
+                'Jumlah Absensi Alfa Belum Lunas',
+                widget.mahasiswa.mahasiswaAlfaTotal -
+                    widget.mahasiswa.mahasiswaAlfaSisa),
             const SizedBox(height: 5),
             const Align(
               alignment: Alignment.centerLeft,
@@ -274,7 +251,7 @@ class _MhsHomepageHutangState extends State<MhsHomepageHutang> {
   // Fungsi untuk membangun tampilan homepage
 
   // Fungsi untuk membuat TextField dengan label dan hint
-  Widget _buildTextField(String label, String hint) {
+  Widget _buildTextField(String label, int hint) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -285,7 +262,7 @@ class _MhsHomepageHutangState extends State<MhsHomepageHutang> {
         const SizedBox(height: 5),
         TextField(
           decoration: InputDecoration(
-            hintText: hint, // Teks yang muncul di dalam kotak
+            hintText: hint.toString(), // Teks yang muncul di dalam kotak
             hintStyle: const TextStyle(
               color: Colors
                   .grey, // Warna teks abu-abu pada "Total jam" dan "Jumlah jam"

@@ -52,11 +52,11 @@ class _MhsDetilPengumpulanState extends State<MhsDetilPengumpulan> {
   }
 
   void _profileMhs() {
-    Navigator.push(
-        context,
-        MaterialPageRoute(
-            builder: (context) =>
-                const MhsProfilePage(title: 'Sistem Kompensasi')));
+    //Navigator.push(
+    //    context,
+    //    MaterialPageRoute(
+    //        builder: (context) =>
+    //            const MhsProfilePage(title: 'Sistem Kompensasi')));
   }
 
   void _tugasTersedia() {

@@ -5,6 +5,7 @@ import 'change_password.dart';
 import 'dosen/homepage.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
+import '../models/login_response.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key, required this.title});
@@ -32,7 +33,6 @@ class _LoginPageState extends State<LoginPage> {
       _isLoading = true;
     });
 
-    const String apiUrl = 'http://192.168.67.216:8000/api/';
     final response = await http.post(
       Uri.parse('${apiUrl}login'),
       headers: {"Content-Type": "application/json"},
@@ -49,32 +49,75 @@ class _LoginPageState extends State<LoginPage> {
     if (response.statusCode == 200) {
       final responseData = jsonDecode(response.body);
       print(responseData);
-      final int levelId = responseData['user']['level_id'];
-      final String tokenLogin = responseData['token'];
-      final int userId = responseData['user']['user_id'];
+      final loginResponse = LoginResponse.fromJson(responseData);
+
+      final int levelId = loginResponse.user.levelId;
+      final String tokenLogin = loginResponse.token;
+      final int userId = loginResponse.user.userId;
+
+      print(levelId);
+      print(tokenLogin);
+      print(userId);
+
       if (levelId == 4) {
-        _saveToken(tokenLogin, userId);
-        Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (context) => MhsHomepageHutang(
-              userId: userId,
-              tokenLogin: tokenLogin,
+        final response2 = await http.get(
+          Uri.parse('${apiUrl}user/find_mahasiswa/$userId'),
+          headers: {
+            "Content-Type": "application/json",
+            'Authorization': 'Bearer $tokenLogin'
+          },
+        );
+
+        if (response2.statusCode == 200) {
+          final responseData2 = jsonDecode(response2.body);
+          print(responseData2);
+
+          final mahasiswa = Mahasiswa.fromJson(responseData2);
+
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => MhsHomepageHutang(
+                mahasiswa: mahasiswa,
+                loginResponse: loginResponse,
+              ),
             ),
-          ),
-        );
+          );
+        } else {
+          _showErrorDialog();
+        }
       } else if (levelId == 2 || levelId == 3) {
-        Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (context) => const DsnHomepage(),
-          ),
+        final response2 = await http.get(
+          Uri.parse('${apiUrl}user/find_dosen/$userId'),
+          headers: {
+            "Content-Type": "application/json",
+            'Authorization': 'Bearer $tokenLogin'
+          },
         );
+
+        if (response2.statusCode == 200) {
+          final responseData2 = jsonDecode(response2.body);
+          print(responseData2);
+
+          final dosen = Dosen.fromJson(responseData2);
+
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => DsnHomepage(
+                dosen: dosen,
+                loginResponse: loginResponse,
+              ),
+            ),
+          );
+        } else {
+          _showErrorDialog();
+        }
       } else {
-        _showErrorDialog();
+        _showErrorDialog(); // Unhandled levelId case
       }
     } else {
-      _showErrorDialog();
+      _showErrorDialog(); // Initial login failed
     }
   }
 
@@ -246,9 +289,7 @@ class _LoginPageState extends State<LoginPage> {
                         Navigator.push(
                           context,
                           MaterialPageRoute(
-                              builder: (context) => const ChangePasswordPage(
-                                    title: 'Sistem Kompensasi',
-                                  )),
+                              builder: (context) => const ChangePasswordPage()),
                         );
                       },
                       child: const Text(
