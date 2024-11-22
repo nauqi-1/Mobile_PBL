@@ -1,4 +1,5 @@
 import 'package:file_picker/file_picker.dart';
+import 'package:testproject/models/login_response.dart';
 import 'dart:math';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -9,7 +10,10 @@ import 'profile.dart';
 import 'daftar_terambil.dart';
 
 class MhsDetilPengumpulan extends StatefulWidget {
-  const MhsDetilPengumpulan({super.key});
+  final LoginResponse loginResponse;
+  final Mahasiswa mahasiswa;
+  const MhsDetilPengumpulan(
+      {super.key, required this.loginResponse, required this.mahasiswa});
 
   @override
   State<MhsDetilPengumpulan> createState() => _MhsDetilPengumpulanState();
@@ -41,40 +45,61 @@ class _MhsDetilPengumpulanState extends State<MhsDetilPengumpulan> {
   }
 
   void _indexMhs() {
-    print("homepage");
-    //  Navigator.push(context,
-    //      MaterialPageRoute(builder: (context) => const MhsHomepageHutang()));
+    print('Homepage Mahasiswa');
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => MhsHomepageHutang(
+          loginResponse: widget.loginResponse,
+          mahasiswa: widget.mahasiswa,
+        ),
+      ),
+    );
   }
 
   void _notifMhs() {
-    Navigator.push(context,
-        MaterialPageRoute(builder: (context) => const MhsNotification()));
+    print('Notifikasi Mahasiswa');
+    Navigator.push(
+        context,
+        MaterialPageRoute(
+            builder: (context) => MhsNotification(
+                  loginResponse: widget.loginResponse,
+                  mahasiswa: widget.mahasiswa,
+                )));
   }
 
   void _profileMhs() {
-    //Navigator.push(
-    //    context,
-    //    MaterialPageRoute(
-    //        builder: (context) =>
-    //            const MhsProfilePage(title: 'Sistem Kompensasi')));
+    print('Profile Mahasiswa');
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+          builder: (context) => MhsProfilePage(
+                loginResponse: widget.loginResponse,
+                mahasiswa: widget.mahasiswa,
+              )),
+    );
   }
 
   void _tugasTersedia() {
     Navigator.push(
-        context,
-        MaterialPageRoute(
-            builder: (context) => const MhsDaftarTersedia(
-                  title: 'Sistem Kompensasi',
-                )));
+      context,
+      MaterialPageRoute(
+          builder: (context) => MhsDaftarTersedia(
+                loginResponse: widget.loginResponse,
+                mahasiswa: widget.mahasiswa,
+              )),
+    );
   }
 
   void _tugasTerambil() {
     Navigator.push(
-        context,
-        MaterialPageRoute(
-            builder: (context) => const MhsDaftarTerambil(
-                  title: 'Sistem Kompensasi',
-                )));
+      context,
+      MaterialPageRoute(
+          builder: (context) => MhsDaftarTerambil(
+                loginResponse: widget.loginResponse,
+                mahasiswa: widget.mahasiswa,
+              )),
+    );
   }
 
   void _submit() {
@@ -87,8 +112,10 @@ class _MhsDetilPengumpulanState extends State<MhsDetilPengumpulan> {
                 Navigator.pushAndRemoveUntil(
                     context,
                     MaterialPageRoute(
-                        builder: (context) => const MhsDaftarTerambil(
-                            title: 'Sistem Kompensasi')),
+                        builder: (context) => MhsDaftarTerambil(
+                              loginResponse: widget.loginResponse,
+                              mahasiswa: widget.mahasiswa,
+                            )),
                     (Route<dynamic> route) => false);
               },
               child: const AlertDialog(

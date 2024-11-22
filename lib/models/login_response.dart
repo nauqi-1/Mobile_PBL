@@ -1,4 +1,4 @@
-const String apiUrl = 'http://192.168.67.60:8000/api/';
+const String apiUrl = 'http://192.168.1.10:8000/api/';
 
 class LoginResponse {
   final bool success;

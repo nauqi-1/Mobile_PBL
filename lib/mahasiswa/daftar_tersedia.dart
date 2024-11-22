@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:testproject/models/login_response.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
@@ -9,8 +10,11 @@ import 'profile.dart';
 import 'daftar_terambil.dart';
 
 class MhsDaftarTersedia extends StatefulWidget {
-  const MhsDaftarTersedia({super.key, required this.title});
-  final String title;
+  final LoginResponse loginResponse;
+  final Mahasiswa mahasiswa;
+  const MhsDaftarTersedia({super.key, required this.loginResponse, required this.mahasiswa});
+  //final String title;
+
   @override
   State<MhsDaftarTersedia> createState() => _MhsDaftarTersediaState();
 }
@@ -18,12 +22,12 @@ class MhsDaftarTersedia extends StatefulWidget {
 class _MhsDaftarTersediaState extends State<MhsDaftarTersedia> {
   List tugasList = []; // Menyimpan daftar tugas dari API
   bool isLoading = true; // Menyimpan status loading
+  final String baseUrl = "http://192.168.1.10:8000/api/";
 
   // Fungsi untuk mengambil data tugas dari API
   Future<void> fetchTugas() async {
     try {
-      final response = await http.get(Uri.parse(
-          'http://192.168.1.4:8000/api/tugas')); // Ganti dengan IP lokal yang sesuai
+      final response = await http.get(Uri.parse('${baseUrl}tugas'));
 
       if (response.statusCode == 200) {
         setState(() {
@@ -37,47 +41,59 @@ class _MhsDaftarTersediaState extends State<MhsDaftarTersedia> {
       setState(() {
         isLoading = false;
       });
-      print("Error fetching data: $e"); // Cetak error di console
+      print("Error fetching data: $e");
     }
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    fetchTugas(); // Memanggil fungsi untuk mengambil data saat halaman dimuat
   }
 
   void _indexMhs() {
     print('Homepage Mahasiswa');
-    //Navigator.push(context,
-    //    MaterialPageRoute(builder: (context) => const MhsHomepageHutang()));
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) =>
+            MhsHomepageHutang(loginResponse: widget.loginResponse, mahasiswa: widget.mahasiswa,),
+      ),
+    );
   }
 
   void _notifMhs() {
     print('Notifikasi Mahasiswa');
     Navigator.push(context,
-        MaterialPageRoute(builder: (context) => const MhsNotification()));
+        MaterialPageRoute(builder: (context) => MhsNotification(loginResponse: widget.loginResponse, mahasiswa: widget.mahasiswa,)));
   }
 
   void _profileMhs() {
     print('Profile Mahasiswa');
-    //Navigator.push(
-    //    context,
-    //    MaterialPageRoute(
-    //        builder: (context) =>
-    //            const MhsProfilePage(title: 'Sistem Kompensasi')));
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+          builder: (context) =>
+              MhsProfilePage(loginResponse: widget.loginResponse, mahasiswa: widget.mahasiswa,)),
+    );
   }
 
   void _tugasTersedia() {
     Navigator.push(
-        context,
-        MaterialPageRoute(
-            builder: (context) => const MhsDaftarTersedia(
-                  title: 'Sistem Kompensasi',
-                )));
+      context,
+      MaterialPageRoute(
+          builder: (context) =>
+              MhsDaftarTersedia(loginResponse: widget.loginResponse, mahasiswa: widget.mahasiswa,)),
+    );
   }
 
   void _tugasTerambil() {
     Navigator.push(
-        context,
-        MaterialPageRoute(
-            builder: (context) => const MhsDaftarTerambil(
-                  title: 'Sistem Kompensasi',
-                )));
+      context,
+      MaterialPageRoute(
+          builder: (context) =>
+              MhsDaftarTerambil(loginResponse: widget.loginResponse, mahasiswa: widget.mahasiswa,)),
+    );
   }
 
   @override
@@ -99,9 +115,9 @@ class _MhsDaftarTersediaState extends State<MhsDaftarTersedia> {
             Column(
               mainAxisSize: MainAxisSize.min,
               children: [
-                Text(
-                  widget.title,
-                  style: const TextStyle(
+                const Text(
+                  'Sistem Kompensasi',
+                  style: TextStyle(
                       color: Colors.white,
                       fontSize: 20,
                       fontFamily: 'InstrumentSans'),
@@ -145,11 +161,12 @@ class _MhsDaftarTersediaState extends State<MhsDaftarTersedia> {
               ],
             ),
             IconButton(
-                onPressed: _notifMhs,
-                icon: const Icon(
-                  Icons.notifications_outlined,
-                  color: Colors.white,
-                ))
+              onPressed: _notifMhs,
+              icon: const Icon(
+                Icons.notifications_outlined,
+                color: Colors.white,
+              ),
+            )
           ],
         ),
       ),
@@ -170,82 +187,91 @@ class _MhsDaftarTersediaState extends State<MhsDaftarTersedia> {
               textAlign: TextAlign.center,
             ),
             const SizedBox(height: 20),
-            Expanded(
-              child: ListView.builder(
-                //itemCount: 10, // Jumlah data dummy
-                itemCount: tugasList.length, //Jumlah data dari API
-                itemBuilder: (context, index) {
-                  return Padding(
-                    padding: const EdgeInsets.symmetric(vertical: 5.0),
-                    child: Container(
-                      decoration: BoxDecoration(
-                        color: const Color(0xFFE0E0E0), // Warna abu-abu
-                        borderRadius: BorderRadius.circular(8),
-                      ),
-                      child: ListTile(
-                        //title: const Text('Judul Tugas'),
-                        title: Text(tugasList[index]
-                            ['tugas_nama']), //menampilkan judul tugas dari API
-                        trailing: const Text(
-                          'Detail >',
-                          style: TextStyle(
-                            color: Colors.black54,
-                          ),
-                        ),
-                        onTap: () {
-                          // Aksi ketika ditekan (navigasi ke halaman detail)
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => const MhsDetilTugas(),
+            isLoading
+                ? const Center(child: CircularProgressIndicator())
+                : Expanded(
+                    child: ListView.builder(
+                      itemCount: tugasList.length, // Jumlah data dari API
+                      itemBuilder: (context, index) {
+                        return Padding(
+                          padding: const EdgeInsets.symmetric(vertical: 5.0),
+                          child: Container(
+                            decoration: BoxDecoration(
+                              color: const Color(0xFFE0E0E0), // Warna abu-abu
+                              borderRadius: BorderRadius.circular(8),
                             ),
-                          );
-                        },
-                      ),
+                            child: ListTile(
+                              title: Text(tugasList[index]['tugas_nama']),
+                              trailing: const Text(
+                                'Detail >',
+                                style: TextStyle(
+                                  color: Colors.black54,
+                                ),
+                              ),
+                              onTap: () {
+                                // Navigasi ke halaman detil tugas dengan mengirim tugas_id
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => MhsDetilTugas(
+                                      tugasId: tugasList[index]['tugas_id'], loginResponse: widget.loginResponse, mahasiswa: widget.mahasiswa,
+                                    ),
+                                  ),
+                                );
+                              },
+                            ),
+                          ),
+                        );
+                      },
                     ),
-                  );
-                },
-              ),
-            ),
+                  ),
           ],
         ),
       ),
       bottomNavigationBar: SizedBox(
-          height: 70,
-          child: Container(
-            color: const Color(0xff2d1b6b),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                IconButton(
-                    onPressed: _indexMhs,
-                    icon: const Icon(
-                      Icons.home_outlined,
-                      color: Colors.white,
-                      size: 35,
-                    )),
-                IconButton(
-                    onPressed: _tugasTersedia,
-                    icon: const Icon(
-                      Icons.list_sharp,
-                      color: Colors.white,
-                      size: 30,
-                    )),
-                IconButton(
-                    onPressed: _tugasTerambil,
-                    icon: const Icon(
-                      CupertinoIcons.briefcase,
-                      color: Colors.white,
-                      size: 30,
-                    )),
-                IconButton(
-                    onPressed: _profileMhs,
-                    icon: const Icon(Icons.account_circle_outlined,
-                        color: Colors.white, size: 35))
-              ],
-            ),
-          )),
+        height: 70,
+        child: Container(
+          color: const Color(0xff2d1b6b),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              IconButton(
+                onPressed: _indexMhs,
+                icon: const Icon(
+                  Icons.home_outlined,
+                  color: Colors.white,
+                  size: 35,
+                ),
+              ),
+              IconButton(
+                onPressed: () {}, // Sudah berada di halaman tugas tersedia
+                icon: const Icon(
+                  Icons.list_sharp,
+                  color: Colors.white,
+                  size: 30,
+                ),
+              ),
+              IconButton(
+                onPressed: _tugasTerambil,
+                icon: const Icon(
+                  CupertinoIcons.briefcase,
+                  color: Colors.white,
+                  size: 30,
+                ),
+              ),
+              IconButton(
+                onPressed: _profileMhs,
+                icon: const Icon(
+                  Icons.account_circle_outlined,
+                  color: Colors.white,
+                  size: 35,
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
     );
   }
 }

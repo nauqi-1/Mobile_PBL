@@ -21,7 +21,7 @@ class _BuatTugasPageState extends State<BuatTugasPage> {
   final TextEditingController _tenggatController = TextEditingController();
   final TextEditingController _deskripsiController = TextEditingController();
 
-  String url_create_data = "http://192.168.56.1:8000/api/tugas/";
+  String url_create_data = "http://192.168.1.10:8000/api/tugas/";
 
   DateTime? _selectedDate;
   TimeOfDay? _selectedTime;

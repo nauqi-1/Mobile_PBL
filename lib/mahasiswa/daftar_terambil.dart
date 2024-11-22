@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:testproject/models/login_response.dart';
 import 'daftar_tersedia.dart';
 import 'homepage.dart';
 import 'notifikasi.dart';
@@ -7,8 +8,11 @@ import 'profile.dart';
 import 'detil_pengumpulan.dart';
 
 class MhsDaftarTerambil extends StatefulWidget {
-  const MhsDaftarTerambil({super.key, required this.title});
-  final String title;
+  final LoginResponse loginResponse;
+  final Mahasiswa mahasiswa;
+  const MhsDaftarTerambil(
+      {super.key, required this.loginResponse, required this.mahasiswa});
+  //final String title;
   @override
   State<MhsDaftarTerambil> createState() => _MhsDaftarTerambilState();
 }
@@ -16,41 +20,60 @@ class MhsDaftarTerambil extends StatefulWidget {
 class _MhsDaftarTerambilState extends State<MhsDaftarTerambil> {
   void _indexMhs() {
     print('Homepage Mahasiswa');
-    //Navigator.push(context,
-    //    MaterialPageRoute(builder: (context) => const MhsHomepageHutang()));
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => MhsHomepageHutang(
+          loginResponse: widget.loginResponse,
+          mahasiswa: widget.mahasiswa,
+        ),
+      ),
+    );
   }
 
   void _notifMhs() {
     print('Notifikasi Mahasiswa');
-    Navigator.push(context,
-        MaterialPageRoute(builder: (context) => const MhsNotification()));
+    Navigator.push(
+        context,
+        MaterialPageRoute(
+            builder: (context) => MhsNotification(
+                  loginResponse: widget.loginResponse,
+                  mahasiswa: widget.mahasiswa,
+                )));
   }
 
   void _profileMhs() {
     print('Profile Mahasiswa');
-    //Navigator.push(
-    //    context,
-    //    MaterialPageRoute(
-    //        builder: (context) =>
-    //            const MhsProfilePage(title: 'Sistem Kompensasi')));
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+          builder: (context) => MhsProfilePage(
+                loginResponse: widget.loginResponse,
+                mahasiswa: widget.mahasiswa,
+              )),
+    );
   }
 
   void _tugasTersedia() {
     Navigator.push(
-        context,
-        MaterialPageRoute(
-            builder: (context) => const MhsDaftarTersedia(
-                  title: 'Sistem Kompensasi',
-                )));
+      context,
+      MaterialPageRoute(
+          builder: (context) => MhsDaftarTersedia(
+                loginResponse: widget.loginResponse,
+                mahasiswa: widget.mahasiswa,
+              )),
+    );
   }
 
   void _tugasTerambil() {
     Navigator.push(
-        context,
-        MaterialPageRoute(
-            builder: (context) => const MhsDaftarTerambil(
-                  title: 'Sistem Kompensasi',
-                )));
+      context,
+      MaterialPageRoute(
+          builder: (context) => MhsDaftarTerambil(
+                loginResponse: widget.loginResponse,
+                mahasiswa: widget.mahasiswa,
+              )),
+    );
   }
 
   @override
@@ -72,8 +95,8 @@ class _MhsDaftarTerambilState extends State<MhsDaftarTerambil> {
             Column(
               mainAxisSize: MainAxisSize.min,
               children: [
-                Text(
-                  widget.title,
+                const Text(
+                  'Sistem Kompensasi',
                   style: const TextStyle(
                       color: Colors.white,
                       fontSize: 20,
@@ -167,7 +190,10 @@ class _MhsDaftarTerambilState extends State<MhsDaftarTerambil> {
                           Navigator.push(
                             context,
                             MaterialPageRoute(
-                              builder: (context) => const MhsDetilPengumpulan(),
+                              builder: (context) => MhsDetilPengumpulan(
+                                loginResponse: widget.loginResponse,
+                                mahasiswa: widget.mahasiswa,
+                              ),
                             ),
                           );
                         },

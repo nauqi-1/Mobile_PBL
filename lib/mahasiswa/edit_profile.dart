@@ -45,44 +45,61 @@ class _EditProfilePageState extends State<EditProfilePage> {
   }
 
   void _indexMhs() {
-    print("homepage");
-    //Navigator.push(context,
-    //    MaterialPageRoute(builder: (context) => const MhsHomepageHutang()));
-  }
-
-  void _tugasTersedia() {
+    print('Homepage Mahasiswa');
     Navigator.push(
-        context,
-        MaterialPageRoute(
-            builder: (context) => const MhsDaftarTersedia(
-                  title: '',
-                )));
-  }
-
-  void _tugasTerambil() {
-    Navigator.push(
-        context,
-        MaterialPageRoute(
-            builder: (context) => const MhsDaftarTerambil(
-                  title: 'Sistem Kompensasi',
-                )));
+      context,
+      MaterialPageRoute(
+        builder: (context) => MhsHomepageHutang(
+          loginResponse: widget.loginResponse,
+          mahasiswa: widget.mahasiswa,
+        ),
+      ),
+    );
   }
 
   void _notifMhs() {
     print('Notifikasi Mahasiswa');
-    Navigator.push(context,
-        MaterialPageRoute(builder: (context) => const MhsNotification()));
+    Navigator.push(
+        context,
+        MaterialPageRoute(
+            builder: (context) => MhsNotification(
+                  loginResponse: widget.loginResponse,
+                  mahasiswa: widget.mahasiswa,
+                )));
   }
 
   void _profileMhs() {
     print('Profile Mahasiswa');
     Navigator.push(
-        context,
-        MaterialPageRoute(
-            builder: (context) => MhsProfilePage(
-                  mahasiswa: widget.mahasiswa,
-                  loginResponse: widget.loginResponse,
-                )));
+      context,
+      MaterialPageRoute(
+          builder: (context) => MhsProfilePage(
+                loginResponse: widget.loginResponse,
+                mahasiswa: widget.mahasiswa,
+              )),
+    );
+  }
+
+  void _tugasTersedia() {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+          builder: (context) => MhsDaftarTersedia(
+                loginResponse: widget.loginResponse,
+                mahasiswa: widget.mahasiswa,
+              )),
+    );
+  }
+
+  void _tugasTerambil() {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+          builder: (context) => MhsDaftarTerambil(
+                loginResponse: widget.loginResponse,
+                mahasiswa: widget.mahasiswa,
+              )),
+    );
   }
 
   void _saveEdit() {
