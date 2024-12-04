@@ -97,7 +97,7 @@ class _MhsDaftarTerambilState extends State<MhsDaftarTerambil> {
               children: [
                 const Text(
                   'Sistem Kompensasi',
-                  style: const TextStyle(
+                  style: TextStyle(
                       color: Colors.white,
                       fontSize: 20,
                       fontFamily: 'InstrumentSans'),

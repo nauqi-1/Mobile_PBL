@@ -1,4 +1,4 @@
-const String apiUrl = 'http://192.168.1.10:8000/api/';
+const String apiUrl = 'http://192.168.67.32:8000/api/';
 
 class LoginResponse {
   final bool success;
@@ -52,8 +52,8 @@ class Mahasiswa {
   final String mahasiswaNim;
   final String mahasiswaProdi;
   final String mahasiswaNoHp;
-  final int mahasiswaAlfaTotal;
-  final int mahasiswaAlfaSisa;
+  final int mahasiswaAlfaLunas;
+  final int jumlahAlfa;
   final int userId;
 
   Mahasiswa({
@@ -63,23 +63,23 @@ class Mahasiswa {
     required this.mahasiswaNim,
     required this.mahasiswaProdi,
     required this.mahasiswaNoHp,
-    required this.mahasiswaAlfaTotal,
-    required this.mahasiswaAlfaSisa,
+    required this.mahasiswaAlfaLunas,
+    required this.jumlahAlfa,
     required this.userId,
   });
 
   // Factory constructor to parse JSON into the object
   factory Mahasiswa.fromJson(Map<String, dynamic> json) {
     return Mahasiswa(
-      mahasiswaId: json['mahasiswa_id'],
-      mahasiswaNama: json['mahasiswa_nama'],
-      mahasiswaKelas: json['mahasiswa_kelas'],
-      mahasiswaNim: json['mahasiswa_nim'],
-      mahasiswaProdi: json['mahasiswa_prodi'],
-      mahasiswaNoHp: json['mahasiswa_noHp'],
-      mahasiswaAlfaTotal: json['mahasiswa_alfa_total'],
-      mahasiswaAlfaSisa: json['mahasiswa_alfa_sisa'],
-      userId: json['user_id'],
+      mahasiswaId: json['mahasiswa']['mahasiswa_id'],
+      mahasiswaNama: json['mahasiswa']['mahasiswa_nama'],
+      mahasiswaKelas: json['mahasiswa']['mahasiswa_kelas'],
+      mahasiswaNim: json['mahasiswa']['mahasiswa_nim'],
+      mahasiswaProdi: json['mahasiswa']['mahasiswa_prodi'],
+      mahasiswaNoHp: json['mahasiswa']['mahasiswa_noHp'],
+      mahasiswaAlfaLunas: json['mahasiswa']['mahasiswa_alfa_lunas'] ?? 0,
+      jumlahAlfa: int.tryParse(json['jumlah_alfa'].toString()) ?? 0,
+      userId: json['mahasiswa']['user_id'] ?? 0,
     );
   }
 
@@ -92,8 +92,8 @@ class Mahasiswa {
       'mahasiswa_nim': mahasiswaNim,
       'mahasiswa_prodi': mahasiswaProdi,
       'mahasiswa_noHp': mahasiswaNoHp,
-      'mahasiswa_alfa_total': mahasiswaAlfaTotal,
-      'mahasiswa_alfa_sisa': mahasiswaAlfaSisa,
+      'mahasiswa_alfa_lunas': mahasiswaAlfaLunas,
+      'jumlah_alfa': jumlahAlfa,
       'user_id': userId,
     };
   }

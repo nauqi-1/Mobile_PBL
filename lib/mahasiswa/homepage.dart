@@ -1,4 +1,3 @@
-import 'dart:convert';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:testproject/mahasiswa/notifikasi.dart';
@@ -6,8 +5,6 @@ import 'package:testproject/models/login_response.dart';
 import 'daftar_tersedia.dart'; // Mengimpor halaman baru
 import 'profile.dart';
 import 'daftar_terambil.dart';
-import 'package:http/http.dart' as http;
-import 'package:shared_preferences/shared_preferences.dart';
 
 class MhsHomepageHutang extends StatefulWidget {
   final LoginResponse loginResponse;
@@ -168,7 +165,7 @@ class _MhsHomepageHutangState extends State<MhsHomepageHutang> {
               ),
             ),
             Text(
-              widget.mahasiswa.mahasiswaNama ?? 'Loading...',
+              widget.mahasiswa.mahasiswaNama,
               style: const TextStyle(
                 fontFamily: 'InstrumentSans',
                 fontSize: 24,
@@ -181,16 +178,15 @@ class _MhsHomepageHutangState extends State<MhsHomepageHutang> {
               height: 150,
             ),
             const SizedBox(height: 20),
-            _buildTextField(
-                'Total Absensi Alfa', widget.mahasiswa.mahasiswaAlfaTotal),
+            _buildTextField('Total Absensi Alfa', widget.mahasiswa.jumlahAlfa),
             const SizedBox(height: 5),
             _buildTextField('Jumlah Absensi Alfa Lunas',
-                widget.mahasiswa.mahasiswaAlfaSisa),
+                widget.mahasiswa.mahasiswaAlfaLunas),
             const SizedBox(height: 5),
             _buildTextField(
                 'Jumlah Absensi Alfa Belum Lunas',
-                widget.mahasiswa.mahasiswaAlfaTotal -
-                    widget.mahasiswa.mahasiswaAlfaSisa),
+                widget.mahasiswa.jumlahAlfa -
+                    widget.mahasiswa.mahasiswaAlfaLunas),
             const SizedBox(height: 5),
             const Align(
               alignment: Alignment.centerLeft,

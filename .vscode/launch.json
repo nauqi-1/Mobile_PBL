@@ -5,18 +5,18 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "name": "testproject",
+            "name": "Sistem Kompensasi JTI",
             "request": "launch",
             "type": "dart"
         },
         {
-            "name": "testproject (profile mode)",
+            "name": "Sistem Kompensasi JTI (profile mode)",
             "request": "launch",
             "type": "dart",
             "flutterMode": "profile"
         },
         {
-            "name": "testproject (release mode)",
+            "name": "Sistem Kompensasi JTI (release mode)",
             "request": "launch",
             "type": "dart",
             "flutterMode": "release"
