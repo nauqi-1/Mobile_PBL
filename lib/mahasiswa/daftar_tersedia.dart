@@ -8,11 +8,13 @@ import 'homepage.dart';
 import 'notifikasi.dart';
 import 'profile.dart';
 import 'daftar_terambil.dart';
+import '../models/login_response.dart';
 
 class MhsDaftarTersedia extends StatefulWidget {
   final LoginResponse loginResponse;
   final Mahasiswa mahasiswa;
-  const MhsDaftarTersedia({super.key, required this.loginResponse, required this.mahasiswa});
+  const MhsDaftarTersedia(
+      {super.key, required this.loginResponse, required this.mahasiswa});
   //final String title;
 
   @override
@@ -22,12 +24,11 @@ class MhsDaftarTersedia extends StatefulWidget {
 class _MhsDaftarTersediaState extends State<MhsDaftarTersedia> {
   List tugasList = []; // Menyimpan daftar tugas dari API
   bool isLoading = true; // Menyimpan status loading
-  final String baseUrl = "http://192.168.1.10:8000/api/";
 
   // Fungsi untuk mengambil data tugas dari API
   Future<void> fetchTugas() async {
     try {
-      final response = await http.get(Uri.parse('${baseUrl}tugas'));
+      final response = await http.get(Uri.parse('${apiUrl}tugas'));
 
       if (response.statusCode == 200) {
         setState(() {
@@ -56,16 +57,23 @@ class _MhsDaftarTersediaState extends State<MhsDaftarTersedia> {
     Navigator.push(
       context,
       MaterialPageRoute(
-        builder: (context) =>
-            MhsHomepageHutang(loginResponse: widget.loginResponse, mahasiswa: widget.mahasiswa,),
+        builder: (context) => MhsHomepageHutang(
+          loginResponse: widget.loginResponse,
+          mahasiswa: widget.mahasiswa,
+        ),
       ),
     );
   }
 
   void _notifMhs() {
     print('Notifikasi Mahasiswa');
-    Navigator.push(context,
-        MaterialPageRoute(builder: (context) => MhsNotification(loginResponse: widget.loginResponse, mahasiswa: widget.mahasiswa,)));
+    Navigator.push(
+        context,
+        MaterialPageRoute(
+            builder: (context) => MhsNotification(
+                  loginResponse: widget.loginResponse,
+                  mahasiswa: widget.mahasiswa,
+                )));
   }
 
   void _profileMhs() {
@@ -73,8 +81,10 @@ class _MhsDaftarTersediaState extends State<MhsDaftarTersedia> {
     Navigator.push(
       context,
       MaterialPageRoute(
-          builder: (context) =>
-              MhsProfilePage(loginResponse: widget.loginResponse, mahasiswa: widget.mahasiswa,)),
+          builder: (context) => MhsProfilePage(
+                loginResponse: widget.loginResponse,
+                mahasiswa: widget.mahasiswa,
+              )),
     );
   }
 
@@ -82,8 +92,10 @@ class _MhsDaftarTersediaState extends State<MhsDaftarTersedia> {
     Navigator.push(
       context,
       MaterialPageRoute(
-          builder: (context) =>
-              MhsDaftarTersedia(loginResponse: widget.loginResponse, mahasiswa: widget.mahasiswa,)),
+          builder: (context) => MhsDaftarTersedia(
+                loginResponse: widget.loginResponse,
+                mahasiswa: widget.mahasiswa,
+              )),
     );
   }
 
@@ -91,8 +103,10 @@ class _MhsDaftarTersediaState extends State<MhsDaftarTersedia> {
     Navigator.push(
       context,
       MaterialPageRoute(
-          builder: (context) =>
-              MhsDaftarTerambil(loginResponse: widget.loginResponse, mahasiswa: widget.mahasiswa,)),
+          builder: (context) => MhsDaftarTerambil(
+                loginResponse: widget.loginResponse,
+                mahasiswa: widget.mahasiswa,
+              )),
     );
   }
 
@@ -214,7 +228,9 @@ class _MhsDaftarTersediaState extends State<MhsDaftarTersedia> {
                                   context,
                                   MaterialPageRoute(
                                     builder: (context) => MhsDetilTugas(
-                                      tugasId: tugasList[index]['tugas_id'], loginResponse: widget.loginResponse, mahasiswa: widget.mahasiswa,
+                                      tugasId: tugasList[index]['tugas_id'],
+                                      loginResponse: widget.loginResponse,
+                                      mahasiswa: widget.mahasiswa,
                                     ),
                                   ),
                                 );

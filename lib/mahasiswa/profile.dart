@@ -7,6 +7,7 @@ import 'homepage.dart';
 import 'notifikasi.dart';
 import 'daftar_terambil.dart';
 import '../models/login_response.dart';
+import 'edit_profile.dart';
 
 class MhsProfilePage extends StatefulWidget {
   final Mahasiswa mahasiswa;
@@ -22,12 +23,13 @@ class MhsProfilePage extends StatefulWidget {
 class _ProfilePageState extends State<MhsProfilePage> {
   void _editProfile() {
     print('Edit Profile');
-    //Navigator.push(
-    //    context,
-    //    MaterialPageRoute(
-    //        builder: (context) => const EditProfilePage(
-    //              title: 'Sistem Kompensasi',
-    //            )));
+    Navigator.push(
+        context,
+        MaterialPageRoute(
+            builder: (context) => EditProfilePage(
+                  loginResponse: widget.loginResponse,
+                  mahasiswa: widget.mahasiswa,
+                )));
   }
 
   void _logOut() {

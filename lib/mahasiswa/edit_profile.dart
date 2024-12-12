@@ -6,6 +6,8 @@ import 'daftar_tersedia.dart';
 import 'notifikasi.dart';
 import 'daftar_terambil.dart';
 import '../models/login_response.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
 
 class EditProfilePage extends StatefulWidget {
   final Mahasiswa mahasiswa;
@@ -19,22 +21,8 @@ class EditProfilePage extends StatefulWidget {
 }
 
 class _EditProfilePageState extends State<EditProfilePage> {
-  final TextEditingController _textNama = TextEditingController();
-  String textNama = "";
-
-  String nim = '2241760046';
-
-  final TextEditingController _textProdi = TextEditingController();
-  String textProdi = "";
-
-  final TextEditingController _textKelas = TextEditingController();
-  String textKelas = "";
-
   final TextEditingController _noHp = TextEditingController();
   String noHp = "";
-
-  final TextEditingController _textKompetensi = TextEditingController();
-  String textKompetensi = "";
 
   void _editProfile() {
     print('Edit Profile');
@@ -102,41 +90,58 @@ class _EditProfilePageState extends State<EditProfilePage> {
     );
   }
 
-  void _saveEdit() {
-    print('Simpan data');
-    showDialog(
+  void _saveEdit() async {
+    print(_noHp.text);
+    final response = await http.put(
+      Uri.parse('${apiUrl}mahasiswa/${widget.mahasiswa.mahasiswaId}'),
+      headers: {"Content-Type": "application/json"},
+      body: jsonEncode({"mahasiswa_noHp": _noHp.text}),
+    );
+
+    if (response.statusCode == 200) {
+      print('Data saved');
+      showDialog(
         context: context,
         builder: (BuildContext context) {
           return GestureDetector(
-              onTap: () {
-                Navigator.of(context).pop();
-                Navigator.pushAndRemoveUntil(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => MhsProfilePage(
-                              mahasiswa: widget.mahasiswa,
-                              loginResponse: widget.loginResponse,
-                            )),
-                    (Route<dynamic> route) => false);
-              },
-              child: const AlertDialog(
-                  title: Text(
-                    'Perubahan berhasil disimpan!',
-                    textAlign: TextAlign.center,
-                    style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
+            onTap: () {
+              Navigator.of(context).pop();
+              Navigator.pushAndRemoveUntil(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => MhsProfilePage(
+                    mahasiswa: widget.mahasiswa,
+                    loginResponse: widget.loginResponse,
                   ),
-                  content: Row(
-                    mainAxisSize: MainAxisSize.min,
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Icon(
-                        Icons.check_circle_outline_outlined,
-                        size: 50,
-                        color: Colors.green,
-                      )
-                    ],
-                  )));
-        });
+                ),
+                (Route<dynamic> route) => false,
+              );
+            },
+            child: const AlertDialog(
+              title: Text(
+                'Perubahan berhasil disimpan!',
+                textAlign: TextAlign.center,
+                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
+              ),
+              content: Row(
+                mainAxisSize: MainAxisSize.min,
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Icon(
+                    Icons.check_circle_outline_outlined,
+                    size: 50,
+                    color: Colors.green,
+                  ),
+                ],
+              ),
+            ),
+          );
+        },
+      );
+    } else {
+      print('Failed to save data');
+      // You can show a failure dialog or message here
+    }
   }
 
   void _confirmEdit() {
@@ -306,16 +311,20 @@ class _EditProfilePageState extends State<EditProfilePage> {
                 ),
               ),
               const SizedBox(height: 8),
-              const TextField(
-                decoration: InputDecoration(
-                  hintText: 'Nama Lengkap',
-                  hintStyle: TextStyle(color: Color(0xffd9d9d9)),
-                  enabledBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.all(Radius.circular(10)),
-                    borderSide: BorderSide(
-                      color: Color(0xFFd9d9d9),
-                      width: 1.0,
-                    ),
+              Container(
+                width: 500,
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 12, vertical: 12),
+                decoration: BoxDecoration(
+                    color: const Color(0xFFDCDCDC),
+                    border:
+                        Border.all(color: const Color(0xFFE4E4E4), width: 1),
+                    borderRadius: BorderRadius.circular(10)),
+                child: Text(
+                  widget.mahasiswa.mahasiswaNama,
+                  style: const TextStyle(
+                    fontSize: 16,
+                    color: Colors.black,
                   ),
                 ),
               ),
@@ -338,7 +347,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
                         Border.all(color: const Color(0xFFE4E4E4), width: 1),
                     borderRadius: BorderRadius.circular(10)),
                 child: Text(
-                  nim,
+                  widget.mahasiswa.mahasiswaNim,
                   style: const TextStyle(
                     fontSize: 16,
                     color: Colors.black,
@@ -354,16 +363,20 @@ class _EditProfilePageState extends State<EditProfilePage> {
                 ),
               ),
               const SizedBox(height: 8),
-              const TextField(
-                decoration: InputDecoration(
-                  hintText: 'Program Studi',
-                  hintStyle: TextStyle(color: Color(0xffd9d9d9)),
-                  enabledBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.all(Radius.circular(10)),
-                    borderSide: BorderSide(
-                      color: Color(0xFFd9d9d9),
-                      width: 1.0,
-                    ),
+              Container(
+                width: 500,
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 12, vertical: 12),
+                decoration: BoxDecoration(
+                    color: const Color(0xFFDCDCDC),
+                    border:
+                        Border.all(color: const Color(0xFFE4E4E4), width: 1),
+                    borderRadius: BorderRadius.circular(10)),
+                child: Text(
+                  widget.mahasiswa.mahasiswaProdi,
+                  style: const TextStyle(
+                    fontSize: 16,
+                    color: Colors.black,
                   ),
                 ),
               ),
@@ -376,16 +389,20 @@ class _EditProfilePageState extends State<EditProfilePage> {
                 ),
               ),
               const SizedBox(height: 8),
-              const TextField(
-                decoration: InputDecoration(
-                  hintText: 'Kelas',
-                  hintStyle: TextStyle(color: Color(0xffd9d9d9)),
-                  enabledBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.all(Radius.circular(10)),
-                    borderSide: BorderSide(
-                      color: Color(0xFFd9d9d9),
-                      width: 1.0,
-                    ),
+              Container(
+                width: 500,
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 12, vertical: 12),
+                decoration: BoxDecoration(
+                    color: const Color(0xFFDCDCDC),
+                    border:
+                        Border.all(color: const Color(0xFFE4E4E4), width: 1),
+                    borderRadius: BorderRadius.circular(10)),
+                child: Text(
+                  widget.mahasiswa.mahasiswaKelas,
+                  style: const TextStyle(
+                    fontSize: 16,
+                    color: Colors.black,
                   ),
                 ),
               ),
@@ -398,33 +415,12 @@ class _EditProfilePageState extends State<EditProfilePage> {
                 ),
               ),
               const SizedBox(height: 8),
-              const TextField(
+              TextField(
+                controller: _noHp,
                 decoration: InputDecoration(
-                  hintText: '08XXXXXX',
-                  hintStyle: TextStyle(color: Color(0xffd9d9d9)),
-                  enabledBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.all(Radius.circular(10)),
-                    borderSide: BorderSide(
-                      color: Color(0xFFd9d9d9),
-                      width: 1.0,
-                    ),
-                  ),
-                ),
-              ),
-              const SizedBox(height: 20),
-              const Text(
-                'Kompetensi',
-                style: TextStyle(
-                  color: Colors.black,
-                  fontSize: 12,
-                ),
-              ),
-              const SizedBox(height: 8),
-              const TextField(
-                decoration: InputDecoration(
-                  hintText: 'Kompetensi',
-                  hintStyle: TextStyle(color: Color(0xffd9d9d9)),
-                  enabledBorder: OutlineInputBorder(
+                  hintText: widget.mahasiswa.mahasiswaNoHp,
+                  hintStyle: const TextStyle(color: Color(0xffd9d9d9)),
+                  enabledBorder: const OutlineInputBorder(
                     borderRadius: BorderRadius.all(Radius.circular(10)),
                     borderSide: BorderSide(
                       color: Color(0xFFd9d9d9),
