@@ -58,6 +58,7 @@ class _LoginPageState extends State<LoginPage> {
       print(levelId);
       print(tokenLogin);
       print(userId);
+      await _saveToken(tokenLogin, userId);
 
       if (levelId == 4) {
         final response2 = await http.get(
@@ -125,6 +126,10 @@ class _LoginPageState extends State<LoginPage> {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     await prefs.setString('token', tokenLogin);
     await prefs.setInt('user_id', userId);
+
+    // Debug log untuk memastikan penyimpanan
+    print("Token saved: $tokenLogin");
+    print("User ID saved: $userId");
   }
 
   void _showErrorDialog() {

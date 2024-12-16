@@ -1,7 +1,12 @@
+import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:http/http.dart' as http;
 import 'buat_tugas.dart';
+import 'detil_tugas.dart';
 import 'notifikasi.dart';
+import '../models/login_response.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class DsnDaftarTugasPage extends StatefulWidget {
   const DsnDaftarTugasPage({super.key, required this.title});
@@ -13,6 +18,46 @@ class DsnDaftarTugasPage extends StatefulWidget {
 }
 
 class _DaftarTugasState extends State<DsnDaftarTugasPage> {
+  List<dynamic> _tasks = [];
+  bool isLoading = true; // Menyimpan status loading
+
+  @override
+  void initState() {
+    super.initState();
+    _fetchTasks();
+  }
+
+  Future<void> _fetchTasks() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String? token = prefs.getString('token'); // Get the saved token
+
+    if (token == null) {
+      // Handle case where token is not available
+      print("Token not found");
+      return;
+    }
+    final response = await http.get(
+      Uri.parse('${apiUrl}tugas/1'),
+      headers: {
+        "Content-Type": "application/json",
+        'Authorization': 'Bearer $token', // Add token to request headers
+      },
+    );
+
+    if (response.statusCode == 200) {
+      setState(() {
+        _tasks = jsonDecode(response.body);
+        isLoading = false; // Menyimpan status loading
+      });
+    } else {
+      setState(() {
+        isLoading = false;
+      });
+      // Handle the error
+      print('Failed to load tasks');
+    }
+  }
+
   void _buatTugas() {
     Navigator.push(
       context,
@@ -120,7 +165,7 @@ class _DaftarTugasState extends State<DsnDaftarTugasPage> {
               ],
             ),
             IconButton(
-                onPressed: _notifDsn, // Action for notifications
+                onPressed: _notifDsn,
                 icon: const Icon(
                   Icons.notifications_outlined,
                   color: Colors.white,
@@ -162,37 +207,44 @@ class _DaftarTugasState extends State<DsnDaftarTugasPage> {
                 ),
               ),
               const SizedBox(height: 20),
-              for (int i = 0; i < 8; i++)
-                GestureDetector(
-                  onTap: _detailTugas,
-                  child: Container(
-                    margin: const EdgeInsets.only(bottom: 12),
-                    width: double.infinity,
-                    height: 32,
-                    decoration: BoxDecoration(
-                      color: const Color(0xFFD9D9D9),
-                      borderRadius: BorderRadius.circular(4),
+              isLoading
+                  ? const Center(child: CircularProgressIndicator())
+                  : ListView.builder(
+                      shrinkWrap: true, // Tambahkan ini
+                      physics: const NeverScrollableScrollPhysics(),
+                      itemCount: _tasks.length, // Jumlah data dari API
+                      itemBuilder: (context, index) {
+                        return Padding(
+                          padding: const EdgeInsets.symmetric(vertical: 5.0),
+                          child: Container(
+                            decoration: BoxDecoration(
+                              color: const Color(0xFFE0E0E0), // Warna abu-abu
+                              borderRadius: BorderRadius.circular(8),
+                            ),
+                            child: ListTile(
+                              title: Text(_tasks[index]['tugas_nama']),
+                              trailing: const Text(
+                                'Detail >',
+                                style: TextStyle(
+                                  color: Colors.black54,
+                                ),
+                              ),
+                              onTap: () {
+                                // Navigasi ke halaman detil tugas dengan mengirim tugas_id
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => DsnDetilTugas(
+                                      tugasId: _tasks[index]['tugas_id'] ?? 0,
+                                    ),
+                                  ),
+                                );
+                              },
+                            ),
+                          ),
+                        );
+                      },
                     ),
-                    padding:
-                        const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
-                    child: const Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text(
-                          'Judul Tugas',
-                          style: TextStyle(fontSize: 16, color: Colors.black),
-                        ),
-                        Text(
-                          'Detail >',
-                          style: TextStyle(
-                              fontSize: 14,
-                              color: Colors.blueAccent,
-                              fontWeight: FontWeight.bold),
-                        )
-                      ],
-                    ),
-                  ),
-                )
             ],
           ),
         ),
@@ -229,7 +281,7 @@ class _DaftarTugasState extends State<DsnDaftarTugasPage> {
                 ),
               ),
               IconButton(
-                onPressed: _profileDsn, // Replace with actual action
+                onPressed: _profileDsn,
                 icon: const Icon(
                   Icons.account_circle_outlined,
                   color: Colors.white,

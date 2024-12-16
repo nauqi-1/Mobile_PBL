@@ -9,6 +9,7 @@ import 'notifikasi.dart';
 import 'profile.dart';
 import 'daftar_terambil.dart';
 import '../models/login_response.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class MhsDaftarTersedia extends StatefulWidget {
   final LoginResponse loginResponse;
@@ -27,8 +28,22 @@ class _MhsDaftarTersediaState extends State<MhsDaftarTersedia> {
 
   // Fungsi untuk mengambil data tugas dari API
   Future<void> fetchTugas() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String? token = prefs.getString('token'); // Get the saved token
+
+    if (token == null) {
+      // Handle case where token is not available
+      print("Token not found");
+      return;
+    }
     try {
-      final response = await http.get(Uri.parse('${apiUrl}tugas'));
+      final response = await http.get(
+        Uri.parse('${apiUrl}tugas'),
+        headers: {
+          "Content-Type": "application/json",
+          'Authorization': 'Bearer $token', // Add token to request headers
+        },
+      );
 
       if (response.statusCode == 200) {
         setState(() {

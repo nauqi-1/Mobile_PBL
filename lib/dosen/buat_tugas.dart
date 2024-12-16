@@ -2,7 +2,6 @@ import 'dart:convert';
 import 'package:intl/intl.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
-import 'package:shared_preferences/shared_preferences.dart';
 
 class BuatTugasPage extends StatefulWidget {
   const BuatTugasPage({super.key, required this.title});
@@ -24,8 +23,20 @@ class _BuatTugasPageState extends State<BuatTugasPage> {
 
   DateTime? _selectedDate;
   TimeOfDay? _selectedTime;
+  String? _selectedJenisTugas;
+  final int _pembuatId = 2; // User ID langsung diisi dengan nilai 2
 
   bool _isFormValid = false;
+
+  @override
+  void initState() {
+    super.initState();
+    _judulTugasController.addListener(_checkFormValid);
+    _bobotJamController.addListener(_checkFormValid);
+    _kuotaMhsController.addListener(_checkFormValid);
+    _tenggatController.addListener(_checkFormValid);
+    _deskripsiController.addListener(_checkFormValid);
+  }
 
   void _checkFormValid() {
     setState(() {
@@ -33,7 +44,8 @@ class _BuatTugasPageState extends State<BuatTugasPage> {
           _bobotJamController.text.isNotEmpty &&
           _kuotaMhsController.text.isNotEmpty &&
           _tenggatController.text.isNotEmpty &&
-          _deskripsiController.text.isNotEmpty;
+          _deskripsiController.text.isNotEmpty &&
+          _selectedJenisTugas != null;
     });
   }
 
@@ -68,9 +80,8 @@ class _BuatTugasPageState extends State<BuatTugasPage> {
   void _updateTenggat() {
     if (_selectedDate != null && _selectedTime != null) {
       final String formattedDate =
-          "${_selectedDate!.day}/${_selectedDate!.month}/${_selectedDate!.year}";
-      final String formattedTime =
-          "${_selectedTime!.hour}:${_selectedTime!.minute.toString().padLeft(2, '0')}";
+          DateFormat('yyyy-MM-dd').format(_selectedDate!);
+      final String formattedTime = _selectedTime!.format(context);
       _tenggatController.text = "$formattedDate $formattedTime";
     }
   }
@@ -85,9 +96,10 @@ class _BuatTugasPageState extends State<BuatTugasPage> {
             width: 300,
             height: 100,
             child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                SizedBox(height: 10),
                 Text("Tugas berhasil dibuat"),
+                SizedBox(height: 10),
                 Icon(Icons.check_circle, color: Colors.green, size: 40),
               ],
             ),
@@ -97,7 +109,7 @@ class _BuatTugasPageState extends State<BuatTugasPage> {
               child: const Text('OK'),
               onPressed: () {
                 Navigator.of(context).pop();
-                Navigator.of(context).pop(); // Kembali ke halaman sebelumnya
+                Navigator.of(context).pop();
               },
             ),
           ],
@@ -106,36 +118,36 @@ class _BuatTugasPageState extends State<BuatTugasPage> {
     );
   }
 
-  void createData(String tugasNama, String bobotJam, String kuotaMahasiswa,
-      String tenggatWaktu, String deskripsi) async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    String? token =
-        prefs.getString('token'); // Ambil token dari SharedPreferences
-
-    // Ambil tanggal saat ini
+  Future<void> createData(
+    String tugasNama,
+    String bobotJam,
+    String kuotaMahasiswa,
+    String tenggatWaktu,
+    String deskripsi,
+    String jenisTugas,
+  ) async {
     final DateTime now = DateTime.now();
-    final String formattedDate =
-        DateFormat('yyyy-MM-dd').format(now); // format ke "YYYY-MM-DD"
+    final String formattedDate = DateFormat('yyyy-MM-dd').format(now);
 
     try {
       final response = await http.post(
         Uri.parse(url_create_data),
         headers: {
           "Content-Type": "application/json",
-          "Authorization": "Bearer $token", // Tambahkan token ke header
         },
         body: jsonEncode({
           'tugas_nama': tugasNama,
           'tugas_bobot': bobotJam,
-          // 'kuota_mahasiswa': kuotaMahasiswa,
+          'tugas_kuota': kuotaMahasiswa,
           'tugas_tgl_dibuat': formattedDate,
           'tugas_tgl_deadline': tenggatWaktu,
           'tugas_desc': deskripsi,
+          'tugas_jenis': jenisTugas,
+          'pembuat_id': _pembuatId, // User ID langsung diisi
         }),
       );
 
       if (response.statusCode == 200 || response.statusCode == 201) {
-        // Tampilkan popup sukses dan kosongkan field
         _judulTugasController.clear();
         _bobotJamController.clear();
         _kuotaMhsController.clear();
@@ -143,9 +155,10 @@ class _BuatTugasPageState extends State<BuatTugasPage> {
         _deskripsiController.clear();
         _showSuccessPopup();
       } else {
-        // Jika gagal
+        final errorData = jsonDecode(response.body);
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text("Gagal membuat tugas, coba lagi!")),
+          SnackBar(
+              content: Text("Gagal membuat tugas: ${errorData['message']}")),
         );
       }
     } catch (e) {
@@ -155,7 +168,6 @@ class _BuatTugasPageState extends State<BuatTugasPage> {
     }
   }
 
-  // Fungsi untuk memanggil createData dengan data dari controller
   void _submitData() {
     createData(
       _judulTugasController.text,
@@ -163,17 +175,8 @@ class _BuatTugasPageState extends State<BuatTugasPage> {
       _kuotaMhsController.text,
       _tenggatController.text,
       _deskripsiController.text,
+      _selectedJenisTugas ?? '',
     );
-  }
-
-  @override
-  void initState() {
-    super.initState();
-    _judulTugasController.addListener(_checkFormValid);
-    _bobotJamController.addListener(_checkFormValid);
-    _kuotaMhsController.addListener(_checkFormValid);
-    _tenggatController.addListener(_checkFormValid);
-    _deskripsiController.addListener(_checkFormValid);
   }
 
   @override
@@ -189,152 +192,95 @@ class _BuatTugasPageState extends State<BuatTugasPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        automaticallyImplyLeading: false,
-        backgroundColor: const Color(0xff2d1b6b),
-        iconTheme: const IconThemeData(color: Colors.white),
-        title: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: <Widget>[
-            IconButton(
-              icon: const Icon(Icons.arrow_back),
-              onPressed: () {
-                Navigator.pop(context);
-              },
-            ),
-            Text(
-              widget.title,
-              style: const TextStyle(
-                  color: Colors.white,
-                  fontSize: 20,
-                  fontFamily: 'InstrumentSans'),
-            ),
-            IconButton(
-              onPressed: () {},
-              icon:
-                  const Icon(Icons.notifications_outlined, color: Colors.white),
-            )
-          ],
-        ),
-      ),
-      body: SingleChildScrollView(
-        padding: const EdgeInsets.all(20),
+      appBar: AppBar(title: Text(widget.title)),
+      body: Padding(
+        padding: const EdgeInsets.all(16.0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const Text("Judul Tugas Kompensasi"),
-            const SizedBox(height: 10),
             TextField(
               controller: _judulTugasController,
               decoration: const InputDecoration(
-                border: OutlineInputBorder(),
-                contentPadding: EdgeInsets.symmetric(horizontal: 10),
+                labelText: 'Judul Tugas Kompensasi',
               ),
             ),
-            const SizedBox(height: 20),
-            const Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Text("Bobot Jam"),
-                Text("Kuota Mahasiswa"),
-              ],
+            const SizedBox(height: 16),
+            TextField(
+              controller: _bobotJamController,
+              keyboardType: TextInputType.number,
+              decoration: const InputDecoration(
+                labelText: 'Bobot Jam',
+              ),
             ),
-            const SizedBox(height: 10),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                SizedBox(
-                  width: 130,
-                  child: TextField(
-                    controller: _bobotJamController,
-                    decoration: const InputDecoration(
-                      border: OutlineInputBorder(),
-                      contentPadding: EdgeInsets.symmetric(horizontal: 10),
-                    ),
-                  ),
-                ),
-                SizedBox(
-                  width: 130,
-                  child: TextField(
-                    controller: _kuotaMhsController,
-                    decoration: const InputDecoration(
-                      border: OutlineInputBorder(),
-                      contentPadding: EdgeInsets.symmetric(horizontal: 10),
-                    ),
-                  ),
-                ),
-              ],
+            const SizedBox(height: 16),
+            TextField(
+              controller: _kuotaMhsController,
+              keyboardType: TextInputType.number,
+              decoration: const InputDecoration(
+                labelText: 'Kuota Mahasiswa',
+              ),
             ),
-            const SizedBox(height: 20),
-            const Text("Tenggat Waktu"),
-            const SizedBox(height: 10),
+            const SizedBox(height: 16),
             TextField(
               controller: _tenggatController,
               readOnly: true,
               decoration: InputDecoration(
-                border: const OutlineInputBorder(),
-                suffixIcon: Row(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    IconButton(
-                      icon: const Icon(Icons.calendar_today),
-                      onPressed: _selectDate,
-                    ),
-                    IconButton(
-                      icon: const Icon(Icons.access_time),
-                      onPressed: _selectTime,
-                    ),
-                  ],
+                labelText: 'Tenggat Waktu',
+                suffixIcon: IntrinsicWidth(
+                  child: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      IconButton(
+                        icon: const Icon(Icons.date_range),
+                        onPressed: _selectDate,
+                      ),
+                      IconButton(
+                        icon: const Icon(Icons.access_time),
+                        onPressed: _selectTime,
+                      ),
+                    ],
+                  ),
                 ),
               ),
             ),
-            const SizedBox(height: 20),
-            const Text("Deskripsi"),
-            const SizedBox(height: 10),
+            const SizedBox(height: 16),
             TextField(
               controller: _deskripsiController,
-              maxLines: 8,
+              maxLines: 3,
               decoration: const InputDecoration(
-                border: OutlineInputBorder(),
-                contentPadding: EdgeInsets.symmetric(horizontal: 10),
+                labelText: 'Deskripsi Tugas',
+                alignLabelWithHint: true,
               ),
             ),
-            const SizedBox(height: 40),
-            Center(
-              child: ElevatedButton(
-                onPressed: _isFormValid ? _submitData : null,
-                style: ElevatedButton.styleFrom(
-                  padding: const EdgeInsets.symmetric(vertical: 12),
-                  minimumSize: const Size(272, 40),
-                  backgroundColor: _isFormValid ? Colors.green : Colors.grey,
-                ),
-                child: const Text("Buat Tugas +"),
+            const SizedBox(height: 16),
+            DropdownButton<String>(
+              value:
+                  _selectedJenisTugas, // Nilai yang dipilih, pastikan ini terikat dengan state
+              hint: Text('Pilih Jenis Tugas'), // Tambahkan hint jika nilai null
+              onChanged: (String? value) {
+                setState(() {
+                  _selectedJenisTugas = value;
+                  _checkFormValid(); // Memastikan validasi form diperbarui
+                });
+              },
+              items: const [
+                DropdownMenuItem(
+                    value: "pengabdian", child: Text("Pengabdian")),
+                DropdownMenuItem(value: "teknis", child: Text("Teknis")),
+                DropdownMenuItem(
+                    value: "penelitian", child: Text("Penelitian")),
+              ],
+            ),
+            const SizedBox(height: 24),
+            ElevatedButton(
+              onPressed: _isFormValid ? _submitData : null,
+              style: ElevatedButton.styleFrom(
+                backgroundColor: _isFormValid ? Colors.green : Colors.grey,
+                minimumSize: const Size(double.infinity, 50),
               ),
+              child: const Text('Buat Tugas +'),
             ),
           ],
-        ),
-      ),
-      bottomNavigationBar: SizedBox(
-        height: 70,
-        child: Container(
-          color: const Color(0xff2d1b6b),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: <Widget>[
-              IconButton(
-                  onPressed: () {},
-                  icon: const Icon(Icons.home, color: Colors.white)),
-              IconButton(
-                  onPressed: () {},
-                  icon: const Icon(Icons.list, color: Colors.white)),
-              IconButton(
-                  onPressed: () {},
-                  icon: const Icon(Icons.work, color: Colors.white)),
-              IconButton(
-                  onPressed: () {},
-                  icon: const Icon(Icons.person, color: Colors.white)),
-            ],
-          ),
         ),
       ),
     );
