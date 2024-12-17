@@ -4,7 +4,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:http/http.dart' as http;
 import 'buat_tugas.dart';
 import 'detil_tugas.dart';
-import 'notifikasi.dart';
+import 'notif.dart';
 import '../models/login_response.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -89,11 +89,11 @@ class _DaftarTugasState extends State<DsnDaftarTugasPage> {
     );
   }
 
-  void _notifDsn() {
+  void _NotifDsn() {
     Navigator.push(
       context,
       MaterialPageRoute(
-        builder: (context) => const DsnNotifikasiPage(
+        builder: (context) => const DsnNotif(
           title: 'Sistem Kompensasi',
         ),
       ),
@@ -165,7 +165,7 @@ class _DaftarTugasState extends State<DsnDaftarTugasPage> {
               ],
             ),
             IconButton(
-                onPressed: _notifDsn,
+                onPressed: _NotifDsn,
                 icon: const Icon(
                   Icons.notifications_outlined,
                   color: Colors.white,

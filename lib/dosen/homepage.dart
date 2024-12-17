@@ -1,7 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'daftar_tugas.dart';
-import 'notifikasi.dart';
+import 'notif.dart';
 import 'package:testproject/dosen/profile.dart';
 import '../models/login_response.dart';
 
@@ -43,11 +43,11 @@ class _DsnHomepageState extends State<DsnHomepage> {
                 )));
   }
 
-  void _notifDsn() {
+  void _NotifDsn() {
     Navigator.push(
       context,
       MaterialPageRoute(
-        builder: (context) => const DsnNotifikasiPage(
+        builder: (context) => const DsnNotif(
           title: 'Sistem Kompensasi',
         ),
       ),
@@ -119,7 +119,7 @@ class _DsnHomepageState extends State<DsnHomepage> {
               ],
             ),
             IconButton(
-                onPressed: _notifDsn,
+                onPressed: _NotifDsn,
                 icon: const Icon(
                   Icons.notifications_outlined,
                   color: Colors.white,
@@ -186,7 +186,7 @@ class _DsnHomepageState extends State<DsnHomepage> {
                       size: 30,
                     )),
                 IconButton(
-                    onPressed: _notifDsn,
+                    onPressed: _NotifDsn,
                     icon: const Icon(
                       CupertinoIcons.briefcase,
                       color: Colors.white,
