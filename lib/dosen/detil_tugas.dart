@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'daftar_tugas.dart';
+import 'edit_tugas.dart';
 import 'homepage.dart';
 import 'package:http/http.dart' as http;
 import 'notifikasi.dart';
@@ -55,6 +56,65 @@ class _DsnDetilTugasState extends State<DsnDetilTugas> {
         isLoading = false;
       });
       print('Failed to load task details');
+    }
+  }
+
+  Future<void> _deleteTask(int tugasId) async {
+    print('Deleting Tugas with ID: $tugasId');
+
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String? token = prefs.getString('token'); // Retrieve token
+
+    if (token == null) {
+      print("Token not found");
+      return;
+    }
+
+    try {
+      final response = await http.delete(
+        Uri.parse(
+            '${apiUrl}tugas/$tugasId'), // Correctly use tugasId in the URL
+        headers: {
+          "Content-Type": "application/json",
+          'Authorization': 'Bearer $token',
+        },
+      );
+
+      if (response.statusCode == 200) {
+        print('Task successfully deleted.');
+        // Tampilkan dialog "Tugas berhasil dihapus!"
+        showDialog(
+          context: context,
+          builder: (BuildContext context) {
+            return const AlertDialog(
+              title: Text(
+                'Tugas berhasil dihapus!',
+                textAlign: TextAlign.center,
+                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
+              ),
+              content: Row(
+                mainAxisSize: MainAxisSize.min,
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Icon(
+                    Icons.check_circle_outline_outlined,
+                    size: 50,
+                    color: Colors.green,
+                  ),
+                ],
+              ),
+            );
+          },
+        );
+
+        // Optionally refresh the task list or navigate back
+        // Navigator.of(context).pop(); // Close dialog or current screen
+      } else {
+        print('Failed to delete task. Status code: ${response.statusCode}');
+        print('Response: ${response.body}');
+      }
+    } catch (e) {
+      print('Error deleting task: $e');
     }
   }
 
@@ -245,20 +305,144 @@ class _DsnDetilTugasState extends State<DsnDetilTugas> {
               ),
               const SizedBox(height: 20),
 
-              // Tombol Request
-              SizedBox(
-                width: double.infinity,
-                child: ElevatedButton(
-                  onPressed: () {},
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.green,
-                    padding: const EdgeInsets.symmetric(vertical: 15),
+              const SizedBox(height: 40),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: <Widget>[
+                  // Edit Button
+                  ElevatedButton(
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) =>
+                              DsnEditTugas(taskDetail: _taskDetail!),
+                        ),
+                      );
+                    },
+                    style: ElevatedButton.styleFrom(
+                      padding: const EdgeInsets.symmetric(horizontal: 5),
+                      backgroundColor: const Color(0xFF2c2c2c),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                    ),
+                    child: const Row(
+                      children: [
+                        Icon(
+                          Icons.edit_outlined,
+                          color: Colors.white,
+                        ),
+                        SizedBox(width: 5),
+                        Text(
+                          'Edit',
+                          style: TextStyle(color: Colors.white),
+                        )
+                      ],
+                    ),
                   ),
-                  child: const Text(
-                    'Request',
-                    style: TextStyle(fontSize: 16, color: Colors.white),
+                  const SizedBox(width: 20),
+                  // Delete Button
+                  ElevatedButton(
+                    onPressed: () {
+                      showDialog(
+                        context: context,
+                        builder: (BuildContext context) {
+                          return AlertDialog(
+                            title: const Text(
+                              'Yakin Menghapus Tugas?',
+                              textAlign: TextAlign.center,
+                              style: TextStyle(fontWeight: FontWeight.bold),
+                            ),
+                            content: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceAround,
+                              mainAxisSize: MainAxisSize.min,
+                              children: <Widget>[
+                                // Yes Button
+                                ElevatedButton(
+                                  onPressed: () {
+                                    _deleteTask(_taskDetail!['tugas_id']);
+                                    Navigator.of(context).pop(); // Close dialog
+                                  },
+                                  style: ElevatedButton.styleFrom(
+                                    padding: const EdgeInsets.symmetric(
+                                        horizontal: 20, vertical: 15),
+                                    backgroundColor: Colors.green,
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(10),
+                                    ),
+                                  ),
+                                  child: const Row(
+                                    mainAxisSize: MainAxisSize.min,
+                                    children: <Widget>[
+                                      Text(
+                                        'Ya',
+                                        style: TextStyle(color: Colors.white),
+                                      ),
+                                      SizedBox(width: 5),
+                                      Icon(
+                                        Icons.check,
+                                        color: Colors.white,
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                                // No Button
+                                ElevatedButton(
+                                  onPressed: () {
+                                    Navigator.of(context).pop(); // Close dialog
+                                  },
+                                  style: ElevatedButton.styleFrom(
+                                    padding: const EdgeInsets.symmetric(
+                                        horizontal: 20, vertical: 15),
+                                    backgroundColor: Colors.red,
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(10),
+                                    ),
+                                  ),
+                                  child: const Row(
+                                    mainAxisSize: MainAxisSize.min,
+                                    children: <Widget>[
+                                      Text(
+                                        'Tidak',
+                                        style: TextStyle(color: Colors.white),
+                                      ),
+                                      SizedBox(width: 5),
+                                      Icon(
+                                        Icons.close,
+                                        color: Colors.white,
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ],
+                            ),
+                          );
+                        },
+                      );
+                    },
+                    style: ElevatedButton.styleFrom(
+                      padding: const EdgeInsets.symmetric(horizontal: 5),
+                      backgroundColor: const Color(0xFF2c2c2c),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                    ),
+                    child: const Row(
+                      children: [
+                        Icon(
+                          Icons.delete_outlined,
+                          color: Colors.white,
+                        ),
+                        SizedBox(width: 5),
+                        Text(
+                          'Hapus',
+                          style: TextStyle(color: Colors.white),
+                        )
+                      ],
+                    ),
                   ),
-                ),
+                ],
               ),
             ],
           ),

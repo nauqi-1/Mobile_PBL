@@ -4,20 +4,22 @@ import 'package:flutter/cupertino.dart';
 import 'package:http/http.dart' as http;
 import 'buat_tugas.dart';
 import 'detil_tugas.dart';
+import 'detil_pengumpulan.dart';
+import 'detail_request.dart';
 import 'notifikasi.dart';
 import '../models/login_response.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-class DsnDaftarTugasPage extends StatefulWidget {
-  const DsnDaftarTugasPage({super.key, required this.title});
+class DsnNotif extends StatefulWidget {
+  const DsnNotif({super.key, required this.title});
 
   final String title;
 
   @override
-  State<DsnDaftarTugasPage> createState() => _DaftarTugasState();
+  State<DsnNotif> createState() => DsnNotifState();
 }
 
-class _DaftarTugasState extends State<DsnDaftarTugasPage> {
+class DsnNotifState extends State<DsnNotif> {
   List<dynamic> _tasks = [];
   bool isLoading = true; // Menyimpan status loading
 
@@ -37,7 +39,7 @@ class _DaftarTugasState extends State<DsnDaftarTugasPage> {
       return;
     }
     final response = await http.get(
-      Uri.parse('${apiUrl}tugas/1'),
+      Uri.parse('${apiUrl}notifikasi'),
       headers: {
         "Content-Type": "application/json",
         'Authorization': 'Bearer $token', // Add token to request headers
@@ -56,17 +58,6 @@ class _DaftarTugasState extends State<DsnDaftarTugasPage> {
       // Handle the error
       print('Failed to load tasks');
     }
-  }
-
-  void _buatTugas() {
-    Navigator.push(
-      context,
-      MaterialPageRoute(
-        builder: (context) => const DsnBuatTugas(
-          title: 'Sistem Kompensasi',
-        ),
-      ),
-    );
   }
 
   void _profileDsn() {
@@ -90,6 +81,27 @@ class _DaftarTugasState extends State<DsnDaftarTugasPage> {
   }
 
   void _notifDsn() {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => const DsnNotifikasiPage(
+          title: 'Sistem Kompensasi',
+        ),
+      ),
+    );
+  }
+
+  // void _requestTugas() {
+  //   print('Notifikasi Mahasiswa');
+  //   Navigator.push(
+  //       context,
+  //       MaterialPageRoute(
+  //           builder: (context) => const DetailRequestPage(
+  //                 requestId: refId,
+  //               )));
+  // }
+
+  void _() {
     Navigator.push(
       context,
       MaterialPageRoute(
@@ -181,28 +193,11 @@ class _DaftarTugasState extends State<DsnDaftarTugasPage> {
             children: [
               const Center(
                 child: Text(
-                  'DAFTAR TUGAS KOMPENSASI',
+                  'NOTIFIKASI',
                   style: TextStyle(
                     fontSize: 22,
                     fontFamily: 'InstrumentSans',
                     fontWeight: FontWeight.bold,
-                  ),
-                ),
-              ),
-              const SizedBox(height: 20),
-              Center(
-                child: ElevatedButton(
-                  onPressed: _buatTugas,
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.green,
-                    fixedSize: const Size(272, 40),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(8),
-                    ),
-                  ),
-                  child: const Text(
-                    'Buat Tugas Baru +',
-                    style: TextStyle(color: Colors.white),
                   ),
                 ),
               ),
@@ -222,7 +217,7 @@ class _DaftarTugasState extends State<DsnDaftarTugasPage> {
                               borderRadius: BorderRadius.circular(8),
                             ),
                             child: ListTile(
-                              title: Text(_tasks[index]['tugas_nama']),
+                              title: Text(_tasks[index]['konten_notification']),
                               trailing: const Text(
                                 'Detail >',
                                 style: TextStyle(
@@ -230,15 +225,41 @@ class _DaftarTugasState extends State<DsnDaftarTugasPage> {
                                 ),
                               ),
                               onTap: () {
-                                // Navigasi ke halaman detil tugas dengan mengirim tugas_id
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (context) => DsnDetilTugas(
-                                      tugasId: _tasks[index]['tugas_id'] ?? 0,
+                                // Periksa jenis_notification
+                                final jenisNotification =
+                                    _tasks[index]['jenis_notification'];
+                                final refId = _tasks[index]['ref_id'] ?? 0;
+
+                                if (jenisNotification == 'permintaan request') {
+                                  // Navigasi ke halaman detil request
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) => DetailRequestPage(
+                                        requestId: refId,
+                                      ),
                                     ),
-                                  ),
-                                );
+                                  );
+                                } else if (jenisNotification ==
+                                    'kumpul tugas') {
+                                  // Navigasi ke halaman detil pengumpulan tugas
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) => DetailPengumpulan(
+                                        kumpulTugasId: refId,
+                                      ),
+                                    ),
+                                  );
+                                } else {
+                                  // Jika jenis_notification tidak dikenali
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                    const SnackBar(
+                                      content: Text(
+                                          'Jenis notifikasi tidak dikenali'),
+                                    ),
+                                  );
+                                }
                               },
                             ),
                           ),

@@ -10,16 +10,16 @@ import 'profile.dart';
 import '../models/login_response.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-class DetailRequestPage extends StatefulWidget {
-  final int requestId; // Tugas ID yang dikirim dari daftar_tugas.dart
-  const DetailRequestPage({super.key, required this.requestId});
+class DetailPengumpulan extends StatefulWidget {
+  final int kumpulTugasId; // Tugas ID yang dikirim dari daftar_tugas.dart
+  const DetailPengumpulan({super.key, required this.kumpulTugasId});
 
   @override
-  State<DetailRequestPage> createState() => _DetailRequestPageState();
+  State<DetailPengumpulan> createState() => _DetailPengumpulanState();
 }
 
-class _DetailRequestPageState extends State<DetailRequestPage> {
-  Map<String, dynamic>? __reqDetail;
+class _DetailPengumpulanState extends State<DetailPengumpulan> {
+  Map<String, dynamic>? _reqDetail;
   bool isLoading = true;
   @override
   void initState() {
@@ -37,7 +37,8 @@ class _DetailRequestPageState extends State<DetailRequestPage> {
     }
 
     final response = await http.get(
-      Uri.parse('${apiUrl}request/${widget.requestId}'), // Menggunakan tugasId
+      Uri.parse(
+          '${apiUrl}request/${widget.kumpulTugasId}'), // Menggunakan tugasId
       headers: {
         "Content-Type": "application/json",
         'Authorization': 'Bearer $token',
@@ -47,168 +48,50 @@ class _DetailRequestPageState extends State<DetailRequestPage> {
     if (response.statusCode == 200) {
       setState(() {
         // Parsing detail tugas dari response
-        __reqDetail = jsonDecode(response.body);
+        _reqDetail = jsonDecode(response.body);
         isLoading = false;
-        print('req Detail: $__reqDetail');
+        print('req Detail: $_reqDetail');
       });
     } else {
       setState(() {
         isLoading = false;
       });
-      print('Failed requestId: ${widget.requestId}');
       print('Failed to load task details');
     }
   }
 
-  Future<void> confirmAccept(int idRequest) async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    String? token = prefs.getString('token'); // Retrieve token
-
-    if (token == null) {
-      print("Token not found");
-      return;
-    }
-
-    // URL untuk API confirm_accept dengan query string id_request
-    final requestUrl = '${apiUrl}request/accept_ajax/?id_request=$idRequest';
-
-    print("Request URL: $requestUrl"); // Debug URL
-
-    try {
-      final response = await http.put(
-        Uri.parse(requestUrl),
-        headers: {
-          "Content-Type": "application/json",
-          'Authorization': 'Bearer $token',
-        },
-      );
-
-      if (response.statusCode == 200) {
-        // Jika berhasil
-        print('Request berhasil dikonfirmasi.');
-
-        showDialog(
-          context: context,
-          builder: (BuildContext context) {
-            return const AlertDialog(
-              title: Text(
-                'Request Berhasil Dikonfirmasi!',
-                textAlign: TextAlign.center,
-                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
-              ),
-              content: Row(
-                mainAxisSize: MainAxisSize.min,
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Icon(
-                    Icons.check_circle_outline_outlined,
-                    size: 50,
-                    color: Colors.green,
-                  ),
-                ],
-              ),
-            );
-          },
-        );
-      } else {
-        // Jika gagal
-        print("Response Status Code: ${response.statusCode}");
-        print("Response Body: ${response.body}");
-        showDialog(
-          context: context,
-          builder: (BuildContext context) {
-            return const AlertDialog(
-              title: Text(
-                'Kuota untuk tugas ini sudah penuh!',
-                textAlign: TextAlign.center,
-                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
-              ),
-              content: Row(
-                mainAxisSize: MainAxisSize.min,
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Icon(
-                    Icons.check_circle_outline_outlined,
-                    size: 50,
-                    color: Colors.green,
-                  ),
-                ],
-              ),
-            );
-          },
-        );
-      }
-    } catch (e) {
-      // Tangani error jika terjadi masalah saat HTTP request
-      print("Error: $e");
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Terjadi kesalahan: $e')),
-      );
-    }
+  void _handleAccept() {
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        content: const Text('Anda telah menerima request mahasiswa'),
+        actions: [
+          TextButton(
+            onPressed: () {
+              Navigator.pop(context);
+            },
+            child: const Text('OK'),
+          ),
+        ],
+      ),
+    );
   }
 
-  Future<void> confirmDenied(int idRequest) async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    String? token = prefs.getString('token'); // Retrieve token
-
-    if (token == null) {
-      print("Token not found");
-      return;
-    }
-
-    // URL untuk API confirm_accept dengan query string id_request
-    final requestUrl = '${apiUrl}request/denied_ajax/?id_request=$idRequest';
-
-    print("Request URL: $requestUrl"); // Debug URL
-
-    try {
-      final response = await http.put(
-        Uri.parse(requestUrl),
-        headers: {
-          "Content-Type": "application/json",
-          'Authorization': 'Bearer $token',
-        },
-      );
-
-      if (response.statusCode == 200) {
-        // Jika berhasil
-        print('Request berhasil ditolak.');
-
-        showDialog(
-          context: context,
-          builder: (BuildContext context) {
-            return const AlertDialog(
-              title: Text(
-                'Request Berhasil ditolak!',
-                textAlign: TextAlign.center,
-                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
-              ),
-              content: Row(
-                mainAxisSize: MainAxisSize.min,
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Icon(
-                    Icons.check_circle_outline_outlined,
-                    size: 50,
-                    color: Colors.green,
-                  ),
-                ],
-              ),
-            );
-          },
-        );
-      } else {
-        // Jika gagal
-        print("Response Status Code: ${response.statusCode}");
-        print("Response Body: ${response.body}");
-      }
-    } catch (e) {
-      // Tangani error jika terjadi masalah saat HTTP request
-      print("Error: $e");
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Terjadi kesalahan: $e')),
-      );
-    }
+  void _handleReject() {
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        content: const Text('Anda telah menolak request mahasiswa'),
+        actions: [
+          TextButton(
+            onPressed: () {
+              Navigator.pop(context);
+            },
+            child: const Text('OK'),
+          ),
+        ],
+      ),
+    );
   }
 
   @override
@@ -289,13 +172,13 @@ class _DetailRequestPageState extends State<DetailRequestPage> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            __reqDetail != null
+            _reqDetail != null
                 ? Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       // Kolom Tugas Nama
                       Text(
-                        __reqDetail!['tugas']?['tugas_nama'] ?? '-',
+                        _reqDetail!['tugas']?['tugas_nama'] ?? '-',
                         style: const TextStyle(
                           fontSize: 24,
                           fontFamily: 'InstrumentSans',
@@ -311,7 +194,7 @@ class _DetailRequestPageState extends State<DetailRequestPage> {
                             fontSize: 16, fontWeight: FontWeight.bold),
                       ),
                       Text(
-                        __reqDetail!['mahasiswa']?['mahasiswa_nama'] ?? '-',
+                        _reqDetail!['mahasiswa']?['mahasiswa_nama'] ?? '-',
                         style: const TextStyle(fontSize: 16),
                       ),
                       const SizedBox(height: 16),
@@ -323,7 +206,7 @@ class _DetailRequestPageState extends State<DetailRequestPage> {
                             fontSize: 16, fontWeight: FontWeight.bold),
                       ),
                       Text(
-                        __reqDetail!['mahasiswa']?['mahasiswa_nim'] ?? '-',
+                        _reqDetail!['mahasiswa']?['mahasiswa_nim'] ?? '-',
                         style: const TextStyle(fontSize: 16),
                       ),
                       const SizedBox(height: 16),
@@ -335,7 +218,7 @@ class _DetailRequestPageState extends State<DetailRequestPage> {
                             fontSize: 16, fontWeight: FontWeight.bold),
                       ),
                       Text(
-                        __reqDetail!['mahasiswa']?['mahasiswa_prodi'] ?? '-',
+                        _reqDetail!['mahasiswa']?['mahasiswa_prodi'] ?? '-',
                         style: const TextStyle(fontSize: 16),
                       ),
                       const SizedBox(height: 16),
@@ -347,7 +230,7 @@ class _DetailRequestPageState extends State<DetailRequestPage> {
                             fontSize: 16, fontWeight: FontWeight.bold),
                       ),
                       Text(
-                        __reqDetail!['mahasiswa']?['mahasiswa_kelas'] ?? '-',
+                        _reqDetail!['mahasiswa']?['mahasiswa_kelas'] ?? '-',
                         style: const TextStyle(fontSize: 16),
                       ),
                       const SizedBox(height: 16),
@@ -359,7 +242,7 @@ class _DetailRequestPageState extends State<DetailRequestPage> {
                             fontSize: 16, fontWeight: FontWeight.bold),
                       ),
                       Text(
-                        __reqDetail!['mahasiswa']?['mahasiswa_no_hp'] ?? '-',
+                        _reqDetail!['mahasiswa']?['mahasiswa_no_hp'] ?? '-',
                         style: const TextStyle(fontSize: 16),
                       ),
                       const SizedBox(height: 16),
@@ -373,9 +256,7 @@ class _DetailRequestPageState extends State<DetailRequestPage> {
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
                 ElevatedButton(
-                  onPressed: () {
-                    confirmAccept(__reqDetail!['id_request']);
-                  },
+                  onPressed: _handleAccept,
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Colors.green,
                     fixedSize: const Size(130, 40),
@@ -383,9 +264,7 @@ class _DetailRequestPageState extends State<DetailRequestPage> {
                   child: const Text('Terima'),
                 ),
                 ElevatedButton(
-                  onPressed: () {
-                    confirmDenied(__reqDetail!['id_request']);
-                  },
+                  onPressed: _handleReject,
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Colors.red,
                     fixedSize: const Size(130, 40),

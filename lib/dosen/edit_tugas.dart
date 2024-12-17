@@ -8,31 +8,25 @@ import 'homepage.dart';
 import 'package:http/http.dart' as http;
 import 'notifikasi.dart';
 import 'profile.dart';
-import 'notif.dart';
 import '../models/login_response.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:dropdown_search/dropdown_search.dart';
 
-class DsnBuatTugas extends StatefulWidget {
-  const DsnBuatTugas({super.key, required this.title});
-
-  final String title;
+class DsnEditTugas extends StatefulWidget {
+  final Map<String, dynamic> taskDetail;
+  // final int tugasId; // Tugas ID yang dikirim dari daftar_tugas.dart
+  const DsnEditTugas({super.key, required this.taskDetail});
 
   @override
-  State<DsnBuatTugas> createState() => Dsn_BuatTugasState();
+  State<DsnEditTugas> createState() => _DsnEditTugasState();
 }
 
-class Dsn_BuatTugasState extends State<DsnBuatTugas> {
-  // TextEditingControllers for all input fields
-  final TextEditingController _namaTugasController = TextEditingController();
-  final TextEditingController _tanggalDibuatController =
-      TextEditingController();
-  final TextEditingController _jenisController = TextEditingController();
-  final TextEditingController _bobotJamController = TextEditingController();
-  final TextEditingController _kuotaController = TextEditingController();
-  final TextEditingController _deadlineController = TextEditingController();
-  final TextEditingController _deskripsiController = TextEditingController();
-  final TextEditingController _fileController = TextEditingController();
+class _DsnEditTugasState extends State<DsnEditTugas> {
+  late TextEditingController _namaTugasController;
+  late TextEditingController _bobotJamController;
+  late TextEditingController _kuotaController;
+  late TextEditingController _deadlineController;
+  late TextEditingController _deskripsiController;
   // Data Kompetensi (dapat diambil dari _taskDetail)
   List<Map<String, dynamic>> kompetensiData = [];
 
@@ -40,57 +34,76 @@ class Dsn_BuatTugasState extends State<DsnBuatTugas> {
   List<String> selectedKompetensiIds = [];
   // Menyimpan nama file tugas yang dipilih atau sudah ada
   String? _selectedFileName;
-  String? _selectedJenis;
-  List<dynamic> _jenisList = []; // List untuk menyimpan data jenis dari API
+  String buildQuery(Map<String, dynamic> params) {
+    return params.entries
+        .map((e) =>
+            '${Uri.encodeComponent(e.key)}=${Uri.encodeComponent(e.value.toString())}')
+        .join('&');
+  }
 
+  @override
   void initState() {
     super.initState();
-// Mengambil data kompetensi dari API
+
+    // Initialize TextEditingControllers with existing data
+    _namaTugasController =
+        TextEditingController(text: widget.taskDetail['tugas_nama']);
+    _bobotJamController = TextEditingController(
+        text: widget.taskDetail['tugas_bobot'].toString());
+    _kuotaController =
+        TextEditingController(text: widget.taskDetail['kuota'].toString());
+    _deadlineController =
+        TextEditingController(text: widget.taskDetail['tugas_tgl_deadline']);
+    _deskripsiController =
+        TextEditingController(text: widget.taskDetail['tugas_desc']);
+    // Mengambil data kompetensi dari API
     fetchKompetensi();
-// Mengambil data Jenis dari API
-    fetchJenis();
+    // Jika sudah ada file, tampilkan nama file yang ada
+    if (widget.taskDetail['tugas_file'] != null &&
+        widget.taskDetail['tugas_file'].isNotEmpty) {
+      _selectedFileName = widget.taskDetail['tugas_file'];
+    }
   }
 
   // Fungsi untuk mengonfirmasi dan menyimpan perubahan
-  Future<void> confirmAdd() async {
+  Future<void> confirmEdit() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String? token = prefs.getString('token'); // Retrieve token
-    int? userId = prefs.getInt('user_id'); // Retrieve token
 
     if (token == null) {
       print("Token not found");
       return;
     }
     // Mempersiapkan data yang akan dikirim
-    final addData = {
+    final updatedData = {
       'tugas_nama': _namaTugasController.text,
       'tugas_bobot': int.parse(_bobotJamController.text),
       'kuota': int.parse(_kuotaController.text),
       'tugas_tgl_deadline': _deadlineController.text,
       'tugas_desc': _deskripsiController.text,
-      'tugas_pembuat_id': userId,
-      'kompetensi': selectedKompetensiIds,
-      'jenis_id': _selectedJenis,
+      'kompetensi_id': selectedKompetensiIds.join(','),
       'tugas_file': _selectedFileName ??
           '', // Jika file tidak diubah, kirimkan null atau string kosong
     };
+    // Membuat query string
+    final queryString = buildQuery(updatedData);
 
 // URL dengan query string
-    final requestUrl = '${apiUrl}tugas/';
+    final requestUrl =
+        '${apiUrl}tugas/${widget.taskDetail['tugas_id']}?$queryString';
 
 // Debug URL untuk verifikasi
     print("Request URL: $requestUrl");
     try {
-      final response = await http.post(
+      final response = await http.put(
         Uri.parse(requestUrl),
         headers: {
           "Content-Type": "application/json",
           'Authorization': 'Bearer $token',
         },
-        body: json.encode(addData), // Tambahkan addData ke body
       );
 
-      if (response.statusCode == 201) {
+      if (response.statusCode == 200) {
         // Tugas berhasil diperbarui
         print('Task successfully update.');
         // Tampilkan dialog "Tugas berhasil dihapus!"
@@ -99,7 +112,7 @@ class Dsn_BuatTugasState extends State<DsnBuatTugas> {
           builder: (BuildContext context) {
             return const AlertDialog(
               title: Text(
-                'Tugas berhasil dibuat!',
+                'Tugas berhasil diperbarui!',
                 textAlign: TextAlign.center,
                 style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
               ),
@@ -120,7 +133,7 @@ class Dsn_BuatTugasState extends State<DsnBuatTugas> {
         // Arahkan kembali ke halaman sebelumnya
         // Navigator.pop(context);
       } else {
-        // Tangani kesalahan jika status code bukan 201
+        // Tangani kesalahan jika status code bukan 200
         print("Response Status Code: ${response.statusCode}");
         print("Response Body: ${response.body}");
         ScaffoldMessenger.of(context)
@@ -180,45 +193,14 @@ class Dsn_BuatTugasState extends State<DsnBuatTugas> {
     }
   }
 
-  // Fungsi untuk mengambil data jenis dari API
-  Future<void> fetchJenis() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    String? token = prefs.getString('token'); // Retrieve token
-
-    if (token == null) {
-      print("Token not found");
-      return;
-    }
-
-    final response = await http.get(
-      Uri.parse('${apiUrl}jenis'),
-      headers: {
-        "Content-Type": "application/json",
-        'Authorization': 'Bearer $token',
-      },
-    );
-
-    if (response.statusCode == 200) {
-      final data = json.decode(response.body); // Decode JSON response
-      setState(() {
-        _jenisList = data; // Simpan data jenis ke dalam list
-      });
-    } else {
-      print('Failed to load jenis: ${response.statusCode}');
-    }
-  }
-
   @override
   void dispose() {
-    // Dispose controllers
+    // Dispose of controllers to free up memory
     _namaTugasController.dispose();
-    _tanggalDibuatController.dispose();
-    _jenisController.dispose();
     _bobotJamController.dispose();
     _kuotaController.dispose();
     _deadlineController.dispose();
     _deskripsiController.dispose();
-    _fileController.dispose();
     super.dispose();
   }
 
@@ -256,16 +238,6 @@ class Dsn_BuatTugasState extends State<DsnBuatTugas> {
         _deadlineController.text = formattedDateTime;
       }
     }
-  }
-
-  void _NotifDsn() {
-    print('Notifikasi Mahasiswa');
-    Navigator.push(
-        context,
-        MaterialPageRoute(
-            builder: (context) => const DsnNotif(
-                  title: 'Sistem Kompensasi',
-                )));
   }
 
   @override
@@ -333,8 +305,8 @@ class Dsn_BuatTugasState extends State<DsnBuatTugas> {
               ],
             ),
             IconButton(
-                onPressed: _NotifDsn,
-                icon: Icon(
+                onPressed: () {},
+                icon: const Icon(
                   Icons.notifications_outlined,
                   color: Colors.white,
                 ))
@@ -352,36 +324,23 @@ class Dsn_BuatTugasState extends State<DsnBuatTugas> {
                 controller: _namaTugasController,
                 decoration: const InputDecoration(
                   labelText: 'Nama Tugas',
-                  hintText: 'Masukkan nama tugas',
                   border: OutlineInputBorder(),
                 ),
               ),
               const SizedBox(height: 15),
-              const Text(
-                'Pilih Jenis',
-                style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-              ),
-              const SizedBox(height: 10),
-              DropdownButtonFormField<String>(
-                value: _selectedJenis, // Nilai yang dipilih
-                decoration: const InputDecoration(
-                  border: OutlineInputBorder(),
-                  hintText: 'Pilih jenis',
-                ),
-                items: _jenisList.map((jenis) {
-                  return DropdownMenuItem<String>(
-                    value:
-                        jenis['jenis_id'].toString(), // ID jenis sebagai value
-                    child: Text(jenis['jenis_nama']), // Nama jenis ditampilkan
-                  );
-                }).toList(),
-                onChanged: (value) {
-                  setState(() {
-                    _selectedJenis = value; // Set nilai yang dipilih
-                  });
-                },
-              ),
 
+              // Tanggal dibuat dan Jenis
+              // Row(
+              //   children: [
+              //     Expanded(
+              //         child: _buildTextField('Tanggal dibuat',
+              //             _taskDetail!['tugas_tgl_dibuat'] ?? '-')),
+              //     const SizedBox(width: 10),
+              //     Expanded(
+              //         child: _buildTextField('Jenis',
+              //             _taskDetail!['jenis']?['jenis_nama'] ?? '-')),
+              //   ],
+              // ),
               const SizedBox(height: 10),
 
               // Bobot Jam dan Kuota
@@ -392,7 +351,6 @@ class Dsn_BuatTugasState extends State<DsnBuatTugas> {
                       controller: _bobotJamController,
                       decoration: const InputDecoration(
                         labelText: 'Bobot Jam',
-                        hintText: 'Masukkan bobot jam',
                         border: OutlineInputBorder(),
                       ),
                       keyboardType: TextInputType.number,
@@ -404,7 +362,6 @@ class Dsn_BuatTugasState extends State<DsnBuatTugas> {
                       controller: _kuotaController,
                       decoration: const InputDecoration(
                         labelText: 'Kuota Mahasiswa',
-                        hintText: 'Masukkan kuota mahasiswa',
                         border: OutlineInputBorder(),
                       ),
                       keyboardType: TextInputType.number,
@@ -423,7 +380,6 @@ class Dsn_BuatTugasState extends State<DsnBuatTugas> {
                     controller: _deadlineController,
                     decoration: const InputDecoration(
                       labelText: 'Tenggat Waktu',
-                      hintText: 'Masukkan Deadline',
                       border: OutlineInputBorder(),
                       suffixIcon: Icon(Icons.calendar_today), // Kalender Icon
                     ),
@@ -489,7 +445,6 @@ class Dsn_BuatTugasState extends State<DsnBuatTugas> {
                 controller: _deskripsiController,
                 decoration: const InputDecoration(
                   labelText: 'Deskripsi',
-                  hintText: 'Masukkan deskripsi',
                   border: OutlineInputBorder(),
                 ),
                 maxLines: 5,
@@ -549,7 +504,7 @@ class Dsn_BuatTugasState extends State<DsnBuatTugas> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
                     ElevatedButton(
-                        onPressed: confirmAdd,
+                        onPressed: confirmEdit,
                         style: ElevatedButton.styleFrom(
                           padding: const EdgeInsets.symmetric(horizontal: 5),
                           backgroundColor: const Color(0xFF2c2c2c),
