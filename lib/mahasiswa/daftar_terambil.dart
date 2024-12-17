@@ -1,5 +1,8 @@
+
+import 'dart:convert';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
 import 'package:testproject/models/login_response.dart';
 import 'daftar_tersedia.dart';
 import 'homepage.dart';
@@ -12,14 +15,50 @@ class MhsDaftarTerambil extends StatefulWidget {
   final Mahasiswa mahasiswa;
   const MhsDaftarTerambil(
       {super.key, required this.loginResponse, required this.mahasiswa});
-  //final String title;
+
   @override
   State<MhsDaftarTerambil> createState() => _MhsDaftarTerambilState();
 }
 
 class _MhsDaftarTerambilState extends State<MhsDaftarTerambil> {
+  List tugasTerambilList = []; // Menyimpan daftar tugas terambil dari API
+  bool isLoading = true; // Menyimpan status loading
+ 
+
+  // Fungsi untuk mengambil data tugas terambil dari API
+  Future<void> fetchTugasTerambil() async {
+    try {
+      final response = await http.get(
+        Uri.parse('${apiUrl}tugas-mahasiswa/${widget.mahasiswa.mahasiswa_id}'),
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": "Bearer ${widget.loginResponse.token}",
+        },
+      );
+
+      if (response.statusCode == 200) {
+        setState(() {
+          tugasTerambilList = json.decode(response.body); // Parsing JSON
+          isLoading = false;
+        });
+      } else {
+        throw Exception('Failed to load tugas terambil');
+      }
+    } catch (e) {
+      setState(() {
+        isLoading = false;
+      });
+      print("Error fetching data: $e");
+    }
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    fetchTugasTerambil(); // Memanggil fungsi untuk mengambil data saat halaman dimuat
+  }
+
   void _indexMhs() {
-    print('Homepage Mahasiswa');
     Navigator.push(
       context,
       MaterialPageRoute(
@@ -32,7 +71,6 @@ class _MhsDaftarTerambilState extends State<MhsDaftarTerambil> {
   }
 
   void _notifMhs() {
-    print('Notifikasi Mahasiswa');
     Navigator.push(
         context,
         MaterialPageRoute(
@@ -43,7 +81,6 @@ class _MhsDaftarTerambilState extends State<MhsDaftarTerambil> {
   }
 
   void _profileMhs() {
-    print('Profile Mahasiswa');
     Navigator.push(
       context,
       MaterialPageRoute(
@@ -167,41 +204,46 @@ class _MhsDaftarTerambilState extends State<MhsDaftarTerambil> {
             ),
             const SizedBox(height: 20),
             Expanded(
-              child: ListView.builder(
-                itemCount: 10, // Jumlah data dummy
-                itemBuilder: (context, index) {
-                  return Padding(
-                    padding: const EdgeInsets.symmetric(vertical: 5.0),
-                    child: Container(
-                      decoration: BoxDecoration(
-                        color: const Color(0xFFE0E0E0), // Warna abu-abu
-                        borderRadius: BorderRadius.circular(8),
-                      ),
-                      child: ListTile(
-                        title: const Text('Judul Tugas'),
-                        trailing: const Text(
-                          'Detail >',
-                          style: TextStyle(
-                            color: Colors.black54,
-                          ),
-                        ),
-                        onTap: () {
-                          // Aksi ketika ditekan (navigasi ke halaman detail)
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => MhsDetilPengumpulan(
-                                loginResponse: widget.loginResponse,
-                                mahasiswa: widget.mahasiswa,
-                              ),
+              child: isLoading
+                  ? const Center(child: CircularProgressIndicator())
+                  : ListView.builder(
+                      itemCount: tugasTerambilList.length, // Jumlah data dari API
+                      itemBuilder: (context, index) {
+                        final tugas = tugasTerambilList[index];
+                        return Padding(
+                          padding: const EdgeInsets.symmetric(vertical: 5.0),
+                          child: Container(
+                            decoration: BoxDecoration(
+                              color: const Color(0xFFE0E0E0), // Warna abu-abu
+                              borderRadius: BorderRadius.circular(8),
                             ),
-                          );
-                        },
-                      ),
+                            child: ListTile(
+                              title: Text(tugas['tugas']['tugas_nama']),
+                              subtitle: Text("Status: ${tugas['status']}"),
+                              trailing: const Text(
+                                'Detail >',
+                                style: TextStyle(
+                                  color: Colors.black54,
+                                ),
+                              ),
+                              onTap: () {
+                                // Navigasi ke halaman detil pengumpulan
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => MhsDetilPengumpulan(
+                                      tugasId: tugas['tugas_id'],
+                                      loginResponse: widget.loginResponse,
+                                      mahasiswa: widget.mahasiswa,
+                                    ),
+                                  ),
+                                );
+                              },
+                            ),
+                          ),
+                        );
+                      },
                     ),
-                  );
-                },
-              ),
             ),
           ],
         ),

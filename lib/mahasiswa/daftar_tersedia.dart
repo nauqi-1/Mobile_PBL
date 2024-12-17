@@ -49,6 +49,7 @@ class _MhsDaftarTersediaState extends State<MhsDaftarTersedia> {
         setState(() {
           tugasList = json.decode(response.body);
           isLoading = false;
+          print(tugasList);
         });
       } else {
         throw Exception('Failed to load tugas');
@@ -57,7 +58,7 @@ class _MhsDaftarTersediaState extends State<MhsDaftarTersedia> {
       setState(() {
         isLoading = false;
       });
-      print("Error fetching data: $e");
+      print("Error fetching data: $e");   
     }
   }
 

@@ -1,4 +1,4 @@
-const String apiUrl = 'http://192.168.1.120:8000/api/';
+const String apiUrl = 'https://kelompok-2.lleans.dev/api/';
 
 class LoginResponse {
   final bool success;
@@ -82,6 +82,8 @@ class Mahasiswa {
       userId: json['mahasiswa']['user_id'] ?? 0,
     );
   }
+
+  get mahasiswa_id => null;
 
   // Convert the object to JSON format
   Map<String, dynamic> toJson() {
