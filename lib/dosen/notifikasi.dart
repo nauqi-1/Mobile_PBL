@@ -24,16 +24,16 @@ class _NotifikasiPageState extends State<DsnNotifikasiPage> {
     );
   }
 
-  void _detailRequest() {
-    Navigator.push(
-      context,
-      MaterialPageRoute(
-        builder: (context) => const DetailRequestPage(
-          title: 'Sistem Kompensasi',
-        ),
-      ),
-    );
-  }
+  // void _detailRequest() {
+  //   Navigator.push(
+  //     context,
+  //     MaterialPageRoute(
+  //       builder: (context) => const DetailRequestPage(
+  //         title: 'Sistem Kompensasi',
+  //       ),
+  //     ),
+  //   );
+  // }
 
   void _profileDsn() {
     print('Profile Dosen');
@@ -165,7 +165,7 @@ class _NotifikasiPageState extends State<DsnNotifikasiPage> {
               ),
               const SizedBox(height: 20),
               GestureDetector(
-                onTap: _detailRequest,
+                onTap: () {},
                 child: Container(
                   width: 330,
                   height: 32,
